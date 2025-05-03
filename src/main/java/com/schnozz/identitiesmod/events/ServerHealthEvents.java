@@ -1,6 +1,7 @@
 package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +26,7 @@ public class ServerHealthEvents {
     {
         if(event.getEntity() instanceof Zombie && event.getSource().getDirectEntity() instanceof Player player)
         {
+            int neededHealth = player.getData(ModDataAttachments.HEALTH_NEEDED);
 
         }
     }

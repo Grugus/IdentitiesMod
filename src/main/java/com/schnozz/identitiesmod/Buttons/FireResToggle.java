@@ -1,5 +1,6 @@
 package com.schnozz.identitiesmod.Buttons;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -11,6 +12,6 @@ public class FireResToggle extends Button {
     @Override
     public void onPress()
     {
-        //Player gets permanent strength increase
+
     }
 }
