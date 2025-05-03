@@ -1,9 +1,12 @@
 package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons;
 
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -17,17 +20,23 @@ public class StrengthUp extends Button
     {
         Player p = Minecraft.getInstance().player;
         assert p != null;
-        int permLevel = 0; //set level based on package
-        int cost = 4; //perm str level = 0
-        if(permLevel == 1) {cost = 6;} //perm str level = 1
-        else {cost = 10;} //perm str level = 2
-        if(p.getMaxHealth() >= 20 + cost && permLevel < 3) //str level is less than 3
-        {
-            PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            permLevel++;
-            //send mobeffect package back with buff type and level
+        boolean hasEffect = p.getActiveEffects().contains(MobEffects.DAMAGE_BOOST);
+        if(hasEffect) {
+            int permLevel = p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier(); //set level based on package
+            int cost = 0; //perm str level = 0
+            if (permLevel == 1) {
+                cost = 6;
+            } //perm str level = 1
+            else {
+                cost = 10;
+            } //perm str level = 2
+            if (p.getMaxHealth() >= 20 + cost && permLevel < 3) //str level is less than 3
+            {
+                PacketDistributor.sendToServer(new HealthCostPayload(cost));
+                permLevel++;
+                PacketDistributor.sendToServer(new PotionLevelPayload((MobEffect) MobEffects.DAMAGE_BOOST,permLevel));
+            }
         }
-
     }
 
 }

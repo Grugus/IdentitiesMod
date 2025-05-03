@@ -37,14 +37,9 @@ public class LifestealerScreen extends Screen {
 
         super.render(graphics, mouseX, mouseY, partialTick); //widget rendering
 
-        //this.renderBackground(graphics, mouseX, mouseY, partialTick);
-
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-
-        //RenderSystem.defaultBlendFunc();
-        //Minecraft.getInstance().getTextureManager().getTexture(ResourceLocation.fromNamespaceAndPath(SuperGoober.MODID,"textures/gui/blank_lifestealer_screen.png")).setFilter(false,true);
 
         int x = (scaledWidth - 256) / 2;
         int y = (scaledHeight - 186) / 2;
