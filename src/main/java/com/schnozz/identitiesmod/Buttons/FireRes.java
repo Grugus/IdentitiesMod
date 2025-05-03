@@ -3,6 +3,7 @@ package com.schnozz.identitiesmod.Buttons;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 //evan is not fat ;)
+//hi goober
 public class FireRes extends Button{
     public FireRes(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
         super(x, y, width, height, message, onPress, createNarration);
