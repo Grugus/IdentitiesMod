@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.Buttons;
+package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons;
 
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import net.minecraft.client.Minecraft;
@@ -7,8 +7,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class NightVision extends Button{
-    public NightVision(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
+public class FireRes extends Button{
+    public FireRes(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
         super(x, y, width, height, message, onPress, createNarration);
     }
     @Override
@@ -17,7 +17,7 @@ public class NightVision extends Button{
         Player p = Minecraft.getInstance().player;
         assert p != null;
         int permLevel = 0; //set level based on package
-        int cost = 2; //perm str level = 0
+        int cost = 4; //perm str level = 0
         if(p.getMaxHealth() >= 20 + cost && permLevel < 1) //str level is less than 3
         {
             PacketDistributor.sendToServer(new HealthCostPayload(cost));

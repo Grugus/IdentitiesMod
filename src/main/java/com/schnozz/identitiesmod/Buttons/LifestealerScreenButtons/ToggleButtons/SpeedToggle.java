@@ -1,10 +1,11 @@
-package com.schnozz.identitiesmod.Buttons;
+package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
-public class NightVisionToggle extends Button {
-    public NightVisionToggle(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
+public class SpeedToggle extends Button
+{
+    public SpeedToggle(int x, int y, int width, int height, Component message, OnPress onPress, CreateNarration createNarration) {
         super(x, y, width, height, message, onPress, createNarration);
     }
     @Override
@@ -13,4 +14,3 @@ public class NightVisionToggle extends Button {
         //Player gets permanent strength increase
     }
 }
-

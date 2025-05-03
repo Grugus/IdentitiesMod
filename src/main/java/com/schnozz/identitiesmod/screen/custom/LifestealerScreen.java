@@ -1,7 +1,8 @@
 package com.schnozz.identitiesmod.screen.custom;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.schnozz.identitiesmod.Buttons.*;
+import com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons.*;
+import com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons.*;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.events.ServerScreenEvents;
 import net.minecraft.client.Minecraft;
