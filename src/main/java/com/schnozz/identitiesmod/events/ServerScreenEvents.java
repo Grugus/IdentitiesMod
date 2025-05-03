@@ -1,0 +1,50 @@
+package com.schnozz.identitiesmod.events;
+
+import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.keymapping.ModMappings;
+import com.schnozz.identitiesmod.screen.custom.LifestealerScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+
+@EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
+public class ServerScreenEvents {
+    private static boolean lifeScreenOpen = false;
+    private static boolean eventCheck = false;
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event)
+    {
+        Player p = event.getEntity();
+
+
+
+        if(!p.level().isClientSide()) return;
+
+        if(!lifeScreenOpen) {
+            if(!eventCheck) {
+                System.out.println("THIS IS A VERY OBIVOUS PRINT LINE YOU DUMBASS");
+                eventCheck = true;
+            }
+            LifestealerScreen newLifeScreen = new LifestealerScreen(Component.literal("Lifestealer Screen"));
+
+            if (ModMappings.LIFESTEALER_MAPPING.get().consumeClick() && p.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
+                System.out.println(p.experienceLevel);
+                Minecraft.getInstance().setScreen(newLifeScreen);
+                lifeScreenOpen = true;
+            }
+
+        }
+    }
+
+    public static void resetLifeScreen()
+    {
+        lifeScreenOpen = false;
+    }
+
+}
+
