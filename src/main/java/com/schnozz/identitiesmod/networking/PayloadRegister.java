@@ -3,26 +3,21 @@ package com.schnozz.identitiesmod.networking;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD)
-public class PowerHandler {
+public class PayloadRegister {
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
@@ -51,6 +46,15 @@ public class PowerHandler {
                     p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealth - payload.cost());
                     p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + p.getData(ModDataAttachments.HEALTH_NEEDED));
                 }
+        );
+
+        registrar.playBidirectional(
+                PotionLevelPayload.TYPE,
+                PotionLevelPayload.STREAM_CODEC,
+                new DirectionalPayloadHandler<>(
+                        ClientPotionLevelHandler::handle,
+                        ServerPotionLevelHandler::handle
+                )
         );
     }
 }
