@@ -1,7 +1,11 @@
 package com.schnozz.identitiesmod.Buttons;
 
+import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class SpeedUp extends Button
 {
@@ -11,6 +15,17 @@ public class SpeedUp extends Button
     @Override
     public void onPress()
     {
-        //Player gets permanent speed increase
+        Player p = Minecraft.getInstance().player;
+        assert p != null;
+        int permLevel = 0; //set level based on package
+        int cost = 2; //perm str level = 0
+        if(permLevel == 1) {cost = 4;} //perm str level = 1
+        else {cost = 8;} //perm str level = 2
+        if(p.getMaxHealth() >= 20 + cost && permLevel < 3) //str level is less than 3
+        {
+            PacketDistributor.sendToServer(new HealthCostPayload(cost));
+            permLevel++;
+            //send mobeffect package back with buff type and level
+        }
     }
 }
