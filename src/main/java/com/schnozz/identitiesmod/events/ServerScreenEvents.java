@@ -27,7 +27,6 @@ public class ServerScreenEvents {
 
         if(!lifeScreenOpen) {
             if(!eventCheck) {
-                System.out.println("THIS IS A VERY OBIVOUS PRINT LINE YOU DUMBASS");
                 eventCheck = true;
             }
             LifestealerScreen newLifeScreen = new LifestealerScreen(Component.literal("Lifestealer Screen"));
