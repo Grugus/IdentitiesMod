@@ -15,28 +15,16 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerScreenEvents {
     private static boolean lifeScreenOpen = false;
-    private static boolean eventCheck = false;
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
         Player p = event.getEntity();
-
-
-
-        if(!p.level().isClientSide()) return;
-
-        if(!lifeScreenOpen) {
-            if(!eventCheck) {
-                eventCheck = true;
-            }
+        if(p == null || !p.level().isClientSide()) return;
+        String power = p.getData(ModDataAttachments.POWER_TYPE);
+        if(power.equals("Lifestealer") && !lifeScreenOpen && ModMappings.LIFESTEALER_MAPPING.get().consumeClick()) {
             LifestealerScreen newLifeScreen = new LifestealerScreen(Component.literal("Lifestealer Screen"));
-
-            if (ModMappings.LIFESTEALER_MAPPING.get().consumeClick() && p.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
-                System.out.println(p.experienceLevel);
-                Minecraft.getInstance().setScreen(newLifeScreen);
-                lifeScreenOpen = true;
-            }
-
+            Minecraft.getInstance().setScreen(newLifeScreen);
+            lifeScreenOpen = true;
         }
     }
 

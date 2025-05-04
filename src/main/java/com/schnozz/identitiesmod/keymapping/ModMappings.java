@@ -17,23 +17,40 @@ public class ModMappings {
     public static final Lazy<KeyMapping> GRAB_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.viltruite.grab", // Will be localized using this translation key
             InputConstants.Type.KEYSYM, // Default mapping is on the keyboard
-            GLFW.GLFW_KEY_G, // Default key is P
+            GLFW.GLFW_KEY_G, // Default key is G
             "key.categories.misc" // Mapping will be in the misc category
     ));
 
     public static final Lazy<KeyMapping> LIFESTEALER_MAPPING = Lazy.of(() -> new KeyMapping(
-            "key.identitiesmod.lifestealer.screen", // Will be localized using this translation key
+            "key.identitiesmod.lifestealer.screen",
             KeyConflictContext.UNIVERSAL,
-            InputConstants.Type.KEYSYM, // Default mapping is on the keyboard
-            GLFW.GLFW_KEY_H, // Default key is P
-            "key.categories.misc" // Mapping will be in the misc category
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_H,
+            "key.categories.misc"
+    ));
+
+    public static final Lazy<KeyMapping> GRAVITY_PUSH_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.gravity.push",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C,
+            "key.categories.misc"
+    ));
+
+    public static final Lazy<KeyMapping> GRAVITY_PULL_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.gravity.pull",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_V,
+            "key.categories.misc"
     ));
 
     // Event is on the mod event bus only on the physical client
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
-
         event.register(GRAB_MAPPING.get());
         event.register(LIFESTEALER_MAPPING.get());
+        event.register(GRAVITY_PUSH_MAPPING.get());
+        event.register(GRAVITY_PULL_MAPPING.get());
     }
 }
