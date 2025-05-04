@@ -1,9 +1,11 @@
 package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons;
 
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -17,15 +19,24 @@ public class JumpUp extends Button
     {
         Player p = Minecraft.getInstance().player;
         assert p != null;
-        int permLevel = 0; //set level based on package
-        int cost = 2; //perm str level = 0
-        if(permLevel == 1) {cost = 4;} //perm str level = 1
-        else {cost = 4;} //perm str level = 2
-        if(p.getMaxHealth() >= 20 + cost && permLevel < 3) //str level is less than 3
-        {
-            PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            permLevel++;
-            //send mobeffect package back with buff type and level
+        boolean hasEffect = p.getActiveEffects().contains(MobEffects.JUMP);
+        int cost = 2;
+        if(hasEffect) {
+            int permLevel = p.getEffect(MobEffects.JUMP).getAmplifier();
+            cost = 4;
+            if (p.getMaxHealth() >= 20 + cost && permLevel < 2 )
+            {
+                PacketDistributor.sendToServer(new HealthCostPayload(cost));
+                permLevel++;
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,permLevel));
+            }
+        }
+        else {
+            if (p.getMaxHealth() >= 20 + cost)
+            {
+                PacketDistributor.sendToServer(new HealthCostPayload(cost));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,0));
+            }
         }
     }
 }

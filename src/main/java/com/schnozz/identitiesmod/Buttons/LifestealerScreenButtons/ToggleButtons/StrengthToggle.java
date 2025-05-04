@@ -1,7 +1,13 @@
 package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons;
 
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionTogglePayload;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class StrengthToggle extends Button
 {
@@ -11,7 +17,8 @@ public class StrengthToggle extends Button
     @Override
     public void onPress()
     {
-        //if strength buff is active, turn off
-        //else turn on
+        Player p = Minecraft.getInstance().player;
+        assert p != null;
+        PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.DAMAGE_BOOST, p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier()));
     }
 }

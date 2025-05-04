@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionTogglePayload;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -44,7 +45,7 @@ public class PayloadRegister {
                     Player p = context.player();
                     int currentHealth = p.getData(ModDataAttachments.HEALTH_NEEDED);
                     p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealth - payload.cost());
-                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + p.getData(ModDataAttachments.HEALTH_NEEDED));
+                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(p.getMaxHealth() + p.getData(ModDataAttachments.HEALTH_NEEDED));
                 }
         );
 
@@ -55,6 +56,12 @@ public class PayloadRegister {
                         ClientPotionLevelHandler::handle,
                         ServerPotionLevelHandler::handle
                 )
+        );
+
+        registrar.playToServer(
+                PotionTogglePayload.TYPE,
+                PotionTogglePayload.STREAM_CODEC,
+                ServerPotionToggleHandler::handle
         );
     }
 }
