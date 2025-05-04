@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
@@ -34,14 +35,14 @@ public class StrengthUp extends Button
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
                 permLevel++;
-                PacketDistributor.sendToServer(new PotionLevelPayload((MobEffect) MobEffects.DAMAGE_BOOST,permLevel));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DAMAGE_BOOST,permLevel));
             }
         }
         else {
             if (p.getMaxHealth() >= 20 + cost ) //str level is less than 3
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
-                PacketDistributor.sendToServer(new PotionLevelPayload((MobEffect) MobEffects.DAMAGE_BOOST,1));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DAMAGE_BOOST,1));
             }
         }
     }
