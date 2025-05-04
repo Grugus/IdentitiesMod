@@ -22,16 +22,16 @@ public class StrengthUp extends Button
         Player p = Minecraft.getInstance().player;
         assert p != null;
         boolean hasEffect = p.getActiveEffects().contains(MobEffects.DAMAGE_BOOST);
-        int cost = 0;
+        int cost = 4;
         if(hasEffect) {
             int permLevel = p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier(); //set level based on package
-            if (permLevel == 1) {
+            if (permLevel == 0) {
                 cost = 6;
             } //perm str level = 1
             else {
                 cost = 10;
             } //perm str level = 2
-            if (p.getMaxHealth() >= 20 + cost && permLevel < 3) //str level is less than 3
+            if (p.getMaxHealth() >= 20 + cost && permLevel < 2 ) //str level is less than 3
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
                 permLevel++;
@@ -39,10 +39,10 @@ public class StrengthUp extends Button
             }
         }
         else {
-            if (p.getMaxHealth() >= 20 + cost ) //str level is less than 3
+            if (p.getMaxHealth() >= 20 + cost) //str level is less than 3
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
-                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DAMAGE_BOOST,1));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DAMAGE_BOOST,0));
             }
         }
     }
