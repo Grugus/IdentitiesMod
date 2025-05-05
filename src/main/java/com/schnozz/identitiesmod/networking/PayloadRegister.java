@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.networking;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.cooldown.CustomCooldown;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -14,6 +15,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+import java.util.List;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class PayloadRegister {
@@ -31,6 +34,31 @@ public class PayloadRegister {
                         LocalPlayer player = Minecraft.getInstance().player;
                         if (player != null) {
                             player.setData(ModDataAttachments.POWER_TYPE.get(), payload.power());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
+                CustomCooldownPayload.TYPE,
+                CustomCooldownPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            if(payload.add())
+                            {
+                                List<CustomCooldown> cdList = player.getData(ModDataAttachments.COOLDOWN_LIST);
+                                cdList.add(payload.cooldown());
+                                player.setData(ModDataAttachments.COOLDOWN_LIST, cdList);
+                            }
+                            else
+                            {
+                                List<CustomCooldown> cdList = player.getData(ModDataAttachments.COOLDOWN_LIST);
+                                cdList.remove(payload.cooldown());
+                                player.setData(ModDataAttachments.COOLDOWN_LIST, cdList);
+                            }
                         }
                     });
                 }

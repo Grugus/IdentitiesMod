@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.cooldown.CustomCooldown;
 import com.schnozz.identitiesmod.networking.payloads.EntityBoxPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -29,7 +30,8 @@ public class ModClientEvents {
         LocalPlayer p = Minecraft.getInstance().player;
         if(p == null || !p.level().isClientSide()) return;
         String power = p.getData(ModDataAttachments.POWER_TYPE);
-        if (power.equals("Viltruite") && GRAB_MAPPING.get().consumeClick()) {
+
+        if (power.equals("Viltruite") && GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN_LIST).contains(new CustomCooldown("Grab_Cooldown", 200))) {
             findEntity(Minecraft.getInstance().player);
         }
     }
