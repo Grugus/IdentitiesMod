@@ -21,12 +21,18 @@ public class GravityEvents {
         if (power.equals("Gravity")) {
             if(GRAVITY_PUSH_MAPPING.get().consumeClick())
             {
-
+                //check in front of them on the client
+                //if theres an entity in the AABB then send a packet with its UUID
+                //in the packet handler set the player's data attachment to the UUID
+                //create a data attachment for the player called currentGrab
+                //check on server side if this has a value then push and clear the entity UUID from the attachment data
             }
             if(GRAVITY_PULL_MAPPING.get().consumeClick())
             {
-
+                //same protocol as if statement above
             }
         }
+
+
     }
 }

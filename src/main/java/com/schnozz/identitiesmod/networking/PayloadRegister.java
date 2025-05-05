@@ -2,12 +2,10 @@ package com.schnozz.identitiesmod.networking;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
-import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
-import com.schnozz.identitiesmod.networking.payloads.PotionTogglePayload;
-import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -46,6 +44,17 @@ public class PayloadRegister {
                     int currentHealth = p.getData(ModDataAttachments.HEALTH_NEEDED);
                     p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealth - payload.cost());
                     p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(p.getMaxHealth() + p.getData(ModDataAttachments.HEALTH_NEEDED));
+                }
+        );
+
+        registrar.playToServer(
+                EntityBoxPayload.TYPE,
+                EntityBoxPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    Minecraft.getInstance().execute(() -> {
+                        Player player = context.player();
+                        player.setData(ModDataAttachments.ENTITY_HELD.get(), payload.entity());
+                    });
                 }
         );
 

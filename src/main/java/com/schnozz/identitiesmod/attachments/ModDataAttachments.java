@@ -2,11 +2,14 @@ package com.schnozz.identitiesmod.attachments;
 
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class ModDataAttachments {
@@ -20,5 +23,13 @@ public class ModDataAttachments {
     public static final Supplier<AttachmentType<String>> POWER_TYPE = ATTACHMENT_TYPES.register(
             "power_type", () -> AttachmentType.builder(() -> "").serialize(Codec.STRING).copyOnDeath().build()
     );
+
+
+    public static final Supplier<AttachmentType<CompoundTag>> ENTITY_HELD = ATTACHMENT_TYPES.register(
+            "entity_data",
+            () -> AttachmentType.builder(CompoundTag::new) // default = empty tag therefore not null
+                    .build()
+    );
+
 
 }
