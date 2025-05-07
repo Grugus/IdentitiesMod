@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Supplier;
 
 public class LifestealerScreen extends Screen {
-    public static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"textures/gui/lifestealer_screen_grey.png");
+    public static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"textures/gui/lifestealer_screen_stinky.png");
 
     public LifestealerScreen(Component title) {
         super(title);

@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -21,15 +22,16 @@ public class GravityEvents {
         if (power.equals("Gravity")) {
             if(GRAVITY_PUSH_MAPPING.get().consumeClick())
             {
-                //check in front of them on the client
-                //if theres an entity in the AABB then send a packet with its UUID
-                //in the packet handler set the player's data attachment to the UUID
-                //create a data attachment for the player called currentGrab
-                //check on server side if this has a value then push and clear the entity UUID from the attachment data
+                 AABB gravityPushBB = new AABB(p.getX(),p.getY(),p.getZ(),p.getX(),p.getY(),p.getZ());
+                 gravityPushBB.intersect(p.getBoundingBox());
+                 //for()
+                 //{
+
+                 //}
             }
             if(GRAVITY_PULL_MAPPING.get().consumeClick())
             {
-                //same protocol as if statement above
+                AABB gravityPullBB = new AABB(p.getX(),p.getY(),p.getZ(),p.getX(),p.getY(),p.getZ());
             }
         }
 
