@@ -3,15 +3,17 @@ package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.cooldown.CustomCooldown;
-import com.schnozz.identitiesmod.networking.payloads.CustomCooldownPayload;
+import com.schnozz.identitiesmod.cooldown.Cooldown;
+import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
@@ -48,10 +50,14 @@ public class ServerViltruiteEvents {
             target.setNoGravity(false);
             target.setDeltaMovement(p.getLookAngle().scale(1));
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
-            List<CustomCooldown> cdList = p.getData(ModDataAttachments.COOLDOWN_LIST);
-            cdList.addLast(new CustomCooldown("Grab_Cooldown", 200));
-            p.setData(ModDataAttachments.COOLDOWN_LIST.get(),cdList);
-            PacketDistributor.sendToPlayer(p, new CustomCooldownPayload(cdList.getLast(), true));
+            long startTime = level.getGameTime();
+            Cooldown cd = new Cooldown(startTime, 200);
+            CooldownAttachment cdAttach = p.getData(ModDataAttachments.COOLDOWN);
+            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
+            cdAttach.setCooldown(key, startTime, 200);
+            PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
+            System.out.println("Set CD on Server");
+
         }
 
     }

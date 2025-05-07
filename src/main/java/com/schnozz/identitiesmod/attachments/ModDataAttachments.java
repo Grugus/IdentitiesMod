@@ -2,17 +2,12 @@ package com.schnozz.identitiesmod.attachments;
 
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.cooldown.CustomCooldown;
-import net.minecraft.core.UUIDUtil;
+import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class ModDataAttachments {
@@ -27,15 +22,6 @@ public class ModDataAttachments {
             "power_type", () -> AttachmentType.builder(() -> "").serialize(Codec.STRING).copyOnDeath().build()
     );
 
-    public static final Supplier<AttachmentType<List<CustomCooldown>>> COOLDOWN_LIST =
-            ATTACHMENT_TYPES.register(
-                    "cooldown_list",
-                    () -> AttachmentType.<List<CustomCooldown>>builder(
-                                    () -> new ArrayList<CustomCooldown>()
-                            )
-                            // Optional
-                            .build()
-            );
 
 
 
@@ -44,6 +30,14 @@ public class ModDataAttachments {
             () -> AttachmentType.builder(CompoundTag::new) // default = empty tag therefore not null
                     .build()
     );
+
+    public static final Supplier<AttachmentType<CooldownAttachment>> COOLDOWN =
+            ATTACHMENT_TYPES.register("cooldowns", () ->
+                    AttachmentType.builder(CooldownAttachment::new)
+                            .serialize(CooldownAttachment.CODEC)
+                            .copyOnDeath()
+                            .build()
+            );
 
 
 }

@@ -2,11 +2,9 @@ package com.schnozz.identitiesmod.networking;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.cooldown.CustomCooldown;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,8 +13,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-
-import java.util.List;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class PayloadRegister {
@@ -39,30 +35,7 @@ public class PayloadRegister {
                 }
         );
 
-        registrar.playToClient(
-                CustomCooldownPayload.TYPE,
-                CustomCooldownPayload.STREAM_CODEC,
-                (payload, context) -> {
-                    // Schedule work on the main client thread
-                    Minecraft.getInstance().execute(() -> {
-                        LocalPlayer player = Minecraft.getInstance().player;
-                        if (player != null) {
-                            if(payload.add())
-                            {
-                                List<CustomCooldown> cdList = player.getData(ModDataAttachments.COOLDOWN_LIST);
-                                cdList.add(payload.cooldown());
-                                player.setData(ModDataAttachments.COOLDOWN_LIST, cdList);
-                            }
-                            else
-                            {
-                                List<CustomCooldown> cdList = player.getData(ModDataAttachments.COOLDOWN_LIST);
-                                cdList.remove(payload.cooldown());
-                                player.setData(ModDataAttachments.COOLDOWN_LIST, cdList);
-                            }
-                        }
-                    });
-                }
-        );
+
 
         registrar.playToServer(
                 HealthCostPayload.TYPE,
@@ -92,6 +65,15 @@ public class PayloadRegister {
                 new DirectionalPayloadHandler<>(
                         ClientPotionLevelHandler::handle,
                         ServerPotionLevelHandler::handle
+                )
+        );
+
+        registrar.playBidirectional(
+                CooldownSyncPayload.TYPE,
+                CooldownSyncPayload.STREAM_CODEC,
+                new DirectionalPayloadHandler<>(
+                        ClientCooldownHandler::handle,
+                        ServerCooldownHandler::handle
                 )
         );
 
