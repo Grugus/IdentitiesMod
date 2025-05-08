@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,7 @@ public class ParryEvents {
         if (power.equals("Parry") && PARRY_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), 0)) {
             long currentTime = Minecraft.getInstance().level.getGameTime();
             System.out.println("Parry sent");
+
             parry(currentTime, p);
 
         }
@@ -40,7 +42,7 @@ public class ParryEvents {
         newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 120);
         player.setData(ModDataAttachments.COOLDOWN, newAtachment);
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 120), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
+        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 8), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
     }
 
 }

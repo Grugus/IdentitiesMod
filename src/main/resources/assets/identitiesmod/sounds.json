@@ -1,0 +1,8 @@
+{
+  "parry_sound": {
+    "subtitle": "sounds.identitiesmod.parry_sound",
+    "sounds": [
+      "identitiesmod::parry_sound"
+    ]
+  }
+}

@@ -57,7 +57,7 @@ public class IdentitiesMod
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
-        ModSounds.SOUND_EVENTS.register(modEventBus);
+        ModSounds.register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         ModDataAttachments.ATTACHMENT_TYPES.register(modEventBus);

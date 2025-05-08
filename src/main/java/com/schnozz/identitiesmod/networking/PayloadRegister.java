@@ -44,7 +44,7 @@ public class PayloadRegister {
                     Minecraft.getInstance().execute(() -> {
                         LocalPlayer player = Minecraft.getInstance().player;
                         if (player != null) {
-                            player.playSound(payload.sound().value());
+                            player.playSound(payload.sound());
                         }
                     });
                 }
