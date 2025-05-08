@@ -56,7 +56,7 @@ public class ServerViltruiteEvents {
             ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
             cdAttach.setCooldown(key, startTime, 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
-            System.out.println("Set CD on Server");
+
 
         }
 

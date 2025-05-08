@@ -37,6 +37,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> PARRY_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.parry",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "key.categories.misc"
+    ));
+
     public static final Lazy<KeyMapping> GRAVITY_PULL_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.gravity.pull",
             KeyConflictContext.UNIVERSAL,
@@ -49,6 +57,7 @@ public class ModMappings {
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         event.register(GRAB_MAPPING.get());
+        event.register(PARRY_MAPPING.get());
         event.register(LIFESTEALER_MAPPING.get());
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());

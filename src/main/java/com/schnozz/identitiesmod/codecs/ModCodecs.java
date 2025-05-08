@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod;
+package com.schnozz.identitiesmod.codecs;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

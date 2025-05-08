@@ -33,7 +33,6 @@ public class ModClientEvents {
         String power = p.getData(ModDataAttachments.POWER_TYPE);
 
         if (power.equals("Viltruite") && GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0)) {
-            float currentTime = Minecraft.getInstance().level.getGameTime();
             findEntity(Minecraft.getInstance().player);
         }
     }

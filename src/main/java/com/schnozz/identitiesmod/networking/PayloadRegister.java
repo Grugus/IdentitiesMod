@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -30,6 +31,20 @@ public class PayloadRegister {
                         LocalPlayer player = Minecraft.getInstance().player;
                         if (player != null) {
                             player.setData(ModDataAttachments.POWER_TYPE.get(), payload.power());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
+                SoundPayload.TYPE,
+                SoundPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            player.playSound(payload.sound().value());
                         }
                     });
                 }

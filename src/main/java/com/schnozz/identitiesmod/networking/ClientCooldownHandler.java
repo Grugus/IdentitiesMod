@@ -16,12 +16,12 @@ public class ClientCooldownHandler {
         if(payload.setRemove())
         {
             cdAttachment.getAllCooldowns().remove(payload.key(), payload.cooldown());
-            System.out.println("Removed CD on Client");
+
         }
         else
         {
             cdAttachment.getAllCooldowns().put(payload.key(), payload.cooldown());
-            System.out.println("Added CD on Client");
+
         }
 
         player.setData(ModDataAttachments.COOLDOWN, cdAttachment);
