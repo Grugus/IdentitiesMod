@@ -33,7 +33,7 @@ public class ServerParryEvents {
             if((event.getSource().getDirectEntity() instanceof LivingEntity source))
             {
                 source.hurt(event.getSource(), event.getAmount());
-                player.level().playSound(null, player.getOnPos(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS);
+                player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                 CooldownAttachment newAtachment = new CooldownAttachment();
                 newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                 newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
@@ -46,7 +46,7 @@ public class ServerParryEvents {
             else if(event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source)
             {
                 source.hurt(event.getSource(), event.getAmount());
-                player.level().playSound(null, player.getOnPos(), SoundEvents.BELL_BLOCK, SoundSource.PLAYERS);
+                player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                 CooldownAttachment newAtachment = new CooldownAttachment();
                 newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                 newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);

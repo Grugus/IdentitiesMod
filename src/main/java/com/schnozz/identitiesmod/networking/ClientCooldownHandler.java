@@ -6,25 +6,27 @@ import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ClientCooldownHandler {
     public static void handle(CooldownSyncPayload payload, IPayloadContext context) {
         LocalPlayer player = Minecraft.getInstance().player;
-        CooldownAttachment cdAttachment = player.getData(ModDataAttachments.COOLDOWN);
+        CooldownAttachment newAttachment = new CooldownAttachment();
+        newAttachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
 
         if(payload.setRemove())
         {
-            cdAttachment.getAllCooldowns().remove(payload.key(), payload.cooldown());
+            newAttachment.getAllCooldowns().remove(payload.key(), payload.cooldown());
 
         }
         else
         {
-            cdAttachment.getAllCooldowns().put(payload.key(), payload.cooldown());
+            newAttachment.getAllCooldowns().put(payload.key(), payload.cooldown());
 
         }
 
-        player.setData(ModDataAttachments.COOLDOWN, cdAttachment);
+        player.setData(ModDataAttachments.COOLDOWN, newAttachment);
 
     }
 }
