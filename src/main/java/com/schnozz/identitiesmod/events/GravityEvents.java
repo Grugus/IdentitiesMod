@@ -16,6 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class GravityEvents {
                     for (Entity entity : entitiesInBox) {
                         double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
                         double forceX = dx > 0 ? -5.0 : 5.0; double forceY = dy > 0 ? -5.0 : 5.0; double forceZ = dz > 0 ? -5.0 : 5.0;
-                        GravityPayload gravPayload = new GravityPayload(entity.getId(),forceX,forceY,forceZ);
+                        PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
                     }
                 }
                 //gravity pull
@@ -55,7 +56,7 @@ public class GravityEvents {
                         double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
                         double forceX = dx < 0 ? -5.0 : 5.0; double forceY = dy < 0 ? -5.0 : 5.0; double forceZ = dz < 0 ? -5.0 : 5.0;
                         Vec3 gravForce = new Vec3(forceX,forceY,forceZ);
-                        GravityPayload gravPayload = new GravityPayload(entity.getId(),forceX,forceY,forceZ);
+                        PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
                     }
                 }
 
