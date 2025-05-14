@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -52,9 +53,18 @@ public class ParryEvents {
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 8), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
     }
 
+    public static void setIconCooldown(Cooldown cod)
+    {
+        cooldownIcon.setCooldown(cod);
+    }
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
+
+        if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
+        {
+            return;
+        }
 
         long gameTime = Minecraft.getInstance().level.getGameTime();
         GuiGraphics graphics = event.getGuiGraphics();
