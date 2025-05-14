@@ -25,12 +25,6 @@ public class CooldownIcon {
     }
 
     public void render(GuiGraphics graphics, long currentGameTime) {
-        graphics.blit(texture, x, y, 0, 0, size, size);
-
-        if (isCoolingDown(currentGameTime)) {
-            double progress = (currentGameTime - cd.startTime()) / (double) cd.duration();
-            int fillHeight = (int) (progress * size);
-            graphics.blit(texture, x, y + (size - fillHeight), size, size - fillHeight, size, fillHeight);
-        }
+        graphics.blitSprite(texture, x,y,size,size);
     }
 }

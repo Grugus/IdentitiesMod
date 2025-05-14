@@ -39,6 +39,9 @@ public class ParryEvents {
         }
     }
 
+    private static final CooldownIcon cooldownIcon = new CooldownIcon(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/parrycd_icon.png"), 10, 10, 16
+    );
+
     private static void parry(long currentTime, LocalPlayer player) {
         CooldownAttachment newAtachment = new CooldownAttachment();
         newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -49,10 +52,6 @@ public class ParryEvents {
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 8), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
     }
 
-    private static final CooldownIcon cooldownIcon = new CooldownIcon(
-            ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/parrycd_icon.png"),
-            10, 10, 16
-    );
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
