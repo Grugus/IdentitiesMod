@@ -27,10 +27,10 @@ public class GravityEvents {
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
-        if (gravityPlayer == null) return;
+        if (gravityPlayer == null || !gravityPlayer.level().isClientSide || !gravityPlayer.hasData(ModDataAttachments.POWER_TYPE)) return;
         Level level = gravityPlayer.level();
 
-        if(!level.isClientSide()) return;
+
 
         String power = gravityPlayer.getData(ModDataAttachments.POWER_TYPE);
         if (power.equals("Gravity")) {

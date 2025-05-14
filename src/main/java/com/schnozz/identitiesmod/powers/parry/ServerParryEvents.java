@@ -28,7 +28,7 @@ public class ServerParryEvents {
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
         long currentTime = event.getEntity().level().getGameTime();
-        if(event.getEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime))
+        if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime))
         {
             if((event.getSource().getDirectEntity() instanceof LivingEntity source))
             {

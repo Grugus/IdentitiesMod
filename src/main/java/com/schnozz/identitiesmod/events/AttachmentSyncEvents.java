@@ -22,7 +22,16 @@ public class AttachmentSyncEvents {
         {
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
-            System.out.println("Player has joined and data was synced");
+
+        }
+    }
+
+    @SubscribeEvent
+    public static void onClone(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+
+            String power = player.getData(ModDataAttachments.POWER_TYPE);
+            PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
 
         }
     }

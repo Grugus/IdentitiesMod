@@ -20,7 +20,7 @@ public class PayloadRegister {
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar("1").executesOn(HandlerThread.MAIN); // Replace "1" with your network protocol version
+        final PayloadRegistrar registrar = event.registrar("1").executesOn(HandlerThread.NETWORK); // Replace "1" with your network protocol version
 
         registrar.playToClient(
                 PowerSyncPayload.TYPE,

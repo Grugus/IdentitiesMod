@@ -29,7 +29,7 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer p = Minecraft.getInstance().player;
-        if(p == null || !p.level().isClientSide()) return;
+        if(p == null || !p.level().isClientSide() || !p.hasData(ModDataAttachments.POWER_TYPE)) return;
         String power = p.getData(ModDataAttachments.POWER_TYPE);
 
         if (power.equals("Viltruite") && GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0)) {

@@ -27,7 +27,7 @@ public class ServerViltruiteEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
-        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
+        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().hasData(ModDataAttachments.POWER_TYPE) && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
         {
             if(!event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty())
             {
