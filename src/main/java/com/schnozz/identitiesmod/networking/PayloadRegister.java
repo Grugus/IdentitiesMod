@@ -74,6 +74,12 @@ public class PayloadRegister {
                 }
         );
 
+        registrar.playToServer(
+                GravityPayload.TYPE,
+                GravityPayload.STREAM_CODEC,
+                    ServerGravityHandler::handle
+        );
+
         registrar.playBidirectional(
                 PotionLevelPayload.TYPE,
                 PotionLevelPayload.STREAM_CODEC,
