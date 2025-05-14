@@ -3,6 +3,7 @@ package com.schnozz.identitiesmod.networking;
 import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Objects;
@@ -12,7 +13,9 @@ public class ServerGravityHandler {
     {
         ServerPlayer player = (ServerPlayer) context.player();
         Minecraft.getInstance().execute(() -> {
-            Objects.requireNonNull(player.level().getEntity(payload.entityID())).push(payload.fx(),payload.fy(),payload.fz());
+            Entity entity = player.level().getEntity(payload.entityID());
+            if(entity == null) return;
+            entity.push(payload.fx(),payload.fy(),payload.fz());
         });
     }
 }
