@@ -80,6 +80,12 @@ public class PayloadRegister {
                     ServerGravityHandler::handle
         );
 
+        registrar.playToServer(
+                EntityDamagePayload.TYPE,
+                EntityDamagePayload.STREAM_CODEC,
+                ServerEntityDamageHandler::handle
+        );
+
         registrar.playBidirectional(
                 PotionLevelPayload.TYPE,
                 PotionLevelPayload.STREAM_CODEC,
