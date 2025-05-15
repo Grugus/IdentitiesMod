@@ -27,7 +27,7 @@ public class AttachmentSyncEvents {
     }
 
     @SubscribeEvent
-    public static void onClone(PlayerEvent.PlayerRespawnEvent event) {
+    public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
 
             String power = player.getData(ModDataAttachments.POWER_TYPE);
