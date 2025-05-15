@@ -77,7 +77,13 @@ public class PayloadRegister {
         registrar.playToServer(
                 GravityPayload.TYPE,
                 GravityPayload.STREAM_CODEC,
-                    ServerGravityHandler::handle
+                ServerGravityHandler::handle
+        );
+
+        registrar.playToServer(
+                PlayerEntityDamagePayload.TYPE,
+                PlayerEntityDamagePayload.STREAM_CODEC,
+                ServerEntityDamageHandler::handle
         );
 
         registrar.playBidirectional(
