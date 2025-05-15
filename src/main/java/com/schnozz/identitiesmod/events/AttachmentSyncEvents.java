@@ -34,8 +34,6 @@ public class AttachmentSyncEvents {
 
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
-            AdaptationAttachment adaptation = player.getData(ModDataAttachments.ADAPTION);
-            PacketDistributor.sendToPlayer(player, new AdaptationSyncPayload(adaptation));
 
         }
     }
