@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public record PlayerEntityDamagePayload(int hurtEntityID, int attackerEntityID, float damage) implements CustomPacketPayload {
     public static final Type<PlayerEntityDamagePayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath("identitiesmod", "entity_box_payload"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath("identitiesmod", "player_entity_damage_payload"));
 
     public static final StreamCodec<ByteBuf, PlayerEntityDamagePayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,

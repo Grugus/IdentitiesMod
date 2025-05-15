@@ -34,6 +34,7 @@ public class CooldownIcon {
         }
         else
         {
+            guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/green_back.png"), x - 1,y - 1,0,0,18,18,18,18);
             guiGraphics.blit(texture, x, y, 0, 0, size, size, size, size*2);
         }
 

@@ -54,6 +54,7 @@ public class ServerViltruiteEvents {
             Cooldown cd = new Cooldown(startTime, 200);
             CooldownAttachment cdAttach = p.getData(ModDataAttachments.COOLDOWN);
             ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
+            ModClientEvents.setIconCooldown(cd);
             cdAttach.setCooldown(key, startTime, 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
 
