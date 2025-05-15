@@ -1,15 +1,14 @@
 package com.schnozz.identitiesmod.events;
 
+import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
-import com.schnozz.identitiesmod.networking.payloads.PlayerEntityDamagePayload;
+import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -17,6 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class GravityEvents {
                         double rx = angle.x; double ry = angle.y; double rz = angle.z;
                         double forceX = 4.0 * rx; double forceY = 4.0 * ry; double forceZ = 4.0 * rz;
                         PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-                        PacketDistributor.sendToServer(new PlayerEntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
+                        PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
                     }
                 }
                 //gravity pull
@@ -62,12 +62,10 @@ public class GravityEvents {
                         double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
                         double forceX = -dx/2; double forceY = -dy/2; double forceZ = -dz/2;
                         PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-                        PacketDistributor.sendToServer(new PlayerEntityDamagePayload(entity.getId(),gravityPlayer.getId(),pullDamage));
+                        PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pullDamage));
                     }
                 }
-
         }
-
-
     }
+
 }

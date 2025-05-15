@@ -8,12 +8,15 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 
 public class GravityPowerDamageSources {
-    public static final ResourceLocation GRAVITY_POWER_ID = ResourceLocation.fromNamespaceAndPath("identitiesmod","gravity_power_damage_type");
-    public static final ResourceKey<DamageType> GRAVITY_POWER_KEY = ResourceKey.create(Registries.DAMAGE_TYPE, GRAVITY_POWER_ID);
+    public static final ResourceKey<DamageType> GRAVITY_POWER_DAMAGE =
+            ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath("identitiesmod", "gravity_power_damage_type"));
 
-    public static DamageSource gravityPower(ServerLevel level) {
-        return new DamageSource(level.registryAccess()
-                .registryOrThrow(Registries.DAMAGE_TYPE)
-                .getHolderOrThrow(GRAVITY_POWER_KEY));
-    }
+    //public static final ResourceLocation GRAVITY_POWER_ID = ResourceLocation.fromNamespaceAndPath("identitiesmod","gravity_power_damage_type");
+    //public static final ResourceKey<DamageType> GRAVITY_POWER_KEY = ResourceKey.create(Registries.DAMAGE_TYPE, GRAVITY_POWER_ID);
+
+    //public static DamageSource gravityPower(ServerLevel level) {
+    //    return new DamageSource(level.registryAccess()
+    //            .registryOrThrow(Registries.DAMAGE_TYPE)
+    //            .getHolderOrThrow(GRAVITY_POWER_KEY));
+    //}
 }

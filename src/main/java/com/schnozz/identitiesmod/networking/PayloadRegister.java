@@ -5,7 +5,6 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -81,8 +80,8 @@ public class PayloadRegister {
         );
 
         registrar.playToServer(
-                PlayerEntityDamagePayload.TYPE,
-                PlayerEntityDamagePayload.STREAM_CODEC,
+                EntityDamagePayload.TYPE,
+                EntityDamagePayload.STREAM_CODEC,
                 ServerEntityDamageHandler::handle
         );
 
