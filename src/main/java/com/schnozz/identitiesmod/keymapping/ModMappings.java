@@ -3,6 +3,7 @@ package com.schnozz.identitiesmod.keymapping;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import net.minecraft.client.KeyMapping;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -11,7 +12,7 @@ import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;
 
 
-@EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModMappings {
 
     public static final Lazy<KeyMapping> GRAB_MAPPING = Lazy.of(() -> new KeyMapping(
