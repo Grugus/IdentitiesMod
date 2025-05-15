@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.advancements.critereon.EntityHurtPlayerTrigger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -33,6 +34,11 @@ public class AdaptationEvents {
     }
     @SubscribeEvent
     public static void onPlayerDamage(LivingIncomingDamageEvent event) {
+        DamageSource source = event.getSource();
+        adapt(source);
+    }
+    public static void adapt(DamageSource source)
+    {
 
     }
     public static void switchAdaptation()
