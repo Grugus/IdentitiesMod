@@ -62,6 +62,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> ADAPTATION_SWITCH_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.adaptation.switch",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_G,
+            "key.categories.misc"
+    ));
+
     // Event is on the mod event bus only on the physical client
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
@@ -71,5 +79,6 @@ public class ModMappings {
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
         event.register(GRAVITY_VORTEX_MAPPING.get());
+        event.register(ADAPTATION_SWITCH_MAPPING.get());
     }
 }
