@@ -2,6 +2,8 @@ package com.schnozz.identitiesmod.events;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
+import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +22,8 @@ public class AttachmentSyncEvents {
         {
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
+            AdaptationAttachment adaptation = player.getData(ModDataAttachments.ADAPTION);
+            PacketDistributor.sendToPlayer(player, new AdaptationSyncPayload(adaptation));
 
         }
     }
@@ -30,6 +34,8 @@ public class AttachmentSyncEvents {
 
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
+            AdaptationAttachment adaptation = player.getData(ModDataAttachments.ADAPTION);
+            PacketDistributor.sendToPlayer(player, new AdaptationSyncPayload(adaptation));
 
         }
     }

@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 public record CooldownSyncPayload(Cooldown cooldown, ResourceLocation key, boolean setRemove) implements CustomPacketPayload {
 
     // Define the Type for the CooldownSyncPayload
-    public static final Type<CooldownSyncPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("yourmodid", "cooldown_sync"));
+    public static final Type<CooldownSyncPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("identitiesmod", "cooldown_sync"));
 
     // Create a StreamCodec to serialize and deserialize the payload
     public static final StreamCodec<FriendlyByteBuf, CooldownSyncPayload> STREAM_CODEC = StreamCodec.composite(

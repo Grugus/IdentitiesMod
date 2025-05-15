@@ -36,6 +36,20 @@ public class PayloadRegister {
         );
 
         registrar.playToClient(
+                AdaptationSyncPayload.TYPE,
+                AdaptationSyncPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            player.setData(ModDataAttachments.ADAPTION.get(), payload.attachment());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
                 SoundPayload.TYPE,
                 SoundPayload.STREAM_CODEC,
                 (payload, context) -> {
