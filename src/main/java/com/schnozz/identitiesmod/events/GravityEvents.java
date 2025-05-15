@@ -37,34 +37,39 @@ public class GravityEvents {
         if (power.equals("Gravity")) {
             float pushDamage = 4.0F; float pullDamage = 4.0F;
                 //gravity push
-                if (GRAVITY_PUSH_MAPPING.get().consumeClick()) {
-                    double xMin = gravityPlayer.getX() - 10.0; double yMin = gravityPlayer.getY() - 10.0; double zMin = gravityPlayer.getZ() - 10.0;
-                    double xMax = gravityPlayer.getX() + 10.0; double yMax = gravityPlayer.getY() + 10.0; double zMax = gravityPlayer.getZ() + 10.0;
-                    AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
+            if (GRAVITY_PUSH_MAPPING.get().consumeClick()) {
+                double xMin = gravityPlayer.getX() - 10.0; double yMin = gravityPlayer.getY() - 10.0; double zMin = gravityPlayer.getZ() - 10.0;
+                double xMax = gravityPlayer.getX() + 10.0; double yMax = gravityPlayer.getY() + 10.0; double zMax = gravityPlayer.getZ() + 10.0;
+                AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
 
-                    List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
-                    for (Entity entity : entitiesInBox) {
-                        Vec3 angle = gravityPlayer.getLookAngle();
-                        double rx = angle.x; double ry = angle.y; double rz = angle.z;
-                        double forceX = 4.0 * rx; double forceY = 4.0 * ry; double forceZ = 4.0 * rz;
-                        PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-                        PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
-                    }
+                List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
+                for (Entity entity : entitiesInBox) {
+                    Vec3 angle = gravityPlayer.getLookAngle();
+                    double rx = angle.x; double ry = angle.y; double rz = angle.z;
+                    double forceX = 4.0 * rx; double forceY = 4.0 * ry; double forceZ = 4.0 * rz;
+                    PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
                 }
-                //gravity pull
-                else if (GRAVITY_PULL_MAPPING.get().consumeClick()) {
-                    double xMin = gravityPlayer.getX() - 20.0; double yMin = gravityPlayer.getY() - 20.0; double zMin = gravityPlayer.getZ() - 20.0;
-                    double xMax = gravityPlayer.getX() + 20.0; double yMax = gravityPlayer.getY() + 20.0; double zMax = gravityPlayer.getZ() + 20.0;
-                    AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
+            }
+            //gravity pull
+            else if (GRAVITY_PULL_MAPPING.get().consumeClick()) {
+                double xMin = gravityPlayer.getX() - 20.0; double yMin = gravityPlayer.getY() - 20.0; double zMin = gravityPlayer.getZ() - 20.0;
+                double xMax = gravityPlayer.getX() + 20.0; double yMax = gravityPlayer.getY() + 20.0; double zMax = gravityPlayer.getZ() + 20.0;
+                AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
 
-                    List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
-                    for (Entity entity : entitiesInBox) {
-                        double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
-                        double forceX = -dx/2; double forceY = -dy/2; double forceZ = -dz/2;
-                        PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-                        PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pullDamage));
-                    }
+                List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
+                for (Entity entity : entitiesInBox) {
+                    double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
+                    double forceX = -dx/2; double forceY = -dy/2; double forceZ = -dz/2;
+                    PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pullDamage));
                 }
+            }
+            else if(GRAVITY_VORTEX_MAPPING.get().consumeClick())
+            {
+                //
+                //
+            }
         }
     }
 

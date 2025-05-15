@@ -53,6 +53,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> GRAVITY_VORTEX_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.gravity.vortex",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_G,
+            "key.categories.misc"
+    ));
+
     // Event is on the mod event bus only on the physical client
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
@@ -61,5 +69,6 @@ public class ModMappings {
         event.register(LIFESTEALER_MAPPING.get());
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
+        event.register(GRAVITY_VORTEX_MAPPING.get());
     }
 }
