@@ -27,7 +27,7 @@ public class ServerViltruiteEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
-        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
+        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().hasData(ModDataAttachments.POWER_TYPE) && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
         {
             if(!event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty())
             {
@@ -54,6 +54,7 @@ public class ServerViltruiteEvents {
             Cooldown cd = new Cooldown(startTime, 200);
             CooldownAttachment cdAttach = p.getData(ModDataAttachments.COOLDOWN);
             ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
+            ModClientEvents.setIconCooldown(cd);
             cdAttach.setCooldown(key, startTime, 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
 

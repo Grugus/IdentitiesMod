@@ -28,29 +28,30 @@ public class ServerParryEvents {
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
         long currentTime = event.getEntity().level().getGameTime();
-        if(event.getEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime))
+        if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime))
         {
             if((event.getSource().getDirectEntity() instanceof LivingEntity source))
             {
-                source.hurt(event.getSource(), event.getAmount());
+                source.hurt(event.getSource(), event.getAmount()*.5f);
                 player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                 CooldownAttachment newAtachment = new CooldownAttachment();
                 newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                 newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                 player.setData(ModDataAttachments.COOLDOWN, newAtachment);
                 PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-
+                ParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
                 event.setCanceled(true);
                 System.out.println("Parry Success");
             }
             else if(event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source)
             {
-                source.hurt(event.getSource(), event.getAmount());
+                source.hurt(event.getSource(), event.getAmount()*.5f);
                 player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                 CooldownAttachment newAtachment = new CooldownAttachment();
                 newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                 newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                 player.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                ParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
                 PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                 PacketDistributor.sendToPlayer(player, new SoundPayload(ModSounds.PARRY_SOUND.get()));
                 event.setCanceled(true);

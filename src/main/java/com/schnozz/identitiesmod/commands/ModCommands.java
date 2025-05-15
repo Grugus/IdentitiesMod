@@ -8,6 +8,7 @@ import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -37,5 +38,18 @@ public class ModCommands {
 
                                     return Command.SINGLE_SUCCESS;
                                 }))));
+
+
+        dispatcher.register(Commands.literal("getpower")
+                .requires(source -> source.hasPermission(2)) // OP level 2
+                .then(Commands.argument("target", EntityArgument.player())
+                                .executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+
+                                    target.sendSystemMessage(Component.literal(target.getData(ModDataAttachments.POWER_TYPE)));
+                                    PacketDistributor.sendToPlayer(target, new PowerSyncPayload(target.getData(ModDataAttachments.POWER_TYPE)));
+
+                                    return Command.SINGLE_SUCCESS;
+                                })));
     }
 }
