@@ -1,13 +1,16 @@
 package com.schnozz.identitiesmod.register_attachments;
 
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModDataAttachments {
@@ -39,10 +42,12 @@ public class ModDataAttachments {
                             .build()
             );
 
-    public static final Supplier<AttachmentType<CooldownAttachment>> ADAPTION =
+
+
+    public static final Supplier<AttachmentType<AdaptationAttachment>> ADAPTION =
             ATTACHMENT_TYPES.register("adaption", () ->
-                    AttachmentType.builder(CooldownAttachment::new)
-                            .serialize(CooldownAttachment.CODEC)
+                    AttachmentType.builder(AdaptationAttachment::new)
+                            .serialize(AdaptationAttachment.CODEC)
                             .build()
             );
 }

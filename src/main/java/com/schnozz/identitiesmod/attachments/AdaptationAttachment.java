@@ -12,15 +12,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdaptationAttachment {
-    private static Map<ResourceLocation, Float> ADAPTATION_VALUES = new HashMap<>();
+    private Map<ResourceLocation, Float> ADAPTATION_VALUES = new HashMap<>();
 
-    public static float getAdaptationValue(ResourceLocation id)
+    public float getAdaptationValue(ResourceLocation id)
     {
         return ADAPTATION_VALUES.get(id);
     }
-    public static void setAdaptationValue(ResourceLocation id, float adaptationValue)
+    public void setAdaptationValue(ResourceLocation id, float adaptationValue)
     {
         ADAPTATION_VALUES.put(id,adaptationValue);
     }
+
+    public Map<ResourceLocation, Float> getAllAdaptationValues() {
+        return ADAPTATION_VALUES;
+    }
+
+    public static final Codec<AdaptationAttachment> CODEC = Codec.unboundedMap(
+            ResourceLocation.CODEC,
+            Codec.FLOAT
+    ).xmap(map -> {
+        AdaptationAttachment att = new AdaptationAttachment();
+        att.ADAPTATION_VALUES.putAll(map);
+        return att;
+    }, AdaptationAttachment::getAllAdaptationValues);
+
 
 }
