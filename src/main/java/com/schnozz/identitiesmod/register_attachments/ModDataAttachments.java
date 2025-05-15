@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.attachments;
+package com.schnozz.identitiesmod.register_attachments;
 
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
@@ -39,5 +39,10 @@ public class ModDataAttachments {
                             .build()
             );
 
-
+    public static final Supplier<AttachmentType<CooldownAttachment>> ADAPTION =
+            ATTACHMENT_TYPES.register("adaption", () ->
+                    AttachmentType.builder(CooldownAttachment::new)
+                            .serialize(CooldownAttachment.CODEC)
+                            .build()
+            );
 }

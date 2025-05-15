@@ -2,15 +2,12 @@ package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.EnderpearlItem;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
