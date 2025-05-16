@@ -22,8 +22,8 @@ public class ServerAdaptationEvents {
     }
     public static void adapt(Player adapter, DamageSource source)
     {
-        if(source.is()){
+        //if(source.is()){
 
-        }
+        //}
     }
 }
