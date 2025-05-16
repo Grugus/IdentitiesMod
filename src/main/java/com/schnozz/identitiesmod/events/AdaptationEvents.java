@@ -32,15 +32,7 @@ public class AdaptationEvents {
             }
         }
     }
-    @SubscribeEvent
-    public static void onPlayerDamage(LivingIncomingDamageEvent event) {
-        DamageSource source = event.getSource();
-        adapt(source);
-    }
-    public static void adapt(DamageSource source)
-    {
 
-    }
     public static void switchAdaptation()
     {
 
