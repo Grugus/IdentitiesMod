@@ -11,6 +11,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
+    //private static list (string or damagesource) that holds every damage source
+    //second list that holds important damagesources
     @SubscribeEvent
     public static void onPlayerDamage(LivingIncomingDamageEvent event) {
         Entity entity = event.getEntity();
@@ -22,8 +24,6 @@ public class ServerAdaptationEvents {
     }
     public static void adapt(Player adapter, DamageSource source)
     {
-        //if(source.is()){
-
-        //}
+        //random number generator to find a location in the important damage source list and decreases it by 1/2 adaptation value
     }
 }
