@@ -7,16 +7,20 @@ import com.mojang.serialization.DynamicOps;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AdaptationAttachment {
     private Map<ResourceLocation, Float> ADAPTATION_VALUES = new HashMap<>();
+    //public ArrayList<String> damageSourceArrayList = new ArrayList<String>();
+    public float adaptationDegree = 1.00F;
 
     public float getAdaptationValue(ResourceLocation id)
     {
-        return ADAPTATION_VALUES.get(id);
+        return ADAPTATION_VALUES.getOrDefault(id, 0.00f);
     }
     public void setAdaptationValue(ResourceLocation id, float adaptationValue)
     {
