@@ -1,7 +1,10 @@
 package com.schnozz.identitiesmod;
 
+import com.schnozz.identitiesmod.entities.ModEntities;
+import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.sounds.ModSounds;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -42,6 +45,8 @@ public class IdentitiesMod
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
         ModSounds.register(modEventBus);
+        ItemRegistry.register(modEventBus);
+        ModEntities.register(modEventBus);
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         ModDataAttachments.ATTACHMENT_TYPES.register(modEventBus);
@@ -57,7 +62,10 @@ public class IdentitiesMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-
+        if (event.getTabKey().equals(CreativeModeTabs.COMBAT)) {
+            event.accept(ItemRegistry.NECROROD.get());
+            event.accept(ItemRegistry.MOB_HOLDER.get());
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

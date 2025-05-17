@@ -1,6 +1,7 @@
 {
   "itemGroup.examplemod": "Example Mod Tab",
   "block.examplemod.example_block": "Example Block",
-  "item.examplemod.example_item": "Example Item",
+  "item.identitiesmod.necrorod": "Necrorod",
+  "item.identitiesmod.mobholder": "Mob Holder",
   "death.attack.identitiesmod.gravity_power": "DON'T FUCK WITH GRAVITY BITCH! I WILL PERMA BAN YOUR ACCOUNT!"
 }
