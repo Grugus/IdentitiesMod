@@ -30,6 +30,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> NECROMANCER_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.necromancer.remove_target",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_H,
+            "key.categories.misc"
+    ));
+
     public static final Lazy<KeyMapping> GRAVITY_PUSH_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.gravity.push",
             KeyConflictContext.UNIVERSAL,

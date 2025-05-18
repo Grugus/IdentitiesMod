@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.powers.parry;
+package com.schnozz.identitiesmod.events.parry;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
