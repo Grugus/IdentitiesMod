@@ -1,31 +1,19 @@
 {
-  "type": "minecraft:shapeless",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
     {
       "item": "minecraft:ender_pearl"
     },
     {
-      "item": "minecraft:bone"
-    },
-    {
-      "item": "minecraft:bone"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    },
-    {
-      "item": "minecraft:rotten_flesh"
-    },
-    {
-      "item": "identitiesmod:mob_holder"
+      "item": "identitiesmod:mobholder"
     }
   ],
   "result": {
-    "item": "identitiesmod:mob_holder",
-    "count": 1
+    "count": 1,
+    "id": "identitiesmod:mobholder"
   }
 }

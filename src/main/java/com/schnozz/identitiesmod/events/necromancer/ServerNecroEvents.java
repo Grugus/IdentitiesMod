@@ -2,10 +2,13 @@ package com.schnozz.identitiesmod.events.necromancer;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
+import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
+import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.items.ItemRegistry;
-import com.schnozz.identitiesmod.items.MobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -13,30 +16,25 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerNecroEvents {
+
+
 
 
 
@@ -128,13 +126,15 @@ public class ServerNecroEvents {
         // Get the item stack that was crafted
         ItemStack craftedItem = event.getCrafting();
         // Check if the crafted item is a MobHolder
-        if (craftedItem.getItem() == ItemRegistry.MOB_HOLDER.get() && craftedItem.getItem() instanceof MobHolder mobHolder) {
+        if (craftedItem.getItem() == ItemRegistry.MOB_HOLDER.get()) {
 
             // Get the crafting matrix (ingredients)
             Container container = event.getInventory();
 
             // Check if Ender Pearl is in the crafting matrix
             boolean hasEnderPearl = false;
+            int currentCharges = 0;
+            CompoundTagListRecord currentRecord = null;
 
             for (int i = 0; i < container.getContainerSize(); i++) {
                 ItemStack stack = container.getItem(i);
@@ -144,12 +144,23 @@ public class ServerNecroEvents {
                 }
             }
 
+            for (int i = 0; i < container.getContainerSize(); i++) {
+                ItemStack stack = container.getItem(i);
+                if (stack.getItem() == ItemRegistry.MOB_HOLDER.get()) {
+                    currentCharges = stack.getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge();
+                    currentRecord = stack.getOrDefault(ModDataComponentRegistry.HELD_LIST, new CompoundTagListRecord(new ArrayList<>()));
+                    break;
+                }
+            }
+
             // If the recipe included an Ender Pearl, increase the charge value
             if (hasEnderPearl) {
-                mobHolder.addCharge();
+                craftedItem.set(ModDataComponentRegistry.CHARGE, new ChargeRecord(currentCharges + 1));
+                craftedItem.set(ModDataComponentRegistry.HELD_LIST, currentRecord);
             }
         }
     }
+
 
     @SubscribeEvent
     public static void onEntityJoin(EntityJoinLevelEvent event)
