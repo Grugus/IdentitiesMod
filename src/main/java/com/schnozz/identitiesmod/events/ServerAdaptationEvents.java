@@ -25,12 +25,11 @@ public class ServerAdaptationEvents {
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
         Entity entity = event.getEntity();
         DamageSource source = event.getSource();
+        String damageSourceString = source.getMsgId();
+        damageSourceString = damageSourceString.toLowerCase();
+        ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) {
             Player adapter = (Player) entity;
-            String damageSourceString = source.getMsgId();
-            damageSourceString = damageSourceString.toLowerCase();
-            ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
-
             boolean alreadyAdapted = false;
             String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIDs;
 
@@ -75,7 +74,7 @@ public class ServerAdaptationEvents {
             if(event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) //if adapter is attacking
             {
                 Player adapter = (Player) event.getSource().getDirectEntity();
-                //kys
+                damageCorrectAttack(adapter,sourceLocation,event);
             }
         }
     }
@@ -84,6 +83,13 @@ public class ServerAdaptationEvents {
     {
         float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
         float amount = event.getAmount()*damagePercent;
+        event.setAmount(amount);
+    }
+    //decrease or increase damage taken by adapter's target based on the adaptation value
+    private static void damageCorrectAttack(Player adapter, ResourceLocation sourceLocation, LivingIncomingDamageEvent event)
+    {
+        float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+        float amount = event.getAmount()*(((1-damagePercent)/5)+1);
         event.setAmount(amount);
     }
     //return true if damage taken by adapter will be zero after adaptation value is applied
