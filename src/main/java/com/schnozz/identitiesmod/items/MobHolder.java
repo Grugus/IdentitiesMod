@@ -1,10 +1,11 @@
 package com.schnozz.identitiesmod.items;
 
+import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
+import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
+import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.entities.ThrownMobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,49 +25,55 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.extensions.IItemExtension;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
+import java.util.Objects;
 
 public class MobHolder extends Item  implements IItemExtension {
 
-    private Stack<CompoundTag> heldEntities;
     private static UUIDSavedData command_list;
-    private int charges = 0;
 
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 
-        tooltipComponents.add(Component.literal("Charges: " + charges));
+        tooltipComponents.add(Component.literal("Charges: " + stack.getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0))));
     }
 
     public MobHolder(Properties properties) {
         super(properties);
-        heldEntities = new Stack<>();
     }
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand){
-        if(!player.level().isClientSide && charges>0)
+        if(!player.level().isClientSide)
         {
             command_list = UUIDSavedData.get(player.level().getServer());
             if(command_list.getUUIDList().contains(target.getUUID()))
             {
                 command_list.removeUUID(target.getUUID());
                 CompoundTag tag = new CompoundTag();
-                target.save(tag);
-                heldEntities.add(tag);
+                player.getMainHandItem().update(ModDataComponentRegistry.HELD_LIST, new CompoundTagListRecord(List.of()), listRecord -> {
+                    List<CompoundTag> updated = new ArrayList<>(listRecord.entries());
+                    target.save(tag);
+                    updated.add(tag);
+                    return new CompoundTagListRecord(List.copyOf(updated));
+                });
+                System.out.println(player.getMainHandItem().get(ModDataComponentRegistry.HELD_LIST).entries().size());
                 target.remove(Entity.RemovalReason.DISCARDED);
                 command_list.addUUID(tag.getUUID("UUID"));
-                charges--;
+
             }
         }
         return InteractionResult.SUCCESS;
 
 
     }
+
+
 
 
     @Override
@@ -83,24 +90,22 @@ public class MobHolder extends Item  implements IItemExtension {
                 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
         player.getCooldowns().addCooldown(this, 20);
-        if (!level.isClientSide) {
+        if (!level.isClientSide && player.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge() > 0) {
             ThrownMobHolder thrownMobHolder = new ThrownMobHolder(level, player);
             thrownMobHolder.setItem(itemstack);
             thrownMobHolder.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             level.addFreshEntity(thrownMobHolder);
+            player.getMainHandItem().set(ModDataComponentRegistry.CHARGE, new ChargeRecord(player.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge() - 1));
         }
         return InteractionResultHolder.success(itemstack);
     }
 
 
-    public void addCharge()
-    {
-        charges++;
-    }
 
     @Override
     public InteractionResult useOn(UseOnContext context)
     {
+        List<CompoundTag> heldEntities = new ArrayList<>(context.getItemInHand().getOrDefault(ModDataComponentRegistry.HELD_LIST.get(), new CompoundTagListRecord(new ArrayList<>())).entries());
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos();
         if(!heldEntities.isEmpty())
@@ -112,28 +117,25 @@ public class MobHolder extends Item  implements IItemExtension {
 
 
 
-    public Stack<CompoundTag> getHeldEntities()
-    {
-        return heldEntities;
-    }
 
-    public void popHeldEntities()
-    {
-        heldEntities.pop();
-    }
+
+
 
 
     public void addEntity(Player player, BlockPos pos)
     {
         if(!player.level().isClientSide)
         {
+            List<CompoundTag> heldEntities = new ArrayList<>(player.getMainHandItem().getOrDefault(ModDataComponentRegistry.HELD_LIST.get(), new CompoundTagListRecord(new ArrayList<>())).entries());
             command_list = UUIDSavedData.get(player.level().getServer());
-            CompoundTag tag = heldEntities.pop();
+            CompoundTag tag = heldEntities.removeFirst();
+            System.out.println(heldEntities.size());
+            player.getMainHandItem().set(ModDataComponentRegistry.HELD_LIST, new CompoundTagListRecord(List.copyOf(heldEntities)));
             ResourceLocation entityId = ResourceLocation.tryParse(tag.getString("id"));
             EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityId);
             Entity entity = type.create(player.level());
             entity.load(tag);
-            entity.moveTo(pos, player.getXRot(), player.getYRot());
+            entity.moveTo(pos.getX(), pos.getY() + 2, pos.getZ(), player.getXRot(), player.getYRot());
             if(!command_list.getUUIDList().contains(entity.getUUID()))
             {
                 command_list.addUUID(entity.getUUID());

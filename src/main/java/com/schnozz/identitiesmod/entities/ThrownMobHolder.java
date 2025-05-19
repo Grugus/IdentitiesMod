@@ -1,5 +1,7 @@
 package com.schnozz.identitiesmod.entities;
 
+import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
+import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.items.MobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
@@ -18,6 +20,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class ThrownMobHolder extends ThrowableItemProjectile {
@@ -43,10 +48,11 @@ public class ThrownMobHolder extends ThrowableItemProjectile {
             if(player.getMainHandItem().getItem() instanceof MobHolder mobHolder)
             {
                 command_list = UUIDSavedData.get(player.level().getServer());
-                Stack<CompoundTag> heldEntities = mobHolder.getHeldEntities();
+                List<CompoundTag> heldEntities = new ArrayList<>(((Player) this.getOwner()).getMainHandItem().getOrDefault(ModDataComponentRegistry.HELD_LIST.get(), new CompoundTagListRecord(new ArrayList<>())).entries());
+
                 if(!heldEntities.isEmpty()) {
-                    CompoundTag tag = heldEntities.peek();
-                    mobHolder.popHeldEntities();
+                    CompoundTag tag = heldEntities.removeLast();
+                    ((Player) this.getOwner()).getMainHandItem().set(ModDataComponentRegistry.HELD_LIST,new CompoundTagListRecord(List.copyOf(heldEntities)));
                     ResourceLocation entityId = ResourceLocation.tryParse(tag.getString("id"));
                     EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityId);
                     Entity entity = type.create(player.level());

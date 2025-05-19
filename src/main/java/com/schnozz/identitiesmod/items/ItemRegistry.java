@@ -1,10 +1,14 @@
 package com.schnozz.identitiesmod.items;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
+import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.ArrayList;
 
 public class ItemRegistry {
 
@@ -18,7 +22,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> MOB_HOLDER = ITEMS.registerItem(
             "mobholder",
             MobHolder::new, // The factory that the properties will be passed into.
-            new Item.Properties() // The properties to use.
+            new Item.Properties().stacksTo(1) // The properties to use.
     );
 
     public static void register(IEventBus bus)
