@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.entities;
 
 import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
+import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.items.MobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
@@ -62,6 +64,10 @@ public class ThrownMobHolder extends ThrowableItemProjectile {
                         command_list.addUUID(entity.getUUID());
                     }
                     player.level().addFreshEntity(entity);
+                    if(entity instanceof Monster m)
+                    {
+                        m.goalSelector.addGoal(3, new FollowEntityAtDistanceGoal(m, player,1D, 5f));
+                    }
                     this.discard();
                 }
 

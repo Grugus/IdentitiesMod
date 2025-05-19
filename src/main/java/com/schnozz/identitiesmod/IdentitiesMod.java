@@ -73,6 +73,7 @@ public class IdentitiesMod
         if (event.getTabKey().equals(CreativeModeTabs.COMBAT)) {
             event.accept(ItemRegistry.NECROROD.get());
             event.accept(ItemRegistry.MOB_HOLDER.get());
+            event.accept(ItemRegistry.BONE_WHISTLE.get());
         }
     }
 
