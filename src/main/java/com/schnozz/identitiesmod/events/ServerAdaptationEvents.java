@@ -12,10 +12,14 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
-    private static float heatCap = 0.00F;
-    private static float dotCap = 0.20F;
-    private static float defaultCap = 0.40F;
-    private static float unadaptCap = 2.00F;
+    private static final float HEAT_CAP = 0.00F;
+    private static final float EXPLOSION_CAP = 0.10F;
+    private static final float MOB_CAP = 0.25F;
+    private static final float DEFAULT_CAP = 0.40F;
+    private static final float UNADAPT_CAP = 2.00F;
+
+    private static final float HEAT_ADAPT_DEGREE = 0.01F;
+    private static final float EXPLOSION_ADAPT_DEGREE = 0.13F;
 
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
@@ -25,38 +29,49 @@ public class ServerAdaptationEvents {
             Player adapter = (Player) entity;
             String damageSourceString = source.getMsgId();
             damageSourceString = damageSourceString.toLowerCase();
+            ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
 
-            boolean isDot = false;
+            boolean alreadyAdapted = false;
             String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIDs;
+
+            if(zeroDamage(adapter,damageSourceString,event)){event.setCanceled(true);}
+
             for(String id: heatIds)
             {
                 if(damageSourceString.equals(id))
                 {
-                    if(groupSources(adapter, damageSourceString, event,heatIds))
-                    {
-                        event.setCanceled(true);
-                    }
-                    decreaseAdaptValue(adapter,damageSourceString,heatCap,0.005F);
-                    isDot = true;
+                    damageCorrect(adapter,sourceLocation,event);
+                    groupSourcesAdapt(adapter, heatIds, HEAT_CAP, HEAT_ADAPT_DEGREE);
+                    alreadyAdapted = true;
                 }
             }
             if(damageSourceString.equals("lava"))
             {
-                if(zeroDamage(adapter,damageSourceString,event))
-                {
-                    event.setCanceled(true);
-                }
-                decreaseAdaptValue(adapter,damageSourceString,heatCap,0.01F);
-                isDot = true;
+                damageCorrect(adapter,sourceLocation,event);
+                decreaseAdaptValue(adapter,damageSourceString, HEAT_CAP, HEAT_ADAPT_DEGREE);
+                alreadyAdapted = true;
             }
-            if(!isDot)
+            if(damageSourceString.equals("explosion"))
             {
-                decreaseAdaptValue(adapter,damageSourceString,defaultCap);
+                damageCorrect(adapter,sourceLocation,event);
+                decreaseAdaptValue(adapter,damageSourceString, EXPLOSION_CAP, EXPLOSION_ADAPT_DEGREE);
+                alreadyAdapted = true;
             }
+            if(damageSourceString.equals("mob"))
+            {
+                damageCorrect(adapter,sourceLocation,event);
+                decreaseAdaptValue(adapter,damageSourceString, MOB_CAP);
+                alreadyAdapted = true;
+            }
+            if(!alreadyAdapted)
+            {
+                damageCorrect(adapter,sourceLocation,event);
+                decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
+            }
+            System.out.println("damageSourceString:" + damageSourceString);
         }
         else if(event.getSource().getDirectEntity() != null)
         {
-
             if(event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) //if adapter is attacking
             {
                 Player adapter = (Player) event.getSource().getDirectEntity();
@@ -87,7 +102,7 @@ public class ServerAdaptationEvents {
         if((newAdaptationValue-adaptDegree)>=cap)
         {
             newAdaptationValue -= adaptDegree;
-            increaseAdaptationValue(adapter,sourceString,unadaptCap);
+            increaseAdaptationValue(adapter,sourceString, UNADAPT_CAP);
         }
         else {
             newAdaptationValue = cap;
@@ -133,16 +148,12 @@ public class ServerAdaptationEvents {
     }
     //pre:damage is taken from a damage over source
     //post:increments adaptation value by adaptation degree for every source in group
-    private static boolean groupSources(Player adapter, String sourceString, LivingIncomingDamageEvent event,String[] ids)
+    private static void groupSourcesAdapt(Player adapter, String[] ids, float cap, float customAdaptDegree)
     {
-        ResourceLocation tempLocation;
         for(String id: ids)
         {
-            tempLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,id);
-            damageCorrect(adapter, tempLocation, event);
-            decreaseAdaptValue(adapter,id,dotCap);
+            decreaseAdaptValue(adapter,id,cap,customAdaptDegree);
         }
-        return zeroDamage(adapter,sourceString,event);
     }
     //pre:damage is taken from a damage over source
     //post:deincrements adaptation value
