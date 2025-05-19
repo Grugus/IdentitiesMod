@@ -12,6 +12,11 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
+    private static float heatCap = 0.00F;
+    private static float dotCap = 0.20F;
+    private static float defaultCap = 0.40F;
+    private static float unadaptCap = 2.00F;
+
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
         Entity entity = event.getEntity();
@@ -20,101 +25,145 @@ public class ServerAdaptationEvents {
             Player adapter = (Player) entity;
             String damageSourceString = source.getMsgId();
             damageSourceString = damageSourceString.toLowerCase();
-            ResourceLocation sourceLocation;
-            if(damageSourceString.equals("magic")||damageSourceString.equals("wither")||damageSourceString.equals("freeze")||damageSourceString.equals("fire")||damageSourceString.equals("inFire")||damageSourceString.equals("lava"))
+
+            boolean isDot = false;
+            String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIDs;
+            for(String id: heatIds)
             {
-                damageOverTimeSource(adapter,damageSourceString,event);
-                if(damageOverTimeSource(adapter, damageSourceString, event))
+                if(damageSourceString.equals(id))
+                {
+                    if(groupSources(adapter, damageSourceString, event,heatIds))
+                    {
+                        event.setCanceled(true);
+                    }
+                    decreaseAdaptValue(adapter,damageSourceString,heatCap,0.005F);
+                    isDot = true;
+                }
+            }
+            if(damageSourceString.equals("lava"))
+            {
+                if(zeroDamage(adapter,damageSourceString,event))
                 {
                     event.setCanceled(true);
                 }
+                decreaseAdaptValue(adapter,damageSourceString,heatCap,0.01F);
+                isDot = true;
             }
-            else
+            if(!isDot)
             {
-                sourceLocation = changeAdaptationValues(adapter,damageSourceString);
-                if(damageCorrect(adapter, sourceLocation, event))
-                {
-                    event.setCanceled(true);
-                }
+                decreaseAdaptValue(adapter,damageSourceString,defaultCap);
             }
-            increaseAdaptValue(adapter,damageSourceString);
         }
         else if(event.getSource().getDirectEntity() != null)
         {
-            Player adapter = (Player) event.getSource().getDirectEntity();
-            if(adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
+
+            if(event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) //if adapter is attacking
             {
+                Player adapter = (Player) event.getSource().getDirectEntity();
                 //kys
             }
         }
-
     }
-    private static ResourceLocation changeAdaptationValues(Player adapter, String sourceString)
+    //decrease or increase damage taken by adapter based on the adaptation value
+    private static void damageCorrect(Player adapter, ResourceLocation sourceLocation, LivingIncomingDamageEvent event)
     {
-        ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,sourceString);
-        float currentValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-
-        System.out.println("sourceLocation" + sourceLocation);
-        System.out.println("currentValue" + currentValue);
-
-        if(currentValue >= 4.00F)
-        {
-            return sourceLocation;
-        }
-
-        return sourceLocation;
-    }
-    private static boolean damageCorrect(Player adapter, ResourceLocation sourceLocation, LivingIncomingDamageEvent event)
-    {
-        float damageDecrease = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-        float amount = event.getAmount()-damageDecrease;
-        if(amount < 0)
-        {
-            return true;
-        }
+        float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+        float amount = event.getAmount()*damagePercent;
         event.setAmount(amount);
-        return false;
     }
-    private static boolean checkAmount(Player adapter, String sourceString, LivingIncomingDamageEvent event)
+    //return true if damage taken by adapter will be zero after adaptation value is applied
+    private static boolean zeroDamage(Player adapter, String sourceString, LivingIncomingDamageEvent event)
     {
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,sourceString);
-        float damageDecrease = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-        float amount = event.getAmount()-damageDecrease;
-        return amount <= 0.00F;
+        float damageChange = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+        return damageChange == 0.00F;
     }
-    private static void increaseAdaptValue(Player adapter, String sourceString)
+    //increments adaptation value of a source by adaptation degree on damage taken
+    private static void decreaseAdaptValue(Player adapter, String sourceString, float cap)
     {
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,sourceString);
         float adaptDegree = adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree;
-        float currentValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-        float newValue = adaptDegree+currentValue;
-        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newValue);
+        float newAdaptationValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+        if((newAdaptationValue-adaptDegree)>=cap)
+        {
+            newAdaptationValue -= adaptDegree;
+            increaseAdaptationValue(adapter,sourceString,unadaptCap);
+        }
+        else {
+            newAdaptationValue = cap;
+        }
+        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue );
     }
-    private static boolean damageOverTimeSource(Player adapter, String sourceString, LivingIncomingDamageEvent event)
+    //override of changeAdaptValue with a different adaptation degree
+    private static void decreaseAdaptValue(Player adapter, String sourceString, float cap, float customAdaptDegree)
+    {
+        ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,sourceString);
+        float newAdaptationValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+        if((newAdaptationValue-customAdaptDegree)>=cap)
+        {
+            newAdaptationValue -= customAdaptDegree;
+        }
+        else {
+            newAdaptationValue = cap;
+        }
+        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue );
+    }
+    //when adaptation value is decreased for one source, it is increased for another
+    private static void increaseAdaptationValue(Player adapter, String sourceString, float cap)
+    {
+        ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,sourceString);
+        String[][] importantGroups = adapter.getData(ModDataAttachments.ADAPTION).importantSourceMessageIdGroups;
+        String[] idGroup = {};
+        int random;
+        boolean validGroup = false;
+        while(!validGroup)
+        {
+            random = (int) (Math.random()*importantGroups.length);
+            validGroup = true;
+            idGroup = importantGroups[random];
+            for(String id:idGroup)
+            {
+                if(id.equals(sourceString))
+                {
+                    validGroup = false;
+                }
+            }
+        }
+        groupSourcesUnadapt(adapter,idGroup,cap);
+    }
+    //pre:damage is taken from a damage over source
+    //post:increments adaptation value by adaptation degree for every source in group
+    private static boolean groupSources(Player adapter, String sourceString, LivingIncomingDamageEvent event,String[] ids)
     {
         ResourceLocation tempLocation;
-
-        tempLocation = changeAdaptationValues(adapter,"magic");
-        damageCorrect(adapter, tempLocation, event);
-
-        tempLocation = changeAdaptationValues(adapter,"wither");
-        damageCorrect(adapter, tempLocation, event);
-
-        tempLocation = changeAdaptationValues(adapter,"freeze");
-        damageCorrect(adapter, tempLocation, event);
-
-        tempLocation = changeAdaptationValues(adapter,"onfire");
-        damageCorrect(adapter, tempLocation, event);
-
-        tempLocation = changeAdaptationValues(adapter,"infire");
-        damageCorrect(adapter, tempLocation, event);
-
-        tempLocation = changeAdaptationValues(adapter,"lava");
-        damageCorrect(adapter, tempLocation, event);
-
-        //add other ones like drown and cactus
-
-        return checkAmount(adapter,sourceString,event);
+        for(String id: ids)
+        {
+            tempLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,id);
+            damageCorrect(adapter, tempLocation, event);
+            decreaseAdaptValue(adapter,id,dotCap);
+        }
+        return zeroDamage(adapter,sourceString,event);
     }
-
+    //pre:damage is taken from a damage over source
+    //post:deincrements adaptation value
+    private static void groupSourcesUnadapt(Player adapter, String[] ids, float cap)
+    {
+        ResourceLocation tempLocation;
+        for(String id: ids)
+        {
+            System.out.println("unadapt source:" + id);
+            tempLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,id);
+            float newAdaptationValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(tempLocation);
+            float adaptDegree = adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree/5;
+            if((newAdaptationValue+adaptDegree)<=cap)
+            {
+                newAdaptationValue += adaptDegree;
+            }
+            else {
+                newAdaptationValue = cap;
+            }
+            adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(tempLocation,newAdaptationValue);
+            System.out.println("newAdaptationValue:"+newAdaptationValue);
+        }
+    }
 }
