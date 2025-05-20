@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.entities.ThrownMobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
+import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +42,7 @@ public class MobHolder extends Item  implements IItemExtension {
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 
-        tooltipComponents.add(Component.literal("Charges: " + stack.getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0))));
+        tooltipComponents.add(Component.literal("Charges: " + stack.getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge()));
     }
 
     public MobHolder(Properties properties) {
@@ -49,7 +51,7 @@ public class MobHolder extends Item  implements IItemExtension {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand){
-        if(!player.level().isClientSide)
+        if(!player.level().isClientSide && player.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))
         {
             command_list = UUIDSavedData.get(player.level().getServer());
             if(command_list.getUUIDList().contains(target.getUUID()))
@@ -90,7 +92,7 @@ public class MobHolder extends Item  implements IItemExtension {
                 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
         );
         player.getCooldowns().addCooldown(this, 20);
-        if (!level.isClientSide && player.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge() > 0) {
+        if (!level.isClientSide && player.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer") &&  player.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge() > 0) {
             ThrownMobHolder thrownMobHolder = new ThrownMobHolder(level, player);
             thrownMobHolder.setItem(itemstack);
             thrownMobHolder.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
@@ -108,7 +110,7 @@ public class MobHolder extends Item  implements IItemExtension {
         List<CompoundTag> heldEntities = new ArrayList<>(context.getItemInHand().getOrDefault(ModDataComponentRegistry.HELD_LIST.get(), new CompoundTagListRecord(new ArrayList<>())).entries());
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos();
-        if(!heldEntities.isEmpty())
+        if(!heldEntities.isEmpty() && player.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))
         {
             addEntity(player, pos);
         }

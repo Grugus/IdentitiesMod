@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
 import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
+import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
@@ -29,6 +30,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
@@ -176,6 +178,13 @@ public class ServerNecroEvents {
             );
             monster.targetSelector.removeAllGoals(goal -> true);
             monster.setTarget(null);
+            for(Player p : server.getLevel(ServerLevel.OVERWORLD).players())
+            {
+                if(p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))
+                {
+                    monster.goalSelector.addGoal(3, new FollowEntityAtDistanceGoal(monster, p,1D, 5f));
+                }
+            }
             //add the follow player goal and any others depending on type
         }
     }

@@ -1,6 +1,8 @@
 package com.schnozz.identitiesmod.items;
 
+import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
+import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +42,7 @@ public class Necrorod extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
-        if (!level.isClientSide && level instanceof ServerLevel ls) {
+        if (!level.isClientSide && level instanceof ServerLevel ls && player.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer")) {
             Vec3 eyePosition = player.getEyePosition(1.0F); // Player's eye location
             Vec3 lookVector = player.getLookAngle();        // Direction player is looking
             Vec3 endPosition = eyePosition.add(lookVector.scale(50)); // End of the ray
@@ -77,6 +79,7 @@ public class Necrorod extends Item {
                     if(ls.getEntity(controlled_Entity) != null && ls.getEntity(controlled_Entity) instanceof Monster monster)
                     {
                         monster.setTarget(null);
+                        monster.goalSelector.removeAllGoals(goal -> goal instanceof FollowEntityAtDistanceGoal);
                         monster.setTarget(livingEntity);
                     }
                 }
@@ -90,4 +93,7 @@ public class Necrorod extends Item {
 
 
     }
+
+
+
 }
