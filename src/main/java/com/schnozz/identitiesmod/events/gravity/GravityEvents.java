@@ -1,6 +1,5 @@
-package com.schnozz.identitiesmod.events;
+package com.schnozz.identitiesmod.events.gravity;
 
-import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
@@ -12,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -23,7 +21,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
-import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -84,7 +81,7 @@ public class GravityEvents {
         for (Entity entity : entitiesInBox) {
             Vec3 angle = gravityPlayer.getLookAngle();
             double rx = angle.x; double ry = angle.y; double rz = angle.z;
-            double forceX = 4.0 * rx; double forceY = 3.5 * ry; double forceZ = 4.0 * rz;
+            double forceX = 5.5 * rx; double forceY = 5.0 * ry; double forceZ = 5.5 * rz;
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
             PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
         }
