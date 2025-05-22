@@ -1,7 +1,8 @@
-package com.schnozz.identitiesmod.events;
+package com.schnozz.identitiesmod.events.viltrumite;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.events.ModClientEvents;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
@@ -20,7 +21,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
-public class ServerViltruiteEvents {
+public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {

@@ -15,8 +15,8 @@ import org.lwjgl.glfw.GLFW;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModMappings {
 
-    public static final Lazy<KeyMapping> GRAB_MAPPING = Lazy.of(() -> new KeyMapping(
-            "key.identitiesmod.viltruite.grab", // Will be localized using this translation key
+    public static final Lazy<KeyMapping> VILTRUMITE_GRAB_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.viltrmuite.grab", // Will be localized using this translation key
             InputConstants.Type.KEYSYM, // Default mapping is on the keyboard
             GLFW.GLFW_KEY_G, // Default key is G
             "key.categories.misc" // Mapping will be in the misc category
@@ -78,15 +78,24 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> VILTRUMITE_CHOKE_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.viltrumite.choke",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C,
+            "key.categories.misc"
+    ));
+
     // Event is on the mod event bus only on the physical client
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
-        event.register(GRAB_MAPPING.get());
+        event.register(VILTRUMITE_GRAB_MAPPING.get());
         event.register(PARRY_MAPPING.get());
         event.register(LIFESTEALER_MAPPING.get());
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
         event.register(GRAVITY_VORTEX_MAPPING.get());
         event.register(ADAPTATION_SWITCH_MAPPING.get());
+        event.register(VILTRUMITE_CHOKE_MAPPING.get());
     }
 }

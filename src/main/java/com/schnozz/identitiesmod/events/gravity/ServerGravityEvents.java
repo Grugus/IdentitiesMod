@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.events;
+package com.schnozz.identitiesmod.events.gravity;
 
 import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.IdentitiesMod;

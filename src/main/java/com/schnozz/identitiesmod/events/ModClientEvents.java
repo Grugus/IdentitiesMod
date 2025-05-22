@@ -26,7 +26,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.schnozz.identitiesmod.keymapping.ModMappings.GRAB_MAPPING;
+import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ModClientEvents {
@@ -38,12 +38,12 @@ public class ModClientEvents {
         if(p == null || !p.level().isClientSide() || !p.hasData(ModDataAttachments.POWER_TYPE)) return;
         String power = p.getData(ModDataAttachments.POWER_TYPE);
 
-        if (power.equals("Viltruite") && GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0)) {
+        if (power.equals("Viltrumite") && VILTRUMITE_GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0)) {
             findEntity(Minecraft.getInstance().player);
         }
     }
 
-    private static final CooldownIcon cooldownIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/viltruitegrabcd_icon.png"));
+    private static final CooldownIcon cooldownIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/viltrumitegrabcd_icon.png"));
 
     private static boolean findEntity (Player player)
     {
@@ -85,7 +85,7 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
-        if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Viltruite"))
+        if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
             return;
         }

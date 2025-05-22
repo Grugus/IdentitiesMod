@@ -17,11 +17,12 @@ public class AdaptationAttachment {
     private Map<ResourceLocation, Float> ADAPTATION_VALUES = new HashMap<>();
     //public ArrayList<String> damageSourceArrayList = new ArrayList<String>();
     public float adaptationDegree = 0.10F;
-    public String[] heatSourceMessageIDs = {"onfire","infire","hotfloor"};
+    public String[] heatSourceMessageIds = {"onfire","infire","hotfloor"};
     public String[] dotSourceMessageIds = {"magic", "wither"};
-    public String[] genericMessageId = {"generic"};
+    public String[] genericMessageIds = {"generic","player"};
     public String[] explosionMessageId = {"explosion"};
-    public String[][] importantSourceMessageIdGroups = {heatSourceMessageIDs,dotSourceMessageIds,genericMessageId,explosionMessageId};
+    public String[] arrowMessageId = {"arrow"};
+    public String[][] importantSourceMessageIdGroups = {heatSourceMessageIds,dotSourceMessageIds,genericMessageIds,explosionMessageId,arrowMessageId};
 
     public float getAdaptationValue(ResourceLocation id)
     {
