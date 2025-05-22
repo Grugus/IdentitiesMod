@@ -29,6 +29,11 @@ public class ItemRegistry {
             BoneWhistle::new, // The factory that the properties will be passed into.
             new Item.Properties().stacksTo(1) // The properties to use.
     );
+    public static final DeferredItem<Item> BONE_SHEARS = ITEMS.registerItem(
+            "bone_shears",
+            BoneShears::new, // The factory that the properties will be passed into.
+            new Item.Properties().stacksTo(1) // The properties to use.
+    );
 
     public static void register(IEventBus bus)
     {

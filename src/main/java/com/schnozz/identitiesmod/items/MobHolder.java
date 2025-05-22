@@ -43,6 +43,7 @@ public class MobHolder extends Item  implements IItemExtension {
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 
         tooltipComponents.add(Component.literal("Charges: " + stack.getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord(0)).charge()));
+        tooltipComponents.add(Component.literal("Entities: " + stack.getOrDefault(ModDataComponentRegistry.HELD_LIST, new CompoundTagListRecord(new ArrayList<>())).entries().size()));
     }
 
     public MobHolder(Properties properties) {
