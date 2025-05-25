@@ -22,6 +22,7 @@ public class AdaptationAttachment {
     public String[] genericMessageIds = {"generic","player"};
     public String[] explosionMessageId = {"explosion"};
     public String[] arrowMessageId = {"arrow"};
+    public String[] fullAdaptIds = {"drown","freeze","cactus"};
     public String[][] importantSourceMessageIdGroups = {heatSourceMessageIds,dotSourceMessageIds,genericMessageIds,explosionMessageId,arrowMessageId};
 
     public float getAdaptationValue(ResourceLocation id)

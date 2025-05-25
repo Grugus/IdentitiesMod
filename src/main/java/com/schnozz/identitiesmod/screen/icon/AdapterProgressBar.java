@@ -14,7 +14,6 @@ public class AdapterProgressBar {
     private int size;
     private ResourceLocation source;
     public AdapterProgressBar(int x, int y, int size, ResourceLocation texture, ResourceLocation source) {
-
         this.x = x;
         this.y = y;
         this.size = size;

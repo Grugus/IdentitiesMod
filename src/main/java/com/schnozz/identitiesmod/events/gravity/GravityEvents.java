@@ -29,10 +29,10 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class GravityEvents {
-
-
-
-
+    private static AABB vortexBox;
+    private static double xzScale = 4.0;
+    private static double yScale = 4.0;
+    private static int vortexTimer = 0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
@@ -43,31 +43,44 @@ public class GravityEvents {
         String power = gravityPlayer.getData(ModDataAttachments.POWER_TYPE);
         if (power.equals("Gravity")) {
             float pushDamage = 4.0F; float pullDamage = 4.0F;
-                //gravity push
+            //gravity push
             if (GRAVITY_PUSH_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), 0)) {
                 push(gravityPlayer, pushDamage);
-                pushCooldownIcon.setCooldown(new Cooldown(level.getGameTime(), 200));
+                PUSH_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 200));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), level.getGameTime(), 200);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), false));
             }
             //gravity pull
             else if (GRAVITY_PULL_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), 0)) {
                 pull(gravityPlayer, pullDamage);
-                pullCooldownIcon.setCooldown(new Cooldown(level.getGameTime(), 160));
+                PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 160));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
             }
+            //gravity vortex
             else if(GRAVITY_VORTEX_MAPPING.get().consumeClick())
             {
-                //
-                //
+                createVortexAABB(gravityPlayer);
+                vortexTimer = 1;
+            }
+            if(vortexTimer < 100 && vortexTimer > 0)
+            {
+                //double vortexBoxSize = vortexBox.getSize();
+                List<Entity> entitiesInBox = level.getEntities(gravityPlayer, vortexBox);
+                for(Entity entity: entitiesInBox)
+                {
+                    double dx = entity.getX() - vortexBox.getCenter().x; double dy = entity.getY() - vortexBox.getCenter().y; double dz = entity.getZ() - vortexBox.getCenter().z;
+                    double forceX = -(dx)/4; double forceY = -(dy)/16; double forceZ = -(dz)/4;
+                    PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+                }
+                vortexTimer++;
             }
         }
     }
 
 
-    private static final CooldownIcon pushCooldownIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
-    private static final CooldownIcon pullCooldownIcon = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
+    private static final CooldownIcon PUSH_COOLDOWN_ICON = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
+    private static final CooldownIcon PULL_COOLDOWN_ICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
 
     public static void push(Player gravityPlayer, float pushDamage)
     {
@@ -104,6 +117,13 @@ public class GravityEvents {
         }
     }
 
+    public static void createVortexAABB(Player gravityPlayer)
+    {
+        Vec3 vortexOrigin = gravityPlayer.getEyePosition().add(gravityPlayer.getLookAngle().scale(6));
+        double minX = vortexOrigin.x-xzScale; double minY = vortexOrigin.y-yScale; double minZ = vortexOrigin.z-xzScale;
+        double maxX = vortexOrigin.x+xzScale; double maxY = vortexOrigin.y+yScale; double maxZ = vortexOrigin.z+xzScale;
+        vortexBox = new AABB(minX,minY,minZ,maxX,maxY,maxZ);
+    }
 
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
@@ -114,11 +134,8 @@ public class GravityEvents {
 
         long gameTime = Minecraft.getInstance().level.getGameTime();
         GuiGraphics graphics = event.getGuiGraphics();
-        pushCooldownIcon.render(graphics, gameTime);
-        pullCooldownIcon.render(graphics, gameTime);
-
+        PUSH_COOLDOWN_ICON.render(graphics, gameTime);
+        PULL_COOLDOWN_ICON.render(graphics, gameTime);
     }
-
-
 
 }
