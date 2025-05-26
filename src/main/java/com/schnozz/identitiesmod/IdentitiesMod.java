@@ -1,14 +1,13 @@
 package com.schnozz.identitiesmod;
 
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
+import com.schnozz.identitiesmod.datagen.DataGenerators;
+import com.schnozz.identitiesmod.enchantmenteffects.ModEnchantmentEffects;
 import com.schnozz.identitiesmod.entities.ModEntities;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.sounds.ModSounds;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -61,6 +60,7 @@ public class IdentitiesMod
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         ItemRegistry.register(modEventBus);
+        ModEnchantmentEffects.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
