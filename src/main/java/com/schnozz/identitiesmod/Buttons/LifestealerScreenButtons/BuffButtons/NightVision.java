@@ -27,7 +27,7 @@ public class NightVision extends Button{
             if (p.getMaxHealth() >= 20 + cost)
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
-                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.NIGHT_VISION,0));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.NIGHT_VISION,0, Integer.MAX_VALUE));
             }
         }
     }

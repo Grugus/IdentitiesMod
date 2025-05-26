@@ -21,7 +21,6 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.PARRY_MAPPING;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ParryEvents {
-
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event)
     {

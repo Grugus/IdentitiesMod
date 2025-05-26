@@ -28,14 +28,14 @@ public class JumpUp extends Button
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
                 permLevel++;
-                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,permLevel));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,permLevel, Integer.MAX_VALUE));
             }
         }
         else {
             if (p.getMaxHealth() >= 20 + cost)
             {
                 PacketDistributor.sendToServer(new HealthCostPayload(cost));
-                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,0));
+                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP,0, Integer.MAX_VALUE));
             }
         }
     }

@@ -13,6 +13,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -30,8 +32,8 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class GravityEvents {
     private static AABB vortexBox;
-    private static double xzScale = 4.0;
-    private static double yScale = 4.0;
+    private static double xzScale = 2.5;
+    private static double yScale = 2.5;
     private static int vortexTimer = 0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -63,15 +65,24 @@ public class GravityEvents {
                 createVortexAABB(gravityPlayer);
                 vortexTimer = 1;
             }
-            if(vortexTimer < 100 && vortexTimer > 0)
+            if(vortexTimer < 120 && vortexTimer > 0)
             {
                 //double vortexBoxSize = vortexBox.getSize();
                 List<Entity> entitiesInBox = level.getEntities(gravityPlayer, vortexBox);
                 for(Entity entity: entitiesInBox)
                 {
-                    double dx = entity.getX() - vortexBox.getCenter().x; double dy = entity.getY() - vortexBox.getCenter().y; double dz = entity.getZ() - vortexBox.getCenter().z;
-                    double forceX = -(dx)/4; double forceY = -(dy)/16; double forceZ = -(dz)/4;
+                    double dx = vortexBox.getCenter().x - entity.getX(); double dy = vortexBox.getCenter().x - entity.getY(); double dz = vortexBox.getCenter().z - entity.getZ();
+                    double forceX = (dx)/4; double forceY = (dy)/10; double forceZ = (dz)/4;
+                    if(entity.getClass().equals(ThrownEnderpearl.class))
+                    {
+                        entity.setPos(vortexBox.getCenter());
+                    }
                     PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+                    if(Math.abs(dx)<=1 && Math.abs(dy)<=1 && Math.abs(dz)<=1)
+                    {
+                        entity.setDeltaMovement(0.0,0.0,0.0);
+                    }
+
                 }
                 vortexTimer++;
             }

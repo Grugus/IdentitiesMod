@@ -11,7 +11,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 
-public record PotionLevelPayload(Holder<MobEffect> effect, int level) implements CustomPacketPayload {
+public record PotionLevelPayload(Holder<MobEffect> effect, int level, int duration) implements CustomPacketPayload {
     public static final Type<PotionLevelPayload> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath("identitiesmod", "potion_level_payload"));
 
@@ -20,6 +20,8 @@ public record PotionLevelPayload(Holder<MobEffect> effect, int level) implements
             PotionLevelPayload::effect,
             ByteBufCodecs.INT,
             PotionLevelPayload::level,
+            ByteBufCodecs.INT,
+            PotionLevelPayload::duration,
             PotionLevelPayload::new
     );
 
