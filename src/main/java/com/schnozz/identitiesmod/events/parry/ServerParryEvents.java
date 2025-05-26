@@ -26,7 +26,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerParryEvents {
     private static int parryStreak = 0;
-    private static int parryMissStreak = 0;
     @SubscribeEvent
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
@@ -37,7 +36,6 @@ public class ServerParryEvents {
 
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
                     parryStreak++;
-                    parryMissStreak = 0;
                     source.hurt(event.getSource(), event.getAmount() * .5f);
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
@@ -52,7 +50,6 @@ public class ServerParryEvents {
                     parryBuff(player);
                 } else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
                     parryStreak++;
-                    parryMissStreak = 0;
                     source.hurt(event.getSource(), event.getAmount() * .5f);
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
@@ -67,13 +64,6 @@ public class ServerParryEvents {
 
                     parryBuff(player);
                 }
-            }
-            else {
-                parryStreak = 0;
-                parryMissStreak++;
-                parryUnBuff(player);
-                System.out.println("Parry Streak: " + parryStreak);
-                System.out.println("Miss Streak: " + parryMissStreak);
             }
         }
     }
@@ -111,25 +101,8 @@ public class ServerParryEvents {
             parryStreak = 2;
         }
     }
-    public static void parryUnBuff(Player parryPlayer)
+    public static void parryMiss(Player parryPlayer)
     {
-        if(parryMissStreak == 2)
-        {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.MOVEMENT_SLOWDOWN, 100, 1, false, true));
-        }
-        if(parryMissStreak == 3)
-        {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.WEAKNESS, 200, 1, false, true));
-        }
-        if(parryMissStreak == 4)
-        {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.MOVEMENT_SLOWDOWN, 80, 2, false, true));
-        }
-        if(parryMissStreak == 5)
-        {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.HUNGER, 200, 2, false, true));
-            parryMissStreak = 0;
-        }
-
+        parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.HUNGER, 200, 1, false, true));
     }
 }
