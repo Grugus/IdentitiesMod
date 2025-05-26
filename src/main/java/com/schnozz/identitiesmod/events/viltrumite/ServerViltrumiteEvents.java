@@ -25,7 +25,7 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
-        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().hasData(ModDataAttachments.POWER_TYPE) && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
+        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().hasData(ModDataAttachments.POWER_TYPE) && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
         {
             if(!event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty())
             {
@@ -41,12 +41,12 @@ public class ServerViltrumiteEvents {
 
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
-        if(event.getEntity() instanceof ServerPlayer p && !event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty() && event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltruite"))
+        if(event.getEntity() instanceof ServerPlayer p && !event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty() && event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
         {
             Entity target = level.getEntity(p.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             assert target != null;
             target.setNoGravity(false);
-            target.setDeltaMovement(p.getLookAngle().scale(1));
+            target.setDeltaMovement(p.getLookAngle().scale(2));
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
             long startTime = level.getGameTime();
             Cooldown cd = new Cooldown(startTime, 200);

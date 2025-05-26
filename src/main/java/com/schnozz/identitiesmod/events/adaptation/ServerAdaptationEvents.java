@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
-    private static final float HEAT_CAP = 0.00F;
+    private static final float NO_CAP = 0.00F;
     private static final float EXPLOSION_CAP = 0.10F;
     private static final float MOB_CAP = 0.25F;
     private static final float DEFAULT_CAP = 0.40F;
@@ -41,14 +41,20 @@ public class ServerAdaptationEvents {
                 if(damageSourceString.equals(id))
                 {
                     damageCorrect(adapter,sourceLocation,event);
-                    groupSourcesAdapt(adapter, heatIds, HEAT_CAP, HEAT_ADAPT_DEGREE);
+                    groupSourcesAdapt(adapter, heatIds, NO_CAP, HEAT_ADAPT_DEGREE);
                     alreadyAdapted = true;
                 }
             }
             if(damageSourceString.equals("lava"))
             {
                 damageCorrect(adapter,sourceLocation,event);
-                decreaseAdaptValue(adapter,damageSourceString, HEAT_CAP, HEAT_ADAPT_DEGREE);
+                decreaseAdaptValue(adapter,damageSourceString, NO_CAP, HEAT_ADAPT_DEGREE);
+                alreadyAdapted = true;
+            }
+            if(damageSourceString.equals("drown"))
+            {
+                damageCorrect(adapter,sourceLocation,event);
+                decreaseAdaptValue(adapter,damageSourceString, NO_CAP);
                 alreadyAdapted = true;
             }
             if(damageSourceString.equals("explosion"))
