@@ -86,6 +86,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> GRAVITY_METEOR_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.viltrumite.choke",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "key.categories.misc"
+    ));
+
     // Event is on the mod event bus only on the physical client
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
@@ -97,5 +105,6 @@ public class ModMappings {
         event.register(GRAVITY_VORTEX_MAPPING.get());
         event.register(ADAPTATION_SWITCH_MAPPING.get());
         event.register(VILTRUMITE_CHOKE_MAPPING.get());
+        event.register(GRAVITY_METEOR_MAPPING.get());
     }
 }

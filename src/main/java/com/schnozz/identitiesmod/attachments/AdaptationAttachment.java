@@ -46,6 +46,4 @@ public class AdaptationAttachment {
         att.ADAPTATION_VALUES.putAll(map);
         return att;
     }, AdaptationAttachment::getAllAdaptationValues);
-
-
 }

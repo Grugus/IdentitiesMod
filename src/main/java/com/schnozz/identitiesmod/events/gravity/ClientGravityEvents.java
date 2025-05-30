@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -30,11 +29,13 @@ import java.util.List;
 import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class GravityEvents {
+public class ClientGravityEvents {
     private static AABB vortexBox;
     private static double xzScale = 2.5;
     private static double yScale = 2.5;
     private static int vortexTimer = 0;
+    private static double forceX,forceY,forceZ;
+
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
@@ -65,23 +66,23 @@ public class GravityEvents {
                 createVortexAABB(gravityPlayer);
                 vortexTimer = 1;
             }
-            if(vortexTimer < 120 && vortexTimer > 0)
+            else if(GRAVITY_METEOR_MAPPING.get().consumeClick())
+            {
+                //meteor
+            }
+            if(vortexTimer < 240 && vortexTimer > 0)
             {
                 //double vortexBoxSize = vortexBox.getSize();
                 List<Entity> entitiesInBox = level.getEntities(gravityPlayer, vortexBox);
                 for(Entity entity: entitiesInBox)
                 {
-                    double dx = vortexBox.getCenter().x - entity.getX(); double dy = vortexBox.getCenter().x - entity.getY(); double dz = vortexBox.getCenter().z - entity.getZ();
-                    double forceX = (dx)/4; double forceY = (dy)/10; double forceZ = (dz)/4;
+                    setVortexForces(entity);;
+
                     if(entity.getClass().equals(ThrownEnderpearl.class))
                     {
                         entity.setPos(vortexBox.getCenter());
                     }
                     PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-                    if(Math.abs(dx)<=1 && Math.abs(dy)<=1 && Math.abs(dz)<=1)
-                    {
-                        entity.setDeltaMovement(0.0,0.0,0.0);
-                    }
 
                 }
                 vortexTimer++;
@@ -130,7 +131,7 @@ public class GravityEvents {
 
     public static void createVortexAABB(Player gravityPlayer)
     {
-        Vec3 vortexOrigin = gravityPlayer.getEyePosition().add(gravityPlayer.getLookAngle().scale(6));
+        Vec3 vortexOrigin = gravityPlayer.getEyePosition().add(gravityPlayer.getLookAngle().scale(4));
         double minX = vortexOrigin.x-xzScale; double minY = vortexOrigin.y-yScale; double minZ = vortexOrigin.z-xzScale;
         double maxX = vortexOrigin.x+xzScale; double maxY = vortexOrigin.y+yScale; double maxZ = vortexOrigin.z+xzScale;
         vortexBox = new AABB(minX,minY,minZ,maxX,maxY,maxZ);
@@ -149,4 +150,53 @@ public class GravityEvents {
         PULL_COOLDOWN_ICON.render(graphics, gameTime);
     }
 
+    public static void setVortexForces(Entity entity)
+    {
+        // Position deltas
+        double dx = vortexBox.getCenter().x - entity.getX();
+        double dy = vortexBox.getCenter().y - entity.getY(); // include Y now
+        double dz = vortexBox.getCenter().z - entity.getZ();
+
+// Distance in 3D
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (distance == 0) distance = 0.0001; // avoid div by zero
+
+// Normalize the radial vector
+        double radialX = dx / distance;
+        double radialY = dy / distance;
+        double radialZ = dz / distance;
+
+// Define an arbitrary "up" vector (to calculate tangential vector)
+        double upX = 0, upY = 1, upZ = 0;
+
+// Tangential vector is cross product of radial and up vector
+// This gives a perpendicular direction in 3D
+        double tangentX = radialY * upZ - radialZ * upY;
+        double tangentY = radialZ * upX - radialX * upZ;
+        double tangentZ = radialX * upY - radialY * upX;
+
+// Normalize tangential vector
+        double tangentLength = Math.sqrt(tangentX * tangentX + tangentY * tangentY + tangentZ * tangentZ);
+        if (tangentLength == 0) tangentLength = 0.0001;
+        tangentX /= tangentLength;
+        tangentY /= tangentLength;
+        tangentZ /= tangentLength;
+
+// Spiral force components
+        double radialStrength = 0.15;      // inward pull
+        double tangentialStrength = 0.1; // circular motion
+
+// Combine the two forces
+        forceX = radialX * radialStrength + tangentX * tangentialStrength;
+        forceY = radialY * radialStrength + tangentY * tangentialStrength;
+        forceZ = radialZ * radialStrength + tangentZ * tangentialStrength;
+
+        double maxForce = 0.15;
+        double magnitude = Math.sqrt(forceX * forceX + forceY * forceY + forceZ * forceZ);
+        if (magnitude > maxForce) {
+            forceX *= maxForce / magnitude;
+            forceY *= maxForce / magnitude;
+            forceZ *= maxForce / magnitude;
+        }
+    }
 }
