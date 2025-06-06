@@ -48,7 +48,8 @@ public class ClientGravityEvents {
     private static double vX,vY,vZ;
     //chaos target entity id
     private static int chaosTargetEntityId;
-
+    //chaos damage
+    private static float chaosDamage = 1.5F;
 
 
 
@@ -64,17 +65,16 @@ public class ClientGravityEvents {
 
         String power = gravityPlayer.getData(ModDataAttachments.POWER_TYPE);
         if (power.equals("Gravity")) {
-            float pushDamage = 4.0F; float pullDamage = 4.0F;
             //gravity push
             if (GRAVITY_PUSH_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), 0)) {
-                push(gravityPlayer, pushDamage);
+                push(gravityPlayer);
                 PUSH_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), level.getGameTime(), 200);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), false));
             }
             //gravity pull
             else if (GRAVITY_PULL_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), 0)) {
-                pull(gravityPlayer, pullDamage);
+                pull(gravityPlayer);
                 PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 200));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
@@ -96,14 +96,8 @@ public class ClientGravityEvents {
                 Vec3 lookVector = gravityPlayer.getLookAngle();        // Direction player is looking
                 Vec3 endPosition = eyePosition.add(lookVector.scale(50)); // End of the ray
 
-
-
-
                 // Create AABB for entity search along the line (expanded path)
                 AABB searchArea = new AABB(eyePosition, endPosition).inflate(1.0); // Slightly wider search area
-
-
-
 
                 // Filter and find first entity hit
                 List<Entity> entities = level.getEntities(gravityPlayer, searchArea, (entity) -> {
@@ -111,21 +105,12 @@ public class ClientGravityEvents {
                     return entity instanceof LivingEntity && !entity.isSpectator() && entity != gravityPlayer;
                 });
 
-
-
-
                 Entity target = null;
                 double closestDistance = Double.MAX_VALUE;
-
-
-
 
                 for (Entity entity : entities) {
                     AABB entityBox = entity.getBoundingBox().inflate(0.3);
                     Optional<Vec3> hit = entityBox.clip(eyePosition, endPosition);
-
-
-
 
                     if (hit.isPresent()) {
                         double distance = eyePosition.distanceTo(hit.get());
@@ -136,17 +121,17 @@ public class ClientGravityEvents {
                     }
                 }
 
-
-
-
                 if (target instanceof LivingEntity livingEntity) {
                     chaosTargetEntityId = livingEntity.getId();
                     chaosTimer = 1;
+                    double x = (int)(Math.random()*X_STRENGTH)+0.2;
+                    double z = (int)(Math.random()*Z_STRENGTH)+0.2;
+                    if((int)(Math.random()*2) == 0) {x*=-1;}
+                    if((int)(Math.random()*2) == 0) {z*=-1;}
+
+                    PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage));
                 }
-
-
-
-
             }
             //vortex logic
             if(vortexTimer > 0 && vortexTimer < 240)
@@ -156,9 +141,6 @@ public class ClientGravityEvents {
                 for(Entity entity: entitiesInBox)
                 {
                     setVortexForces(entity);;
-
-
-
 
                     if(entity.getClass().equals(ThrownEnderpearl.class))
                     {
@@ -171,7 +153,7 @@ public class ClientGravityEvents {
             //chaos logic
             if(chaosTimer > 0 && chaosTimer < 500 && chaosTargetEntityId != 0)
             {
-                int ran = (int) (Math.random() * 50);
+                int ran = (int) (Math.random() * 35);
                 if(ran == 0)
                 {
                     double x = (int)(Math.random()*X_STRENGTH)+0.2;
@@ -179,13 +161,8 @@ public class ClientGravityEvents {
                     if((int)(Math.random()*2) == 0) {x*=-1;}
                     if((int)(Math.random()*2) == 0) {z*=-1;}
 
-
-
-
                     PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-
-
-
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage));
 
                     chaosTimer++;
                 }
@@ -194,70 +171,41 @@ public class ClientGravityEvents {
     }
 
 
-
-
-
-
-
-
     private static final CooldownIcon PUSH_COOLDOWN_ICON = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
     private static final CooldownIcon PULL_COOLDOWN_ICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
 
-
-
-
-    public static void push(Player gravityPlayer, float pushDamage)
+    public static void push(Player gravityPlayer)
     {
         Level level = gravityPlayer.level();
-
-
-
 
         double xMin = gravityPlayer.getX() - 10.0; double yMin = gravityPlayer.getY() - 10.0; double zMin = gravityPlayer.getZ() - 10.0;
         double xMax = gravityPlayer.getX() + 10.0; double yMax = gravityPlayer.getY() + 10.0; double zMax = gravityPlayer.getZ() + 10.0;
         AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
 
-
-
-
         List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
         for (Entity entity : entitiesInBox) {
             Vec3 angle = gravityPlayer.getLookAngle();
             double rx = angle.x; double ry = angle.y; double rz = angle.z;
-            double forceX = 5.5 * rx; double forceY = 5.0 * ry; double forceZ = 5.5 * rz;
+            double forceX = 4.0 * rx; double forceY = 5.0 * ry; double forceZ = 4.0 * rz;
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-            PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pushDamage));
         }
     }
 
-
-
-
-    public static void pull(Player gravityPlayer, float pullDamage)
+    public static void pull(Player gravityPlayer)
     {
         Level level = gravityPlayer.level();
-
-
-
 
         double xMin = gravityPlayer.getX() - 20.0; double yMin = gravityPlayer.getY() - 20.0; double zMin = gravityPlayer.getZ() - 20.0;
         double xMax = gravityPlayer.getX() + 20.0; double yMax = gravityPlayer.getY() + 20.0; double zMax = gravityPlayer.getZ() + 20.0;
         AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
-
-
-
 
         List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
         for (Entity entity : entitiesInBox) {
             double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
             double forceX = -dx/2; double forceY = -dy/4; double forceZ = -dz/2;
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
-            PacketDistributor.sendToServer(new EntityDamagePayload(entity.getId(),gravityPlayer.getId(),pullDamage));
         }
     }
-
-
-
 
     public static void createVortexAABB(Player gravityPlayer)
     {
@@ -267,9 +215,6 @@ public class ClientGravityEvents {
         vortexBox = new AABB(minX,minY,minZ,maxX,maxY,maxZ);
     }
 
-
-
-
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
         if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
@@ -277,15 +222,11 @@ public class ClientGravityEvents {
             return;
         }
 
-
         long gameTime = Minecraft.getInstance().level.getGameTime();
         GuiGraphics graphics = event.getGuiGraphics();
         PUSH_COOLDOWN_ICON.render(graphics, gameTime);
         PULL_COOLDOWN_ICON.render(graphics, gameTime);
     }
-
-
-
 
     public static void setVortexForces(Entity entity)
     {
@@ -293,7 +234,6 @@ public class ClientGravityEvents {
         double dx = vortexBox.getCenter().x - entity.getX();
         double dy = vortexBox.getCenter().y - entity.getY();
         double dz = vortexBox.getCenter().z - entity.getZ();
-
 
         vX = dx/4; vY = dy/4; vZ = dz/4;
     }
