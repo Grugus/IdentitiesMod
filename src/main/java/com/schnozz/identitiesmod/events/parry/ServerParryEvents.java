@@ -43,12 +43,12 @@ public class ServerParryEvents {
                     newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-                    ParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
+                    ClientParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
                     event.setCanceled(true);
                     System.out.println("Parry Success");
 
                     parryBuff(player);
-                } else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
+                }else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
                     parryStreak++;
                     source.hurt(event.getSource(), event.getAmount() * .5f);
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
@@ -56,7 +56,7 @@ public class ServerParryEvents {
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                     newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
-                    ParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
+                    ClientParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                     PacketDistributor.sendToPlayer(player, new SoundPayload(ModSounds.PARRY_SOUND.get()));
                     event.setCanceled(true);
@@ -64,6 +64,10 @@ public class ServerParryEvents {
 
                     parryBuff(player);
                 }
+            }
+            else
+            {
+                parryStreak = 0;
             }
         }
     }
@@ -100,9 +104,5 @@ public class ServerParryEvents {
             parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.ABSORPTION, 300, 3, false, true));
             parryStreak = 2;
         }
-    }
-    public static void parryMiss(Player parryPlayer)
-    {
-        parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.HUNGER, 200, 1, false, true));
     }
 }

@@ -77,6 +77,13 @@ public class PayloadRegister {
         );
 
         registrar.playToServer(
+                VelocityPayload.TYPE,
+                VelocityPayload.STREAM_CODEC,
+                ServerVelocityHandler::handle
+        );
+
+
+        registrar.playToServer(
                 EntityBoxPayload.TYPE,
                 EntityBoxPayload.STREAM_CODEC,
                 (payload, context) -> {

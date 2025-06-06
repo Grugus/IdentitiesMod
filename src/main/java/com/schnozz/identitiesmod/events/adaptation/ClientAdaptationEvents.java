@@ -15,7 +15,7 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import static com.schnozz.identitiesmod.keymapping.ModMappings.ADAPTATION_SWITCH_MAPPING;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class AdaptationEvents {
+public class ClientAdaptationEvents {
     private static final AdapterProgressBar DIAMOND_SWORD_BAR = new AdapterProgressBar(10,10, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/diamond_sword_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"generic"));
     private static final AdapterProgressBar FLAME_BAR = new AdapterProgressBar(10,33, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/flame_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"infire"));
     private static final AdapterProgressBar POTION_BAR = new AdapterProgressBar(10,56, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/potion_of_harming_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"magic"));
