@@ -71,4 +71,7 @@ public class UUIDSavedData extends SavedData {
     public static UUIDSavedData get(MinecraftServer server) {
         return server.getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(UUIDSavedData::new, UUIDSavedData::load), "example");
     }
+
+
+
 }

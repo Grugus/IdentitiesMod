@@ -1,5 +1,7 @@
 package com.schnozz.identitiesmod;
 
+import com.schnozz.identitiesmod.blockentities.BlockEntityRegistry;
+import com.schnozz.identitiesmod.blocks.BlockRegistry;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.datagen.DataGenerators;
 import com.schnozz.identitiesmod.enchantmenteffects.ModEnchantmentEffects;
@@ -60,6 +62,8 @@ public class IdentitiesMod
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         ItemRegistry.register(modEventBus);
+        BlockRegistry.BLOCKS.register(modEventBus);
+        BlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
         ModEnchantmentEffects.register(modEventBus);
     }
 
