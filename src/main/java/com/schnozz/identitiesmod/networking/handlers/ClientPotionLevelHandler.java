@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.networking;
+package com.schnozz.identitiesmod.networking.handlers;
 
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;

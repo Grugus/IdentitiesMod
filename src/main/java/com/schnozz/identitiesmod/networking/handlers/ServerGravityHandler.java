@@ -1,12 +1,10 @@
-package com.schnozz.identitiesmod.networking;
+package com.schnozz.identitiesmod.networking.handlers;
 
 import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import java.util.Objects;
 
 public class ServerGravityHandler {
     public static void handle(GravityPayload payload, IPayloadContext context)

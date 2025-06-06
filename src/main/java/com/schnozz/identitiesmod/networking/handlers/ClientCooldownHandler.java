@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.networking;
+package com.schnozz.identitiesmod.networking.handlers;
 
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;

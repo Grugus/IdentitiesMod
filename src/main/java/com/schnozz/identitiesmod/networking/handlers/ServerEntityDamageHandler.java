@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.networking;
+package com.schnozz.identitiesmod.networking.handlers;
 
 import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
