@@ -2,7 +2,6 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.events.ModClientEvents;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
@@ -52,7 +51,7 @@ public class ServerViltrumiteEvents {
             Cooldown cd = new Cooldown(startTime, 200);
             CooldownAttachment cdAttach = p.getData(ModDataAttachments.COOLDOWN);
             ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
-            ModClientEvents.setIconCooldown(cd);
+            ClientViltrumiteEvents.setIconCooldown(cd);
             cdAttach.setCooldown(key, startTime, 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
 

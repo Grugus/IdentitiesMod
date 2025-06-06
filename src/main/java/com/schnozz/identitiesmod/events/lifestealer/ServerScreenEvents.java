@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.events;
+package com.schnozz.identitiesmod.events.lifestealer;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;

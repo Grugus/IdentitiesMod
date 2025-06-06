@@ -51,17 +51,12 @@ public class ClientGravityEvents {
     //chaos damage
     private static float chaosDamage = 1.5F;
 
-
-
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
         if (gravityPlayer == null) return;
         Level level = gravityPlayer.level();
         if(!level.isClientSide()) return;
-
-
-
 
         String power = gravityPlayer.getData(ModDataAttachments.POWER_TYPE);
         if (power.equals("Gravity")) {

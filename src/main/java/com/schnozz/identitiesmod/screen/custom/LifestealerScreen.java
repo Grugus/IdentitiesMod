@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons.*;
 import com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons.*;
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.events.ServerScreenEvents;
+import com.schnozz.identitiesmod.events.lifestealer.ServerScreenEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
