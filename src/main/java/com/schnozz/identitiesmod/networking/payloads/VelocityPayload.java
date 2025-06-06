@@ -10,9 +10,6 @@ public record VelocityPayload(int entityID, double vx, double vy, double vz) imp
     public static final Type<VelocityPayload> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath("identitiesmod", "velocity_payload"));
 
-
-
-
     public static final StreamCodec<ByteBuf, VelocityPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT,
             VelocityPayload::entityID,

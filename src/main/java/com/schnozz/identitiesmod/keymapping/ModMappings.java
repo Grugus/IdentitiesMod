@@ -106,19 +106,19 @@ public class ModMappings {
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         //Viltrumite mappings
         event.register(VILTRUMITE_GRAB_MAPPING.get());
-        event.register(VILTRUMITE_CHOKE_MAPPING.get()); //unimplemented
+        event.register(VILTRUMITE_CHOKE_MAPPING.get()); //in progress
 
 
         //Gravity mappings
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
         event.register(GRAVITY_VORTEX_MAPPING.get());
-        event.register(GRAVITY_METEOR_MAPPING.get()); //in progress
-        event.register(GRAVITY_CHAOS_MAPPING.get());  //fixing
+        event.register(GRAVITY_METEOR_MAPPING.get()); //post v1
+        event.register(GRAVITY_CHAOS_MAPPING.get());
 
 
         //Adaptation mapping
-        event.register(ADAPTATION_SWITCH_MAPPING.get()); //unimplemented
+        event.register(ADAPTATION_SWITCH_MAPPING.get()); //changed to a reflection without adaptation
 
 
         //Parry mapping

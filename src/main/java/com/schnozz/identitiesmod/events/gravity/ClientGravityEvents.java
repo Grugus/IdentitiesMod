@@ -11,7 +11,11 @@ import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -124,8 +128,10 @@ public class ClientGravityEvents {
                     if((int)(Math.random()*2) == 0) {x*=-1;}
                     if((int)(Math.random()*2) == 0) {z*=-1;}
 
+                    Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+
                     PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,placeHolderDamageType));
                 }
             }
             //vortex logic
@@ -156,8 +162,10 @@ public class ClientGravityEvents {
                     if((int)(Math.random()*2) == 0) {x*=-1;}
                     if((int)(Math.random()*2) == 0) {z*=-1;}
 
+                    Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+
                     PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,placeHolderDamageType));
 
                     chaosTimer++;
                 }
@@ -181,7 +189,7 @@ public class ClientGravityEvents {
         for (Entity entity : entitiesInBox) {
             Vec3 angle = gravityPlayer.getLookAngle();
             double rx = angle.x; double ry = angle.y; double rz = angle.z;
-            double forceX = 4.0 * rx; double forceY = 5.0 * ry; double forceZ = 4.0 * rz;
+            double forceX = 4.0 * rx; double forceY = 2.0 * ry; double forceZ = 4.0 * rz;
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
         }
     }

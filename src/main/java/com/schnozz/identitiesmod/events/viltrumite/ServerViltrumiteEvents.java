@@ -54,8 +54,6 @@ public class ServerViltrumiteEvents {
             ClientViltrumiteEvents.setIconCooldown(cd);
             cdAttach.setCooldown(key, startTime, 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
-
-
         }
 
     }

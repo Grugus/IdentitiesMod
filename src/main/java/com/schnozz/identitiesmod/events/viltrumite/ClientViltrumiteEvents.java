@@ -1,19 +1,24 @@
 package com.schnozz.identitiesmod.events.viltrumite;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
-import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
-import com.schnozz.identitiesmod.networking.payloads.EntityBoxPayload;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -30,16 +35,30 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientViltrumiteEvents {
-
-
+    private static final float CHOKE_DAMAGE = 6.0F;
+    private static int dashDuration = 0;
+    private static boolean dashHit;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
-        LocalPlayer p = Minecraft.getInstance().player;
-        if(p == null || !p.level().isClientSide() || !p.hasData(ModDataAttachments.POWER_TYPE)) return;
-        String power = p.getData(ModDataAttachments.POWER_TYPE);
+        LocalPlayer viltrumitePlayer = Minecraft.getInstance().player;
+        if(viltrumitePlayer == null || !viltrumitePlayer.level().isClientSide() || !viltrumitePlayer.hasData(ModDataAttachments.POWER_TYPE)) return;
+        String power = viltrumitePlayer.getData(ModDataAttachments.POWER_TYPE);
 
-        if (power.equals("Viltrumite") && VILTRUMITE_GRAB_MAPPING.get().consumeClick() && !p.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0)) {
-            findEntity(Minecraft.getInstance().player);
+        if (power.equals("Viltrumite")) {
+            if(VILTRUMITE_GRAB_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0))
+            {
+                findEntity(Minecraft.getInstance().player);
+            }
+            if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick())
+            {
+                System.out.println("Mapping Works");
+                chokeDash(viltrumitePlayer);
+            }
+            if(dashDuration > 0 && dashDuration < 30)
+            {
+                dashDuration++;
+                chokeDamage(viltrumitePlayer);
+            }
         }
     }
 
@@ -76,6 +95,44 @@ public class ClientViltrumiteEvents {
         return false;
 
         // do nothing or anything you want to do if it fails put an else statement -- this wasn't chatgpt btw
+    }
+
+    private static void chokeDamage(Player viltrumitePlayer)
+    {
+        Level level = viltrumitePlayer.level();
+
+        List<Entity> entities = level.getEntities(viltrumitePlayer, viltrumitePlayer.getBoundingBox(), (entity) -> {
+            return entity instanceof LivingEntity && !entity.isSpectator() && entity != viltrumitePlayer;
+        });
+
+        Entity target = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Entity entity : entities) {
+            double distance = viltrumitePlayer.distanceTo(entity);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                target = entity;
+            }
+        }
+
+        if (target instanceof LivingEntity livingEntity) {
+            Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+            PacketDistributor.sendToServer(new EntityDamagePayload(target.getId(),viltrumitePlayer.getId(), CHOKE_DAMAGE,placeHolderDamageType));
+            dashDuration = 0;
+
+            PacketDistributor.sendToServer(new VelocityPayload(viltrumitePlayer.getId(),0,0,0));
+            PacketDistributor.sendToServer(new VelocityPayload(target.getId(),0,0,0));
+        }
+    }
+
+    private static void chokeDash(Player viltrumitePlayer)
+    {
+        Vec3 angle = viltrumitePlayer.getLookAngle();
+        double rx = angle.x; double ry = angle.y; double rz = angle.z;
+        double vx = 3.0 * rx; double vy = 2.0 * ry; double vz = 3.0 * rz;
+        PacketDistributor.sendToServer(new VelocityPayload(viltrumitePlayer.getId(),vx,vy,vz));
+        dashDuration = 1;
     }
 
     public static void setIconCooldown(Cooldown cod)
