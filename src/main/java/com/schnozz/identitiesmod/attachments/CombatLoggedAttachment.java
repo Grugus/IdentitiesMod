@@ -4,24 +4,24 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 public class CombatLoggedAttachment {
-    private int unhitTicks = 0;
+    private long hitTime = 0;
 
     public CombatLoggedAttachment() {}
 
-    public int getUnhitTicks() {
-        return unhitTicks;
+    public long getHitTime() {
+        return hitTime;
     }
 
-    public void setUnhitTicks(int num) {
-        unhitTicks = num;
+    public void setHitTime(long num) {
+        hitTime = num;
     }
 
     public static final Codec<CombatLoggedAttachment> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    Codec.INT.fieldOf("unhit_ticks").forGetter(CombatLoggedAttachment::getUnhitTicks)
+                    Codec.LONG.fieldOf("hit_time").forGetter(CombatLoggedAttachment::getHitTime)
             ).apply(instance, unhitTicks -> {
                 CombatLoggedAttachment attachment = new CombatLoggedAttachment();
-                attachment.setUnhitTicks(unhitTicks);
+                attachment.setHitTime(unhitTicks);
                 return attachment;
             })
     );

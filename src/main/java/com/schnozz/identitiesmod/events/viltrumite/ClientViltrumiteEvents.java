@@ -6,12 +6,14 @@ import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -45,6 +47,7 @@ public class ClientViltrumiteEvents {
         String power = viltrumitePlayer.getData(ModDataAttachments.POWER_TYPE);
 
         if (power.equals("Viltrumite")) {
+            //key presses
             if(VILTRUMITE_GRAB_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0))
             {
                 findEntity(Minecraft.getInstance().player);
@@ -62,15 +65,22 @@ public class ClientViltrumiteEvents {
                 else {
                     viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
                 }
+                if(true) {
+                    viltrumitePlayer.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
+                }
             }
-            if(viltrumitePlayer.getData(ModDataAttachments.COMBAT_LOGGED).getUnhitTicks()<100)
+
+            //combat logged flight turn off
+            if(viltrumitePlayer.level().getGameTime() - viltrumitePlayer.getData(ModDataAttachments.COMBAT_LOGGED).getHitTime() < 2000)
             {
                 viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
             }
+            //flight movement
             if(viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")))
             {
                 flight(viltrumitePlayer);
             }
+            //dash timer and choke hit
             if(dashDuration > 0 && dashDuration < 30)
             {
                 dashDuration++;
