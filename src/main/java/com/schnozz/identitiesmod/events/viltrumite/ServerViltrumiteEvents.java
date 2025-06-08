@@ -59,7 +59,6 @@ public class ServerViltrumiteEvents {
         if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
             Player viltrumtiePlayer = (Player) event.getEntity();
-            viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setHitTime(event.getEntity().level().getGameTime());
 
             //cd set
             long startTime = viltrumtiePlayer.level().getGameTime();

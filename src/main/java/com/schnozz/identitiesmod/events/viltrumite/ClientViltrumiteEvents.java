@@ -65,13 +65,13 @@ public class ClientViltrumiteEvents {
                 else {
                     viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
                 }
-                if(viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd"), 0)) {//EVAN, make this a cooldown (if time since hit is less than 60 seconds - 1200 ticks
+                if(viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd"), 0)) {
                     viltrumitePlayer.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
                 }
             }
 
             //combat logged flight turn off
-            if(true)//EVAN, make this a cooldown (if time since hit is less than 60 seconds - 1200 ticks
+            if(viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd"), 0))
             {
                 viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
             }
