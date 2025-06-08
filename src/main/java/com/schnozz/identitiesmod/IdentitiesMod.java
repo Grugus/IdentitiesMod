@@ -69,6 +69,7 @@ public class IdentitiesMod
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+
     }
 
     // Add the example block item to the building blocks tab
@@ -85,6 +86,7 @@ public class IdentitiesMod
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
+
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }

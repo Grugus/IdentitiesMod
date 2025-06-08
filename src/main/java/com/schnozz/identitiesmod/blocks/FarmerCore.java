@@ -1,11 +1,15 @@
 package com.schnozz.identitiesmod.blocks;
 
 import com.mojang.serialization.MapCodec;
+import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -40,6 +44,46 @@ public class FarmerCore extends BaseEntityBlock {
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return null;
     }
+
+    @Override
+    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity)
+    {
+        if(!level.isClientSide)
+        {
+            if(entity instanceof ItemEntity itemEntity)
+            {
+                ItemStack stack = ((ItemEntity) itemEntity).getItem();
+
+                if(stack.getItem() == Items.WHEAT)
+                {
+                    FarmValueSavedData data = FarmValueSavedData.get(level.getServer());
+                    data.addToValue(4 * stack.getCount());
+                    itemEntity.discard();
+                }
+                else if(stack.getItem() == Items.WHEAT_SEEDS)
+                {
+                    FarmValueSavedData data = FarmValueSavedData.get(level.getServer());
+                    data.addToValue(1 * stack.getCount());
+                    itemEntity.discard();
+                }
+                else if(stack.getItem() == Items.HAY_BLOCK)
+                {
+                    FarmValueSavedData data = FarmValueSavedData.get(level.getServer());
+                    data.addToValue(36 * stack.getCount());
+                    itemEntity.discard();
+                }
+                else if(stack.getItem() == Items.BREAD)
+                {
+                    FarmValueSavedData data = FarmValueSavedData.get(level.getServer());
+                    data.addToValue(12 * stack.getCount());
+                    itemEntity.discard();
+                }
+            }
+        }
+        super.stepOn(level, pos, state, entity);
+    }
+
+
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston )

@@ -3,6 +3,7 @@ package com.schnozz.identitiesmod.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.commands.CommandSourceStack;
@@ -49,5 +50,20 @@ public class ModCommands {
 
                                     return Command.SINGLE_SUCCESS;
                                 })));
+
+        dispatcher.register(Commands.literal("getKyleWorth")
+                .requires(source -> source.hasPermission(2)) // OP level 2
+                .then(Commands.argument("target", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+
+                            if(!target.level().isClientSide && target.getData(ModDataAttachments.POWER_TYPE).equals("Kyle"))
+                            {
+                                FarmValueSavedData data = FarmValueSavedData.get(target.getServer());
+                                target.sendSystemMessage(Component.literal("Balance: " + data.getValue()));
+                            }
+
+                            return Command.SINGLE_SUCCESS;
+                        })));
     }
 }

@@ -9,13 +9,13 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 public class FarmValueSavedData extends SavedData {
     private static final String FARM_VALUE_TAG = "FarmTag";
-    private int value;
+    private long value;
 
 
 
     public static FarmValueSavedData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         FarmValueSavedData data = new FarmValueSavedData();
-        if (tag.contains(FARM_VALUE_TAG, Tag.TAG_INT)) {
+        if (tag.contains(FARM_VALUE_TAG, Tag.TAG_LONG)) {
             data.value = tag.getInt(FARM_VALUE_TAG);
         }
         return data;
@@ -24,23 +24,23 @@ public class FarmValueSavedData extends SavedData {
     // Save to NBT
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
-        tag.putInt(FARM_VALUE_TAG, value);
+        tag.putLong(FARM_VALUE_TAG, value);
         return tag;
     }
 
     // Getter
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    public void addToValue(int add)
+    public void addToValue(long add)
     {
         this.value += add;
         this.setDirty();
     }
 
     // Setter
-    public void setValue(int newValue) {
+    public void setValue(long newValue) {
         if (this.value != newValue) {
             this.value = newValue;
             this.setDirty(); // Mark as changed
