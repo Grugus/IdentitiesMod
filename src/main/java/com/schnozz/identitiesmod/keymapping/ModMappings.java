@@ -29,6 +29,14 @@ public class ModMappings {
             GLFW.GLFW_KEY_C,
             "key.categories.misc"
     ));
+    public static final Lazy<KeyMapping> VILTRUMITE_FLIGHT_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.viltrumite.flight",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "key.categories.misc"
+    ));
+
     //Lifestealer Screen
     public static final Lazy<KeyMapping> LIFESTEALER_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.lifestealer.screen",
@@ -107,7 +115,7 @@ public class ModMappings {
         //Viltrumite mappings
         event.register(VILTRUMITE_GRAB_MAPPING.get());
         event.register(VILTRUMITE_CHOKE_MAPPING.get()); //in progress
-
+        event.register(VILTRUMITE_FLIGHT_MAPPING.get());
 
         //Gravity mappings
         event.register(GRAVITY_PUSH_MAPPING.get());
@@ -116,14 +124,11 @@ public class ModMappings {
         event.register(GRAVITY_METEOR_MAPPING.get()); //post v1
         event.register(GRAVITY_CHAOS_MAPPING.get());
 
-
         //Adaptation mapping
         event.register(ADAPTATION_SWITCH_MAPPING.get()); //changed to a reflection without adaptation
 
-
         //Parry mapping
         event.register(PARRY_MAPPING.get());
-
 
         //Lifestealer mapping
         event.register(LIFESTEALER_MAPPING.get());

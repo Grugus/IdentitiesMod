@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons;
+package com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.ToggleButtons;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

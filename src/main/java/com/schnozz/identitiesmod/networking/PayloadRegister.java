@@ -51,6 +51,34 @@ public class PayloadRegister {
         );
 
         registrar.playToClient(
+                ViltrumiteAttachmentSyncPayload.TYPE,
+                ViltrumiteAttachmentSyncPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            player.setData(ModDataAttachments.VILTRUMITE_STATES.get(), payload.attachment());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
+                CombatLoggedAttachmentSyncPayload.TYPE,
+                CombatLoggedAttachmentSyncPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            player.setData(ModDataAttachments.COMBAT_LOGGED.get(), payload.attachment());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
                 SoundPayload.TYPE,
                 SoundPayload.STREAM_CODEC,
                 (payload, context) -> {
@@ -63,8 +91,6 @@ public class PayloadRegister {
                     });
                 }
         );
-
-
 
         registrar.playToServer(
                 HealthCostPayload.TYPE,

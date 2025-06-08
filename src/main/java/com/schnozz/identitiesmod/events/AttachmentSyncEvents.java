@@ -3,7 +3,9 @@ package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
+import com.schnozz.identitiesmod.attachments.ViltrumiteAttachment;
 import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.ViltrumiteAttachmentSyncPayload;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +26,8 @@ public class AttachmentSyncEvents {
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
             AdaptationAttachment adaptation = player.getData(ModDataAttachments.ADAPTION);
             PacketDistributor.sendToPlayer(player, new AdaptationSyncPayload(adaptation));
-
+            ViltrumiteAttachment viltrumiteStates = player.getData(ModDataAttachments.VILTRUMITE_STATES);
+            PacketDistributor.sendToPlayer(player, new ViltrumiteAttachmentSyncPayload(viltrumiteStates));
         }
     }
 

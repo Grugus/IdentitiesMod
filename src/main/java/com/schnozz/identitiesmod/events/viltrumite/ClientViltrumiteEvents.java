@@ -37,7 +37,7 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 public class ClientViltrumiteEvents {
     private static final float CHOKE_DAMAGE = 6.0F;
     private static int dashDuration = 0;
-    private static boolean dashHit;
+    private static double flightSpeed = 2.0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer viltrumitePlayer = Minecraft.getInstance().player;
@@ -51,8 +51,25 @@ public class ClientViltrumiteEvents {
             }
             if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick())
             {
-                System.out.println("Mapping Works");
                 chokeDash(viltrumitePlayer);
+            }
+            if(VILTRUMITE_FLIGHT_MAPPING.get().consumeClick())
+            {
+                if(!viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")))
+                {
+                    viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),true);
+                }
+                else {
+                    viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
+                }
+            }
+            if(viltrumitePlayer.getData(ModDataAttachments.COMBAT_LOGGED).getUnhitTicks()<100)
+            {
+                viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
+            }
+            if(viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")))
+            {
+                flight(viltrumitePlayer);
             }
             if(dashDuration > 0 && dashDuration < 30)
             {
@@ -135,6 +152,13 @@ public class ClientViltrumiteEvents {
         dashDuration = 1;
     }
 
+    private static void flight(Player viltrumitePlayer)
+    {
+        Vec3 angle = viltrumitePlayer.getLookAngle();
+        Vec3 flightVec = angle.multiply(flightSpeed,flightSpeed,flightSpeed);
+        viltrumitePlayer.setDeltaMovement(flightVec);
+    }
+
     public static void setIconCooldown(Cooldown cod)
     {
         cooldownIcon.setCooldown(cod);
@@ -150,6 +174,6 @@ public class ClientViltrumiteEvents {
         long gameTime = Minecraft.getInstance().level.getGameTime();
         GuiGraphics graphics = event.getGuiGraphics();
         cooldownIcon.render(graphics, gameTime);
-
     }
+
 }

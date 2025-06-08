@@ -1,6 +1,5 @@
-package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.ToggleButtons;
+package com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.ToggleButtons;
 
-import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionTogglePayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;

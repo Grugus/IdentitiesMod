@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons;
+package com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.BuffButtons;
 
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;

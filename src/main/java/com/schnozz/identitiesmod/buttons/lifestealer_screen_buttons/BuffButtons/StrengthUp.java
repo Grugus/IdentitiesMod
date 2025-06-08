@@ -1,12 +1,10 @@
-package com.schnozz.identitiesmod.Buttons.LifestealerScreenButtons.BuffButtons;
+package com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.BuffButtons;
 
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;

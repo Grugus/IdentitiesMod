@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
+import com.schnozz.identitiesmod.attachments.CombatLoggedAttachment;
+import com.schnozz.identitiesmod.attachments.ViltrumiteAttachment;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
@@ -41,10 +43,6 @@ public class ModDataAttachments {
             "under_control", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).copyOnDeath().build()
     );
 
-
-
-
-
     public static final Supplier<AttachmentType<CompoundTag>> ENTITY_HELD = ATTACHMENT_TYPES.register(
             "entity_data",
             () -> AttachmentType.builder(CompoundTag::new) // default = empty tag therefore not null
@@ -59,8 +57,6 @@ public class ModDataAttachments {
                             .build()
             );
 
-
-
     public static final Supplier<AttachmentType<AdaptationAttachment>> ADAPTION =
             ATTACHMENT_TYPES.register("adaption", () ->
                     AttachmentType.builder(AdaptationAttachment::new)
@@ -68,6 +64,18 @@ public class ModDataAttachments {
                             .build()
             );
 
-
+    public static final Supplier<AttachmentType<ViltrumiteAttachment>> VILTRUMITE_STATES =
+            ATTACHMENT_TYPES.register("viltrumite_states", () ->
+                    AttachmentType.builder(ViltrumiteAttachment::new)
+                            .serialize(ViltrumiteAttachment.CODEC)
+                            .copyOnDeath()
+                            .build()
+            );
+    public static final Supplier<AttachmentType<CombatLoggedAttachment>> COMBAT_LOGGED =
+            ATTACHMENT_TYPES.register("combat_logged", () ->
+                    AttachmentType.builder(CombatLoggedAttachment::new)
+                            .serialize(CombatLoggedAttachment.CODEC)
+                            .build()
+            );
 
 }

@@ -10,17 +10,23 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerViltrumiteEvents {
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
@@ -35,9 +41,25 @@ public class ServerViltrumiteEvents {
                 target.setPos(targetPos);
                 target.setNoGravity(true);
             }
+            event.getEntity().getData(ModDataAttachments.COMBAT_LOGGED).setUnhitTicks(event.getEntity().getData(ModDataAttachments.COMBAT_LOGGED).getUnhitTicks()+1);
+        }
+
+    }
+    @SubscribeEvent
+    public static void onEntityDamage(LivingIncomingDamageEvent event)
+    {
+        if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
+        {
+            Player viltrumtiePlayer = (Player) event.getEntity();
+            viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setUnhitTicks(0);
+        }
+        else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity().isAlive()  ) {
+            if (event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
+                Player viltrumtiePlayer = (Player) event.getSource().getDirectEntity();
+                viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setUnhitTicks(0);
+            }
         }
     }
-
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
         if(event.getEntity() instanceof ServerPlayer p && !event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty() && event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
@@ -57,6 +79,25 @@ public class ServerViltrumiteEvents {
         }
 
     }
+    @SubscribeEvent
+    public static void onFall(LivingFallEvent event) {
+        Entity entity = event.getEntity();
+        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
+            event.setCanceled(true);
+        }
+    }
 
-
+    @SubscribeEvent
+    public static void onDamage(LivingIncomingDamageEvent event) {
+        Entity entity = event.getEntity();
+        DamageSource source = event.getSource();
+        DamageType type = source.type();
+        String typeString = type.msgId();
+        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
+            if(typeString.equals("minecraft:arrow"))
+            {
+                event.setAmount(event.getOriginalAmount()*3);
+            }
+        }
+    }
 }
