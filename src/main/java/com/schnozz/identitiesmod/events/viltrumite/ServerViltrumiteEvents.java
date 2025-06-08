@@ -55,15 +55,35 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event)
     {
+        if(event.getEntity().level().isClientSide) return;
         if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
             Player viltrumtiePlayer = (Player) event.getEntity();
             viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setHitTime(event.getEntity().level().getGameTime());
+
+            //cd set
+            long startTime = viltrumtiePlayer.level().getGameTime();
+            Cooldown cd = new Cooldown(startTime, 1200);
+            CooldownAttachment cdAttach = viltrumtiePlayer.getData(ModDataAttachments.COOLDOWN);
+            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd");
+
+            cdAttach.setCooldown(key, startTime, 1200);
+            PacketDistributor.sendToPlayer((ServerPlayer) viltrumtiePlayer, new CooldownSyncPayload(cd,key, false  ));
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity().isAlive()  ) {
             if (event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
+
                 Player viltrumtiePlayer = (Player) event.getSource().getDirectEntity();
                 viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setHitTime(event.getEntity().level().getGameTime());
+
+                //cd set
+                long startTime = viltrumtiePlayer.level().getGameTime();
+                Cooldown cd = new Cooldown(startTime, 1200);
+                CooldownAttachment cdAttach = viltrumtiePlayer.getData(ModDataAttachments.COOLDOWN);
+                ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd");
+
+                cdAttach.setCooldown(key, startTime, 1200);
+                PacketDistributor.sendToPlayer((ServerPlayer) viltrumtiePlayer, new CooldownSyncPayload(cd,key, false  ));
             }
         }
     }
