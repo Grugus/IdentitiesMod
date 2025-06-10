@@ -21,8 +21,6 @@ public class PowerGauntlet extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        // choke code goes here
-
         super.use(level, player, hand);
         return  InteractionResultHolder.success(player.getItemInHand(hand));
     }

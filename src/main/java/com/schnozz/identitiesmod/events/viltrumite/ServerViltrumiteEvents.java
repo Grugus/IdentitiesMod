@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
@@ -12,22 +13,20 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -37,20 +36,45 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event)
     {
-
         if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().hasData(ModDataAttachments.POWER_TYPE) && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
         {
             if(!event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty())
             {
-                Player p = event.getEntity();
-                Entity target = level.getEntity(p.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                Vec3 targetPos = p.getEyePosition().add(p.getLookAngle().scale(2));
+                //sets held entity position
+                Player viltrumitePlayer = event.getEntity();
+                Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
                 assert target != null;
                 target.setPos(targetPos);
                 target.setNoGravity(true);
             }
         }
+    }
+    @SubscribeEvent
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
+            Player viltrumitePlayer = event.getEntity();
+            ItemStack stack = event.getItemStack();
 
+            if (stack.getItem() == Items.DIAMOND_SWORD) {//needs to change to power gaunlet
+                if(event.getEntity().level() instanceof ServerLevel level && !viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).isEmpty())
+                {
+                    //add stun
+                    LivingEntity target = (LivingEntity) level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+                    target.addEffect(new MobEffectInstance(ModEffects.STUN, 100, 1));
+                    //let go
+                    target.setNoGravity(false);;
+                    viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
+                    long startTime = level.getGameTime();
+                    Cooldown cd = new Cooldown(startTime, 200);
+                    CooldownAttachment cdAttach = viltrumitePlayer.getData(ModDataAttachments.COOLDOWN);
+                    ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
+                    ClientViltrumiteEvents.setIconCooldown(cd);
+                    cdAttach.setCooldown(key, startTime, 200);
+                    PacketDistributor.sendToPlayer((ServerPlayer) viltrumitePlayer, new CooldownSyncPayload(cd,key, false  ));
+                }
+            }
+        }
     }
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event)

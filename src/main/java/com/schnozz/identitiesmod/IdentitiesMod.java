@@ -7,6 +7,7 @@ import com.schnozz.identitiesmod.datagen.DataGenerators;
 import com.schnozz.identitiesmod.enchantmenteffects.ModEnchantmentEffects;
 import com.schnozz.identitiesmod.entities.ModEntities;
 import com.schnozz.identitiesmod.items.ItemRegistry;
+import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -65,6 +66,8 @@ public class IdentitiesMod
         BlockRegistry.BLOCKS.register(modEventBus);
         BlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
         ModEnchantmentEffects.register(modEventBus);
+        //effects registers
+        ModEffects.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

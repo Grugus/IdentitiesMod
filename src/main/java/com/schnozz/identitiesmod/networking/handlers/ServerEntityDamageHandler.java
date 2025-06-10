@@ -1,14 +1,10 @@
 package com.schnozz.identitiesmod.networking.handlers;
 
-import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
