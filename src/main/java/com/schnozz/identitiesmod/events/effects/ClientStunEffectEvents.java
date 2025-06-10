@@ -3,10 +3,14 @@ package com.schnozz.identitiesmod.events.effects;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+
+import java.awt.*;
 
 public class ClientStunEffectEvents {
     @SubscribeEvent
@@ -27,6 +31,12 @@ public class ClientStunEffectEvents {
             }
         }
 
+//        LocalPlayer player = Minecraft.getInstance().player;
+//        if(player.getActiveEffects().contains(ModEffects.STUN))
+//        {
+//            player.setDeltaMovement(Vec3.ZERO);
+//            player.setPos(player.xOld,player.yOld,player.zOld);
+//        }
     }
 
 }

@@ -2,6 +2,8 @@ package com.schnozz.identitiesmod.mob_effects;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 public class StunEffect extends MobEffect {
@@ -24,6 +26,7 @@ public class StunEffect extends MobEffect {
 
     @Override
     public void onEffectAdded(LivingEntity entity, int amplifier) {
+        //entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,30,999999999,false,false,false));
         super.onEffectAdded(entity, amplifier);
     }
 }

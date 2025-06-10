@@ -61,7 +61,7 @@ public class ServerViltrumiteEvents {
                 {
                     //add stun
                     LivingEntity target = (LivingEntity) level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                    target.addEffect(new MobEffectInstance(ModEffects.STUN, 100, 0,false,true,true));
+                    target.addEffect(new MobEffectInstance(ModEffects.STUN, 30, 0,false,true,true));
                     //let go
                     target.setNoGravity(false);;
                     viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
