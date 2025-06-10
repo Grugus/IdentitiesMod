@@ -68,13 +68,6 @@ public class ModMappings {
             GLFW.GLFW_KEY_V,
             "key.categories.misc"
     ));
-    public static final Lazy<KeyMapping> GRAVITY_VORTEX_MAPPING = Lazy.of(() -> new KeyMapping(
-            "key.identitiesmod.gravity.vortex",
-            KeyConflictContext.UNIVERSAL,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_G,
-            "key.categories.misc"
-    ));
     public static final Lazy<KeyMapping> GRAVITY_METEOR_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.gravity.meteor",
             KeyConflictContext.UNIVERSAL,
@@ -120,7 +113,6 @@ public class ModMappings {
         //Gravity mappings
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
-        event.register(GRAVITY_VORTEX_MAPPING.get());
         event.register(GRAVITY_METEOR_MAPPING.get()); //post v1
         event.register(GRAVITY_CHAOS_MAPPING.get());
 

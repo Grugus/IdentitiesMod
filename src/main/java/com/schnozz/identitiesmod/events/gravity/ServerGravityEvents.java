@@ -1,6 +1,6 @@
 package com.schnozz.identitiesmod.events.gravity;
 
-import com.schnozz.identitiesmod.DamageSources.GravityPowerDamageSources;
+import com.schnozz.identitiesmod.damage_sources.GravityPowerDamageSources;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.world.damagesource.DamageSource;
