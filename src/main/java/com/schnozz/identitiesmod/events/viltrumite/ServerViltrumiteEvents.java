@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
@@ -56,7 +57,7 @@ public class ServerViltrumiteEvents {
             Player viltrumitePlayer = event.getEntity();
             ItemStack stack = event.getItemStack();
 
-            if (stack.getItem() == Items.DIAMOND_SWORD) {//needs to change to power gaunlet
+            if (stack.getItem() == ItemRegistry.POWER_GAUNTLET.get()) {//needs to change to power gaunlet
                 if(event.getEntity().level() instanceof ServerLevel level && !viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).isEmpty())
                 {
                     //add stun
