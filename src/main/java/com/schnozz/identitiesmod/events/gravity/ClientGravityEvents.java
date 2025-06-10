@@ -37,16 +37,10 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientGravityEvents {
-    //AABB finals
-    private static final double XZ_SCALE = 4.0;
-    private static final double Y_SCALE = 4.0;
     //x and z finals for chaos
     private static final double X_STRENGTH = 1.5;
     private static final double Z_STRENGTH = 1.5;
-    //bounding box
-    private static AABB vortexBox;
     //timers
-    private static int vortexTimer = 0;
     private static int chaosTimer = 0;
     //dynamic forces
     private static double vX,vY,vZ;
@@ -77,12 +71,6 @@ public class ClientGravityEvents {
                 PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 200));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
-            }
-            //gravity vortex creation and start of timer
-            else if(GRAVITY_VORTEX_MAPPING.get().consumeClick())
-            {
-                createVortexAABB(gravityPlayer);
-                vortexTimer = 1;
             }
             //gravity meteor creation and set both position and movement
             else if(GRAVITY_METEOR_MAPPING.get().consumeClick())
@@ -134,23 +122,7 @@ public class ClientGravityEvents {
                     PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,placeHolderDamageType));
                 }
             }
-            //vortex logic
-            if(vortexTimer > 0 && vortexTimer < 240)
-            {
-                //double vortexBoxSize = vortexBox.getSize();
-                List<Entity> entitiesInBox = level.getEntities(gravityPlayer, vortexBox);
-                for(Entity entity: entitiesInBox)
-                {
-                    setVortexForces(entity);;
 
-                    if(entity.getClass().equals(ThrownEnderpearl.class))
-                    {
-                        entity.setPos(vortexBox.getCenter());
-                    }
-                    PacketDistributor.sendToServer(new VelocityPayload(entity.getId(),vX,vY,vZ));
-                }
-                vortexTimer++;
-            }
             //chaos logic
             if(chaosTimer > 0 && chaosTimer < 500 && chaosTargetEntityId != 0)
             {
@@ -210,14 +182,6 @@ public class ClientGravityEvents {
         }
     }
 
-    public static void createVortexAABB(Player gravityPlayer)
-    {
-        Vec3 vortexOrigin = gravityPlayer.getEyePosition().add(gravityPlayer.getLookAngle().scale(4));
-        double minX = vortexOrigin.x- XZ_SCALE; double minY = vortexOrigin.y- Y_SCALE; double minZ = vortexOrigin.z- XZ_SCALE;
-        double maxX = vortexOrigin.x+ XZ_SCALE; double maxY = vortexOrigin.y+ Y_SCALE; double maxZ = vortexOrigin.z+ XZ_SCALE;
-        vortexBox = new AABB(minX,minY,minZ,maxX,maxY,maxZ);
-    }
-
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
         if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
@@ -231,13 +195,4 @@ public class ClientGravityEvents {
         PULL_COOLDOWN_ICON.render(graphics, gameTime);
     }
 
-    public static void setVortexForces(Entity entity)
-    {
-        // Position deltas
-        double dx = vortexBox.getCenter().x - entity.getX();
-        double dy = vortexBox.getCenter().y - entity.getY();
-        double dz = vortexBox.getCenter().z - entity.getZ();
-
-        vX = dx/4; vY = dy/4; vZ = dz/4;
-    }
 }

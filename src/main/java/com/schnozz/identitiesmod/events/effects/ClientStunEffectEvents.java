@@ -20,15 +20,13 @@ public class ClientStunEffectEvents {
         for (Entity entity : level.entitiesForRendering()) {
             if (entity instanceof Mob mob) {
                 if (mob.hasEffect(ModEffects.STUN)) {
-                    if (mob.hasEffect(ModEffects.STUN)) {
-                        mob.setNoAi(true);  // Disable AI
-                    } else if (mob.isNoAi()) {
-                        mob.setNoAi(false); // Restore AI
-                    }
-
+                    mob.setNoAi(true);  // Disable AI
+                } else if (mob.isNoAi()) {
+                    mob.setNoAi(false); // Restore AI
                 }
             }
         }
 
     }
+
 }

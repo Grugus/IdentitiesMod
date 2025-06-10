@@ -5,15 +5,25 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 public class StunEffect extends MobEffect {
-    protected StunEffect(MobEffectCategory category, int color) {
+    public StunEffect(MobEffectCategory category, int color) {
         super(category, color);
     }
 
-    public void applyEffect(LivingEntity entity, int amplifier) {
+    @Override
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.setDeltaMovement(0,0,0);
+        entity.setPos(entity.xOld,entity.yOld,entity.zOld);
+        entity.hurtMarked = true;
+        return true;
     }
 
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int tickCount, int amplifier) {
         return true;
+    }
+
+    @Override
+    public void onEffectAdded(LivingEntity entity, int amplifier) {
+        super.onEffectAdded(entity, amplifier);
     }
 }
