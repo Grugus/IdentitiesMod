@@ -24,6 +24,6 @@ public class AdapterProgressBar {
     public void render(GuiGraphics guiGraphics) {
         Player adapter = Minecraft.getInstance().player;
         float percentFull = 1.00F-adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(source);
-        guiGraphics.blit(texture, x, y, 0, (size*percentFull) - size, size, size, size, size*2);
+        guiGraphics.blit(texture, x, y, 0, (size*percentFull) - 18, size, size, size, size*2);
     }
 }

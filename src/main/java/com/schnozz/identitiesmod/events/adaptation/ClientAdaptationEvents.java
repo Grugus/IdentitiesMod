@@ -36,6 +36,11 @@ public class ClientAdaptationEvents {
     }
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
+        if(!Minecraft.getInstance().player.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
+        {
+            return;
+        }
+
         DIAMOND_SWORD_BAR.render(event.getGuiGraphics());
         FLAME_BAR.render(event.getGuiGraphics());
         POTION_BAR.render(event.getGuiGraphics());

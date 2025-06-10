@@ -1,6 +1,7 @@
 package com.schnozz.identitiesmod.events.viltrumite;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.items.BoundingBoxVisualizer;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
@@ -98,7 +99,7 @@ public class ClientViltrumiteEvents {
         Vec3 frontCenter = start.add(look.scale(2.0)); // 2 blocks in front
 
         AABB aabb = new AABB(frontCenter, frontCenter).inflate(1.0); // Expand to 2x2x2 area
-
+        BoundingBoxVisualizer.showAABB(player.level(), aabb);
         List<Entity> entities = player.level().getEntities(player, aabb, e -> !(e instanceof Player));
 
         if (!entities.isEmpty()) {

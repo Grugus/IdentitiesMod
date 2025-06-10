@@ -19,6 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -90,8 +92,17 @@ public class Scythe extends SwordItem {
             long farmValue = FarmValueSavedData.get(attacker.level().getServer()).getValue();
             DamageSource bonusDamageSource = new DamageSource(attacker.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK),null,attacker,null);
             float bonusDamage = (float) (farmValue /2000);
+
             attacker.getMainHandItem().set(ModDataComponentRegistry.CHARGE, new ChargeRecord(attacker.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord((int) bonusDamage)).charge()));
-            target.hurt(bonusDamageSource, (float) attacker.getMainHandItem().get(ModDataComponentRegistry.CHARGE).charge());
+            AABB hurtBox = (new AABB(attacker.position(), target.position())).inflate(2,1,0.5);
+
+
+            List<Entity> entities = attacker.level().getEntities(attacker, hurtBox, e -> !(e == attacker));
+            for(Entity buh : entities)
+            {
+                buh.hurt(bonusDamageSource, (float) attacker.getMainHandItem().get(ModDataComponentRegistry.CHARGE).charge());
+            }
+
         }
 
 
@@ -99,6 +110,8 @@ public class Scythe extends SwordItem {
 
         return true;
     }
+
+
 
 
     public static List<BlockPos> getBlocksToTill(int range, BlockPos initalBlockPos, ServerPlayer player) {
