@@ -1,16 +1,13 @@
 package com.schnozz.identitiesmod.items;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
-import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
+import com.schnozz.identitiesmod.items.item_classes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class ItemRegistry {
@@ -45,6 +42,19 @@ public class ItemRegistry {
                             )
             )
     ));
+    public static final Supplier<SwordItem> POWER_GAUNTLET = ITEMS.register("power_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.POWER_GAUNTLET,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.POWER_GAUNTLET,
+                            // The type-specific attack damage bonus. 3 for swords, 1.5 for shovels, 1 for pickaxes, varying for axes and hoes.
+                            3f,
+                            // The type-specific attack speed modifier. The player has a default attack speed of 4, so to get to the desired
+                            // value of 1.6f, we use -2.4f. -2.4f for swords, -3f for shovels, -2.8f for pickaxes, varying for axes and hoes.
+                            -3f
+                    )
+            )
+    ));
 
     public static final DeferredItem<Item> BONE_WHISTLE = ITEMS.registerItem(
             "bone_whistle",
@@ -56,11 +66,7 @@ public class ItemRegistry {
             BoneShears::new, // The factory that the properties will be passed into.
             new Item.Properties().stacksTo(1) // The properties to use.
     );
-    public static final DeferredItem<Item> POWER_GAUNTLET = ITEMS.registerItem(
-            "power_gauntlet",
-            PowerGauntlet::new, // The factory that the properties will be passed into.
-            new Item.Properties().stacksTo(1) // The properties to use.
-    );
+
 
     public static void register(IEventBus bus)
     {

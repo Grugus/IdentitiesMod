@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.items;
+package com.schnozz.identitiesmod.items.item_classes;
 
 
 import com.schnozz.identitiesmod.datacomponent.ChargeRecord;

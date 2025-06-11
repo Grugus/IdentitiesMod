@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.items;
+package com.schnozz.identitiesmod.items.item_classes;
 
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
@@ -9,8 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Objects;
 
 public class BoneShears extends Item {
     public BoneShears(Properties properties) {

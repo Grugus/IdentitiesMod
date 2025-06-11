@@ -3,8 +3,7 @@ package com.schnozz.identitiesmod.entities;
 import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
-import com.schnozz.identitiesmod.items.ItemRegistry;
-import com.schnozz.identitiesmod.items.MobHolder;
+import com.schnozz.identitiesmod.items.item_classes.MobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,16 +15,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class ThrownMobHolder extends ThrowableItemProjectile {
 
