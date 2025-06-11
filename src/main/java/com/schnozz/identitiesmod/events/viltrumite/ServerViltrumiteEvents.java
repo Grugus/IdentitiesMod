@@ -57,7 +57,7 @@ public class ServerViltrumiteEvents {
             Player viltrumitePlayer = event.getEntity();
             ItemStack stack = event.getItemStack();
 
-            if (stack.getItem() == ItemRegistry.POWER_GAUNTLET.get()) {//needs to change to power gaunlet
+            if (stack.getItem() == ItemRegistry.STRONG_POWER_GAUNTLET.get() || stack.getItem() == ItemRegistry.FAST_POWER_GAUNTLET.get()) {
                 if(event.getEntity().level() instanceof ServerLevel level && !viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).isEmpty())
                 {
                     //add stun
