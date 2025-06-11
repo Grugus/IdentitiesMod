@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +27,9 @@ public class ServerAdaptationEvents {
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
         Entity entity = event.getEntity();
         DamageSource source = event.getSource();
+
+        //DamageType type = source.type();
+
         String damageSourceString = source.getMsgId();
         damageSourceString = damageSourceString.toLowerCase();
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
@@ -94,11 +98,15 @@ public class ServerAdaptationEvents {
     //decrease or increase damage taken by adapter's target based on the adaptation value
     private static void damageCorrectAttack(Player adapter, ResourceLocation sourceLocation, LivingIncomingDamageEvent event)
     {
-        float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-        float amount = event.getAmount()*(((1-damagePercent)/3)+1);
-        System.out.println("source of attack multiplier:"+sourceLocation.toString());
-        System.out.println("attack multiplier:"+(((1-damagePercent)/3)+1));
-        event.setAmount(amount);
+        if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
+        {
+            float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+            float amount = event.getAmount()*damagePercent*3;
+            System.out.println("OLD AMOUNT:" + event.getAmount());
+            System.out.println("NEW AMOUNT:" + amount);
+            System.out.println("SOURCE:" + sourceLocation);
+            event.setAmount(amount);
+        }
     }
     //return true if damage taken by adapter will be zero after adaptation value is applied
     private static boolean zeroDamage(Player adapter, String sourceString, LivingIncomingDamageEvent event)

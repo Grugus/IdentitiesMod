@@ -1,6 +1,6 @@
 package com.schnozz.identitiesmod.events.gravity;
 
-import com.schnozz.identitiesmod.damage_sources.GravityPowerDamageSources;
+import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,7 +18,7 @@ public class ServerGravityEvents {
     public static void onKnockback(LivingKnockBackEvent event) {
         DamageSource source = event.getEntity().getLastDamageSource();
         if(source == null) return;
-        if (source.is(GravityPowerDamageSources.GRAVITY_POWER_DAMAGE)) {
+        if (source.is(ModDamageTypes.GRAVITY_POWER_DAMAGE)) {
             event.setCanceled(true);
         }
     }

@@ -1,7 +1,7 @@
 package com.schnozz.identitiesmod.events.gravity;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.networking.payloads.VelocityPayload;
+import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
@@ -19,7 +19,6 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -116,10 +115,10 @@ public class ClientGravityEvents {
                     if((int)(Math.random()*2) == 0) {x*=-1;}
                     if((int)(Math.random()*2) == 0) {z*=-1;}
 
-                    Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+                    Holder<DamageType> gravDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
 
                     PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,placeHolderDamageType));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
                 }
             }
 
@@ -134,10 +133,10 @@ public class ClientGravityEvents {
                     if((int)(Math.random()*2) == 0) {x*=-1;}
                     if((int)(Math.random()*2) == 0) {z*=-1;}
 
-                    Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+                    Holder<DamageType> gravDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
 
                     PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,placeHolderDamageType));
+                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
 
                     chaosTimer++;
                 }

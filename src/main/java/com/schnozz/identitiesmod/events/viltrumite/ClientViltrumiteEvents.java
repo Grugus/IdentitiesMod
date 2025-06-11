@@ -145,7 +145,7 @@ public class ClientViltrumiteEvents {
         }
 
         if (target instanceof LivingEntity livingEntity) {
-            Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CRAMMING);
+            Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK);
             PacketDistributor.sendToServer(new EntityDamagePayload(target.getId(),viltrumitePlayer.getId(), CHOKE_DAMAGE,placeHolderDamageType));
             dashDuration = 0;
 

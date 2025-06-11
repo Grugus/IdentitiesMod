@@ -6,6 +6,7 @@ import com.schnozz.identitiesmod.screen.icon.AdapterProgressBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -19,6 +20,7 @@ public class ClientAdaptationEvents {
     private static final AdapterProgressBar DIAMOND_SWORD_BAR = new AdapterProgressBar(10,10, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/diamond_sword_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"generic"));
     private static final AdapterProgressBar FLAME_BAR = new AdapterProgressBar(10,33, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/flame_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"infire"));
     private static final AdapterProgressBar POTION_BAR = new AdapterProgressBar(10,56, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/potion_of_harming_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"magic"));
+    private static int switchTimer = 0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer adaptationPlayer = Minecraft.getInstance().player;
@@ -30,7 +32,17 @@ public class ClientAdaptationEvents {
         {
             if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())
             {
-                switchAdaptation();
+                switchAdaptation(adaptationPlayer);
+                switchTimer = 1;
+            }
+
+            if(switchTimer > 0 && switchTimer < 600)
+            {
+                switchTimer++;
+            }
+            else if(switchTimer > 0)
+            {
+                adaptationPlayer.getData(ModDataAttachments.ADAPTION).setAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive"),1);
             }
         }
     }
@@ -46,8 +58,9 @@ public class ClientAdaptationEvents {
         POTION_BAR.render(event.getGuiGraphics());
     }
 
-    public static void switchAdaptation()
+    public static void switchAdaptation(Player adaptationPlayer)
     {
-
+        // 0 is on, 1 is off
+        adaptationPlayer.getData(ModDataAttachments.ADAPTION).setAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive"),0);
     }
 }
