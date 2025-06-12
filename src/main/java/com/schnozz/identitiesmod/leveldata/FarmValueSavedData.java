@@ -16,7 +16,7 @@ public class FarmValueSavedData extends SavedData {
     public static FarmValueSavedData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
         FarmValueSavedData data = new FarmValueSavedData();
         if (tag.contains(FARM_VALUE_TAG, Tag.TAG_LONG)) {
-            data.value = tag.getInt(FARM_VALUE_TAG);
+            data.value = tag.getLong(FARM_VALUE_TAG);
         }
         return data;
     }

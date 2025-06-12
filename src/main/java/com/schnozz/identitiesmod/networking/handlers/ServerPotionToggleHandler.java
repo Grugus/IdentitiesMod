@@ -11,7 +11,7 @@ public abstract class ServerPotionToggleHandler {
 
     public static void handle(PotionTogglePayload payload, IPayloadContext context)
     {
-        Minecraft.getInstance().execute(() -> {
+
             ServerPlayer player = (ServerPlayer) context.player();
             if (player != null) {
                 if(player.hasEffect(payload.effect()))
@@ -23,7 +23,7 @@ public abstract class ServerPotionToggleHandler {
                     player.addEffect(new MobEffectInstance(payload.effect(), Integer.MAX_VALUE, payload.level(), false, false));
                 }
             }
-        });
+
     }
 }
 

@@ -12,9 +12,9 @@ public abstract class ServerPotionLevelHandler {
 
     public static void handle(PotionLevelPayload payload, IPayloadContext context)
     {
-        Minecraft.getInstance().execute(() -> {
+
             ServerPlayer player = (ServerPlayer) context.player();
             player.addEffect(new MobEffectInstance((Holder<MobEffect>) payload.effect(), payload.duration(), payload.level(), false, false));
-        });
+
     }
 }

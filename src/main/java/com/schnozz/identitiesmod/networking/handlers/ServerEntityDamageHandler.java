@@ -16,8 +16,8 @@ public class ServerEntityDamageHandler {
         Entity hurtEntity = player.level().getEntity(payload.hurtEntityID());
 
         DamageSource dSource = new DamageSource(payload.dType(),serverLevel.getEntity(payload.attackerEntityID()),serverLevel.getEntity(payload.hurtEntityID()));
-        Minecraft.getInstance().execute(() -> {
-            hurtEntity.hurt(dSource,payload.damage());
-        });
+
+        hurtEntity.hurt(dSource,payload.damage());
+
     }
 }
