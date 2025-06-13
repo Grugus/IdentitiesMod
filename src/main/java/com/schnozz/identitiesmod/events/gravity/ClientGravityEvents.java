@@ -1,8 +1,8 @@
 package com.schnozz.identitiesmod.events.gravity;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
@@ -87,7 +87,7 @@ public class ClientGravityEvents {
             {
                 //MeteorEntity newMeteor = new MeteorEntity(,level);
             }
-            else if(GRAVITY_CHAOS_MAPPING.get().consumeClick())  //EVAN THIS NEEDS COOLDOWN
+            else if(GRAVITY_CHAOS_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), 0))  //EVAN THIS NEEDS COOLDOWN
             {
                 target = null;
                 closestDistance = Integer.MAX_VALUE;
@@ -98,6 +98,8 @@ public class ClientGravityEvents {
                     chaosTimer = 1; //starts chaos logic loop
                     chaos(gravityPlayer); //intial hit guaranteed
                 }
+                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
             }
 
 

@@ -2,6 +2,8 @@ package com.schnozz.identitiesmod.events.adaptation;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.cooldown.Cooldown;
+import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.screen.icon.AdapterProgressBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -13,6 +15,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 import static com.schnozz.identitiesmod.keymapping.ModMappings.ADAPTATION_SWITCH_MAPPING;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
@@ -30,10 +34,12 @@ public class ClientAdaptationEvents {
 
         if(adaptationPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())  //EVAN THIS NEEDS COOLDOWN (long)
+            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick() && !adaptationPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), 0))  //EVAN THIS NEEDS COOLDOWN (long)
             {
                 switchAdaptation(adaptationPlayer);
                 switchTimer = 1;
+                adaptationPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), level.getGameTime(), 250);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), false));
             }
 
             if(switchTimer > 0 && switchTimer < 600)
