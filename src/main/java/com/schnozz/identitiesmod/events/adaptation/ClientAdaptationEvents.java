@@ -30,7 +30,7 @@ public class ClientAdaptationEvents {
 
         if(adaptationPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())
+            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())  //EVAN THIS NEEDS COOLDOWN (long)
             {
                 switchAdaptation(adaptationPlayer);
                 switchTimer = 1;

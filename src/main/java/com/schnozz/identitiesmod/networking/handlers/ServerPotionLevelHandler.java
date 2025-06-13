@@ -14,7 +14,7 @@ public abstract class ServerPotionLevelHandler {
     {
         Minecraft.getInstance().execute(() -> {
             ServerPlayer player = (ServerPlayer) context.player();
-            player.addEffect(new MobEffectInstance((Holder<MobEffect>) payload.effect(), payload.duration(), payload.level(), false, false));
+            player.addEffect(new MobEffectInstance(payload.effect(), payload.duration(), payload.level(), false, false));
         });
     }
 }

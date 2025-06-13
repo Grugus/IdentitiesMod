@@ -2,11 +2,14 @@ package com.schnozz.identitiesmod.events.effect;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
@@ -14,12 +17,19 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 public class ServerStunEffectEvents {
 
     @SubscribeEvent
-    public static void onEntityAttack(AttackEntityEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity.hasEffect(ModEffects.STUN)) {
-            event.setCanceled(true);
+    public static void onIncomingDamage(LivingIncomingDamageEvent event) {
+        Entity attacker = event.getSource().getEntity();
+        System.out.println("ATTACKER: " + attacker);
+        if(attacker instanceof ServerPlayer attackerPlayer)
+        {
+            System.out.println("IS PLAYER");
+            if (attackerPlayer.getActiveEffects().contains(ModEffects.STUN)) {
+                System.out.println("STUNNED ATTACKER: " + attackerPlayer);
+                event.setCanceled(true);
+            }
         }
     }
+
     @SubscribeEvent
     public static void onItemUse(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();

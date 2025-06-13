@@ -47,6 +47,9 @@ public class ClientGravityEvents {
     private static int chaosTargetEntityId;
     //chaos damage
     private static float chaosDamage = 1.5F;
+    //chaos target find global variables
+    private static Entity target;
+    private static double closestDistance;
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -72,82 +75,39 @@ public class ClientGravityEvents {
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
             }
             //gravity meteor creation and set both position and movement
-            else if(GRAVITY_METEOR_MAPPING.get().consumeClick())
+            else if(GRAVITY_METEOR_MAPPING.get().consumeClick()) //EVAN THIS NEEDS COOLDOWN
             {
                 //MeteorEntity newMeteor = new MeteorEntity(,level);
             }
-            else if(GRAVITY_CHAOS_MAPPING.get().consumeClick())//if this errors, could need to be server side
+            else if(GRAVITY_CHAOS_MAPPING.get().consumeClick())  //EVAN THIS NEEDS COOLDOWN
             {
-                Vec3 eyePosition = gravityPlayer.getEyePosition(1.0F); // Player's eye location
-                Vec3 lookVector = gravityPlayer.getLookAngle();        // Direction player is looking
-                Vec3 endPosition = eyePosition.add(lookVector.scale(50)); // End of the ray
+                target = null;
+                closestDistance = Integer.MAX_VALUE;
 
-                // Create AABB for entity search along the line (expanded path)
-                AABB searchArea = new AABB(eyePosition, endPosition).inflate(1.0); // Slightly wider search area
-
-                // Filter and find first entity hit
-                List<Entity> entities = level.getEntities(gravityPlayer, searchArea, (entity) -> {
-                    // Optional filters: skip the player and only target living entities
-                    return entity instanceof LivingEntity && !entity.isSpectator() && entity != gravityPlayer;
-                });
-
-                Entity target = null;
-                double closestDistance = Double.MAX_VALUE;
-
-                for (Entity entity : entities) {
-                    AABB entityBox = entity.getBoundingBox().inflate(0.3);
-                    Optional<Vec3> hit = entityBox.clip(eyePosition, endPosition);
-
-                    if (hit.isPresent()) {
-                        double distance = eyePosition.distanceTo(hit.get());
-                        if (distance < closestDistance) {
-                            closestDistance = distance;
-                            target = entity;
-                        }
-                    }
-                }
-
+                findChaosTargetAndDistance(gravityPlayer);
                 if (target instanceof LivingEntity livingEntity) {
                     chaosTargetEntityId = livingEntity.getId();
-                    chaosTimer = 1;
-                    double x = (int)(Math.random()*X_STRENGTH)+0.2;
-                    double z = (int)(Math.random()*Z_STRENGTH)+0.2;
-                    if((int)(Math.random()*2) == 0) {x*=-1;}
-                    if((int)(Math.random()*2) == 0) {z*=-1;}
-
-                    Holder<DamageType> gravDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
-
-                    PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
+                    chaosTimer = 1; //starts chaos logic loop
+                    chaos(gravityPlayer); //intial hit guaranteed
                 }
             }
 
+
             //chaos logic
-            if(chaosTimer > 0 && chaosTimer < 500 && chaosTargetEntityId != 0)
+            if(chaosTimer > 0 && chaosTimer < 450 && chaosTargetEntityId != 0)
             {
-                int ran = (int) (Math.random() * 35);
-                if(ran == 0)
-                {
-                    double x = (int)(Math.random()*X_STRENGTH)+0.2;
-                    double z = (int)(Math.random()*Z_STRENGTH)+0.2;
-                    if((int)(Math.random()*2) == 0) {x*=-1;}
-                    if((int)(Math.random()*2) == 0) {z*=-1;}
-
-                    Holder<DamageType> gravDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
-
-                    PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-                    PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
-
+                int ran = (int) (Math.random() * 50);
+                if(ran == 0) {
+                    chaos(gravityPlayer);
                     chaosTimer++;
                 }
             }
         }
     }
-
-
+    //cooldown icons
     private static final CooldownIcon PUSH_COOLDOWN_ICON = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
     private static final CooldownIcon PULL_COOLDOWN_ICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
-
+    //ability methods
     public static void push(Player gravityPlayer)
     {
         Level level = gravityPlayer.level();
@@ -164,7 +124,6 @@ public class ClientGravityEvents {
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
         }
     }
-
     public static void pull(Player gravityPlayer)
     {
         Level level = gravityPlayer.level();
@@ -179,6 +138,52 @@ public class ClientGravityEvents {
             double forceX = -dx/2; double forceY = -dy/4; double forceZ = -dz/2;
             PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
         }
+    }
+
+    public static void findChaosTargetAndDistance(Player gravityPlayer)
+    {
+        Vec3 eyePosition = gravityPlayer.getEyePosition(1.0F); // Player's eye location
+        Vec3 lookVector = gravityPlayer.getLookAngle();        // Direction player is looking
+        Vec3 endPosition = eyePosition.add(lookVector.scale(25)); // End of the ray
+
+        // Create AABB for entity search along the line (expanded path)
+        AABB searchArea = new AABB(eyePosition, endPosition).inflate(1.0); // Slightly wider search area
+
+        // Filter and find first entity hit
+        List<Entity> entities = gravityPlayer.level().getEntities(gravityPlayer, searchArea, (entity) -> {
+            // Optional filters: skip the player and only target living entities
+            return entity instanceof LivingEntity && !entity.isSpectator() && entity != gravityPlayer;
+        });
+
+        for (Entity entity : entities) {
+            AABB entityBox = entity.getBoundingBox().inflate(0.3);
+            Optional<Vec3> hit = entityBox.clip(eyePosition, endPosition);
+
+            if (hit.isPresent()) {
+                double distance = eyePosition.distanceTo(hit.get());
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    target = entity;
+                }
+            }
+        }
+    }
+    public static void chaos(Player gravityPlayer)
+    {
+        double x = (int)(Math.random()*X_STRENGTH)+0.4;
+        double z = (int)(Math.random()*Z_STRENGTH)+0.4;
+        if((int)(Math.random()*1.8) == 0) {x*=-1;}
+        if((int)(Math.random()*1.8) == 0) {z*=-1;}
+
+        Holder<DamageType> gravDamageType = gravityPlayer.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
+
+        PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
+        PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
+    }
+
+    public static void meteor()
+    {
+
     }
 
     @SubscribeEvent

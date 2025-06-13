@@ -27,12 +27,6 @@ public class ClientStunEffectEvents {
             }
         }
 
-//        LocalPlayer player = Minecraft.getInstance().player;
-//        if(player.getActiveEffects().contains(ModEffects.STUN))
-//        {
-//            player.setDeltaMovement(Vec3.ZERO);
-//            player.setPos(player.xOld,player.yOld,player.zOld);
-//        }
     }
 
 }

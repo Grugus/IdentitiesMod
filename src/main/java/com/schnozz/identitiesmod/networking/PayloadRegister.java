@@ -156,5 +156,11 @@ public class PayloadRegister {
                 PotionTogglePayload.STREAM_CODEC,
                 ServerPotionToggleHandler::handle
         );
+
+        registrar.playToServer(
+                StunPayload.TYPE,
+                StunPayload.STREAM_CODEC,
+                ServerStunHandler::handle
+        );
     }
 }
