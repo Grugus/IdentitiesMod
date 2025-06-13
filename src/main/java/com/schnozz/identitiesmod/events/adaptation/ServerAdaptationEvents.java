@@ -101,7 +101,7 @@ public class ServerAdaptationEvents {
         if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
         {
             float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-            float amount = event.getAmount()*damagePercent*3;
+            float amount = event.getAmount()*damagePercent*3.5F;
             System.out.println("OLD AMOUNT:" + event.getAmount());
             System.out.println("NEW AMOUNT:" + amount);
             System.out.println("SOURCE:" + sourceLocation);
