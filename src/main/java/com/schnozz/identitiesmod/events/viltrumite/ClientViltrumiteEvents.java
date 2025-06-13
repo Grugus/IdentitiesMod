@@ -137,7 +137,7 @@ public class ClientViltrumiteEvents {
 
         AABB aabb = new AABB(frontCenter, frontCenter).inflate(1.0); // Expand to 2x2x2 area
         BoundingBoxVisualizer.showAABB(player.level(), aabb);
-        List<Entity> entities = player.level().getEntities(player, aabb, e -> !(e instanceof Player));
+        List<Entity> entities = player.level().getEntities(player, aabb, e -> !(e == player));
 
         if (!entities.isEmpty()) {
             Entity closest = entities.stream()
