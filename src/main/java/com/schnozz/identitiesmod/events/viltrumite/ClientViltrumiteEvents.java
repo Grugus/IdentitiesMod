@@ -65,13 +65,8 @@ public class ClientViltrumiteEvents {
             if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")) && !viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "choke_dash_cd"), 0))
             {
                 chokeDash(viltrumitePlayer);
-                long currentTime = viltrumitePlayer.level().getGameTime();
-                CooldownAttachment newAtachment = new CooldownAttachment();
-                newAtachment.getAllCooldowns().putAll(viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
-                newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "choke_dash_cd"), currentTime, 200);
-                viltrumitePlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
-                cooldownIcon.setCooldown(new Cooldown(currentTime, 500));
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 500), ResourceLocation.fromNamespaceAndPath("identitiesmod", "choke_dash_cd"), false));
+                viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), viltrumitePlayer.level().getGameTime(), 500);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(viltrumitePlayer.level().getGameTime(), 500), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), false));
             }
             if(VILTRUMITE_FLIGHT_MAPPING.get().consumeClick())
             {
