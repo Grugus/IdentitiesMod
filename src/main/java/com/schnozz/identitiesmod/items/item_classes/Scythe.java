@@ -81,7 +81,7 @@ public class Scythe extends SwordItem {
             DamageSource bonusDamageSource = new DamageSource(attacker.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK),null,attacker,null);
             float bonusDamage = (float) (farmValue /2000);
 
-            attacker.getMainHandItem().set(ModDataComponentRegistry.CHARGE, new ChargeRecord(attacker.getMainHandItem().getOrDefault(ModDataComponentRegistry.CHARGE, new ChargeRecord((int) bonusDamage)).charge()));
+            attacker.getMainHandItem().set(ModDataComponentRegistry.CHARGE, new ChargeRecord((int) bonusDamage));
             AABB hurtBox = (new AABB(attacker.position(), target.position())).inflate(2,1,0.5);
 
 

@@ -10,10 +10,9 @@ public class ServerGravityHandler {
     public static void handle(GravityPayload payload, IPayloadContext context)
     {
         ServerPlayer player = (ServerPlayer) context.player();
-        Minecraft.getInstance().execute(() -> {
-            Entity entity = player.level().getEntity(payload.entityID());
-            if(entity == null) return;
-            entity.push(payload.fx(),payload.fy(),payload.fz());
-        });
+
+        Entity entity = player.level().getEntity(payload.entityID());
+        if(entity == null) return;
+        entity.push(payload.fx(),payload.fy(),payload.fz());
     }
 }

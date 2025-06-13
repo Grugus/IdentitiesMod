@@ -50,6 +50,7 @@ public class PayloadRegister {
                 }
         );
 
+
         registrar.playToClient(
                 ViltrumiteAttachmentSyncPayload.TYPE,
                 ViltrumiteAttachmentSyncPayload.STREAM_CODEC,
@@ -114,10 +115,8 @@ public class PayloadRegister {
                 EntityBoxPayload.TYPE,
                 EntityBoxPayload.STREAM_CODEC,
                 (payload, context) -> {
-                    Minecraft.getInstance().execute(() -> {
                         Player player = context.player();
                         player.setData(ModDataAttachments.ENTITY_HELD.get(), payload.entity());
-                    });
                 }
         );
 
