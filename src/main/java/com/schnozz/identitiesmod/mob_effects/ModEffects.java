@@ -12,6 +12,7 @@ public class ModEffects {
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, IdentitiesMod.MODID);
 
     public static final Holder<MobEffect> STUN = EFFECTS.register("stun", () -> new StunEffect(MobEffectCategory.HARMFUL, 0x9db92c));
+    public static final Holder<MobEffect> LIFE_STEALED = EFFECTS.register("life_stealed", () -> new StunEffect(MobEffectCategory.HARMFUL, 0xFF0000));
 
     public static void register(IEventBus modEventBus) {
         EFFECTS.register(modEventBus);
