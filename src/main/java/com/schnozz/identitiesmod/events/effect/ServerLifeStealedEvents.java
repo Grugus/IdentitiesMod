@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerLifeStealedEvents {
     @SubscribeEvent
-    public void onEffectRemoved(MobEffectEvent.Remove event) {
+    public static void onEffectRemoved(MobEffectEvent.Remove event) {
         LivingEntity entity = event.getEntity();
         MobEffectInstance effect = event.getEffectInstance();
         if(effect.is(ModEffects.LIFE_STEALED)) {
@@ -27,12 +27,12 @@ public class ServerLifeStealedEvents {
         }
     }
     @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event)
+    public static void onLivingDeath(LivingDeathEvent event)
     {
         Entity deadEntity = event.getEntity();
-        if(event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
-            if (deadEntity instanceof Player deadPlayer) {
-                deadPlayer.addEffect(new MobEffectInstance(ModEffects.LIFE_STEALED, MobEffectInstance.INFINITE_DURATION, 0,false,false,true));
+        if (deadEntity instanceof Player deadPlayer) {
+            if (event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
+                deadPlayer.addEffect(new MobEffectInstance(ModEffects.LIFE_STEALED, MobEffectInstance.INFINITE_DURATION, 0, false, false, true));
             }
         }
     }
