@@ -26,8 +26,6 @@ public class ServerAdaptationEvents {
         Entity entity = event.getEntity();
         DamageSource source = event.getSource();
 
-        //DamageType type = source.type();
-
         String damageSourceString = source.getMsgId();
         damageSourceString = damageSourceString.toLowerCase();
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
