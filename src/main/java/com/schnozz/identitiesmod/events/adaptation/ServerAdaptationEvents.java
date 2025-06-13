@@ -1,14 +1,18 @@
 package com.schnozz.identitiesmod.events.adaptation;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
@@ -127,7 +131,9 @@ public class ServerAdaptationEvents {
         }
 
         adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue);
-        //PacketDistributor.sendToPlayer(new AdaptationSyncPayload());
+
+        AdaptationAttachment adaptation = adapter.getData(ModDataAttachments.ADAPTION);
+        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adaptation));
     }
     //override of changeAdaptValue with a different adaptation degree
     private static void decreaseAdaptValue(Player adapter, String sourceString, float cap, float customAdaptDegree)
@@ -141,7 +147,10 @@ public class ServerAdaptationEvents {
         else {
             newAdaptationValue = cap;
         }
-        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue );
+        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue);
+
+        AdaptationAttachment adaptation = adapter.getData(ModDataAttachments.ADAPTION);
+        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adaptation));
     }
     //when adaptation value is decreased for one source, it is increased for another
     private static void increaseAdaptationValue(Player adapter, String sourceString, float cap)
@@ -192,6 +201,9 @@ public class ServerAdaptationEvents {
                 newAdaptationValue = cap;
             }
             adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(tempLocation,newAdaptationValue);
+
+            AdaptationAttachment adaptation = adapter.getData(ModDataAttachments.ADAPTION);
+            PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adaptation));
         }
     }
 }
