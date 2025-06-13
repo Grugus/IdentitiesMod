@@ -157,13 +157,9 @@ public class ServerViltrumiteEvents {
             target.setNoGravity(false);
             target.setDeltaMovement(p.getLookAngle().scale(2));
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
-            long startTime = level.getGameTime();
-            Cooldown cd = new Cooldown(startTime, 200);
-            CooldownAttachment cdAttach = p.getData(ModDataAttachments.COOLDOWN);
-            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd");
-            ClientViltrumiteEvents.setIconCooldown(cd);
-            cdAttach.setCooldown(key, startTime, 200);
-            PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(cd,key, false  ));
+            p.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), level.getGameTime(), 200);
+            PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), false));
+            ClientViltrumiteEvents.setIconCooldown(new Cooldown(level.getGameTime(), 200));
         }
 
     }
