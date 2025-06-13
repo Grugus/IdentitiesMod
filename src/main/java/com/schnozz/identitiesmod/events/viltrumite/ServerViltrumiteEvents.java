@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -45,10 +46,14 @@ public class ServerViltrumiteEvents {
                 //sets held entity position
                 Player viltrumitePlayer = event.getEntity();
                 Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
                 assert target != null;
+                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
                 target.setPos(targetPos);
                 target.setNoGravity(true);
+                if(!(target instanceof Player) && target instanceof Mob mob)
+                {
+                    mob.setTarget(event.getEntity());
+                }
             }
         }
     }
