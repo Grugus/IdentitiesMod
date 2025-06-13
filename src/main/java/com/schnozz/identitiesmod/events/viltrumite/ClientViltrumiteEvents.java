@@ -107,7 +107,7 @@ public class ClientViltrumiteEvents {
                     dashMisses++;
                 }
             }
-            if(dashMisses >= 20)
+            if(dashMisses >= 20 && viltrumitePlayer != null && !viltrumitePlayer.isDeadOrDying())
             {
                 viltrumitePlayer.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
                 PacketDistributor.sendToServer(new StunPayload(viltrumitePlayer.getId(), stunDuration));

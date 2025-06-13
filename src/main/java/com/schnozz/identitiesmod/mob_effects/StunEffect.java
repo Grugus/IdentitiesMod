@@ -42,7 +42,10 @@ public class StunEffect extends MobEffect {
 
     @Override
     public void onEffectAdded(LivingEntity entity, int amplifier) {
-        checkAir(entity);
+        if(!entity.isDeadOrDying())
+        {
+            checkAir(entity);
+        }
         super.onEffectAdded(entity, amplifier);
     }
 
