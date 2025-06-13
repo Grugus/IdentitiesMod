@@ -29,6 +29,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -117,6 +118,34 @@ public class ServerViltrumiteEvents {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onKillBread(PlayerEvent.Clone event)
+    {
+        if(event.isWasDeath() && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        {
+            Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            if(target == null) return;
+            target.setNoGravity(false);
+            event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
+
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
+    {
+        if(!event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        {
+            Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            if(target == null) return;
+            target.setNoGravity(false);
+            event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
+
+        }
+    }
+
+
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
         if(event.getEntity() instanceof ServerPlayer p && !event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty() && event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
