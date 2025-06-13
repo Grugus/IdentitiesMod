@@ -161,5 +161,11 @@ public class PayloadRegister {
                 StunPayload.STREAM_CODEC,
                 ServerStunHandler::handle
         );
+
+        registrar.playToServer(
+                EntityPositionPayload.TYPE,
+                EntityPositionPayload.STREAM_CODEC,
+                ServerEntityPositionHandler::handle
+        );
     }
 }

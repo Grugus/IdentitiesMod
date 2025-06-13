@@ -5,10 +5,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
-import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
-import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
-import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
-import com.schnozz.identitiesmod.networking.payloads.StunPayload;
+import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -112,7 +109,11 @@ public class ClientGravityEvents {
                     chaosTimer++;
                 }
             }
-            if(pullStunTimer > 0 && pullStunTimer < 30)
+            if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
+            {
+                pullStunTimer++;
+            }
+            if(pullStunTimer == 20)
             {
                 for(Entity entity: entitiesInBox)
                 {
@@ -123,7 +124,7 @@ public class ClientGravityEvents {
                     }
                 }
             }
-            if(pullStunTimer >= 30)
+            if(pullStunTimer >= 20 + stunDuration)
             {
                 for(Entity entity: entitiesInBox)
                 {
@@ -132,6 +133,7 @@ public class ClientGravityEvents {
                         livingEntity.removeEffect(ModEffects.STUN);
                     }
                 }
+                pullStunTimer = 0;
             }
         }
     }
