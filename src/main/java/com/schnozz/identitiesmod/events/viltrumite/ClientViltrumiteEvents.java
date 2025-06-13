@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.items.BoundingBoxVisualizer;
+import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
@@ -60,25 +61,29 @@ public class ClientViltrumiteEvents {
             //key presses
             if(VILTRUMITE_GRAB_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), 0))
             {
-                findEntity(Minecraft.getInstance().player);
+                if(viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.FAST_POWER_GAUNTLET || viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.STRONG_POWER_GAUNTLET) {
+                    findEntity(Minecraft.getInstance().player);
+                }
             }
             if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")) && !viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "choke_dash_cd"), 0))
             {
-                chokeDash(viltrumitePlayer);
-                viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), viltrumitePlayer.level().getGameTime(), 500);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(viltrumitePlayer.level().getGameTime(), 500), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), false));
+                if(viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.FAST_POWER_GAUNTLET || viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.STRONG_POWER_GAUNTLET) {
+                    chokeDash(viltrumitePlayer);
+                    viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), viltrumitePlayer.level().getGameTime(), 500);
+                    PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(viltrumitePlayer.level().getGameTime(), 500), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), false));
+                }
             }
             if(VILTRUMITE_FLIGHT_MAPPING.get().consumeClick())
             {
-                if(!viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")))
-                {
-                    viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),true);
-                }
-                else {
-                    viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight"),false);
-                }
-                if(viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd"), 0)) {
-                    viltrumitePlayer.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
+                if(viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.FAST_POWER_GAUNTLET || viltrumitePlayer.getMainHandItem().getItem() == ItemRegistry.STRONG_POWER_GAUNTLET) {
+                    if (!viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "flight"))) {
+                        viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "flight"), true);
+                    } else {
+                        viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).setViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "flight"), false);
+                    }
+                    if (viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd"), 0)) {
+                        viltrumitePlayer.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
+                    }
                 }
             }
 
@@ -115,7 +120,6 @@ public class ClientViltrumiteEvents {
             if(stunTimer > stunDuration)
             {
                 viltrumitePlayer.removeEffect(ModEffects.STUN);
-                //PacketDistributor.sendToServer(new StunRemovePayload(viltrumitePlayer.getId()));
                 stunTimer = 0;
             }
         }
