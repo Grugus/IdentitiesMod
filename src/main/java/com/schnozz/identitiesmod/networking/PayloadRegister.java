@@ -2,7 +2,7 @@ package com.schnozz.identitiesmod.networking;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.networking.handlers.*;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -154,6 +154,12 @@ public class PayloadRegister {
                 PotionTogglePayload.TYPE,
                 PotionTogglePayload.STREAM_CODEC,
                 ServerPotionToggleHandler::handle
+        );
+
+        registrar.playToServer(
+                StunPayload.TYPE,
+                StunPayload.STREAM_CODEC,
+                ServerStunHandler::handle
         );
     }
 }

@@ -1,16 +1,16 @@
 package com.schnozz.identitiesmod.events.adaptation;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
@@ -101,7 +101,7 @@ public class ServerAdaptationEvents {
         if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
         {
             float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-            float amount = event.getAmount()*damagePercent*3;
+            float amount = event.getAmount()*damagePercent*3.5F;
             System.out.println("OLD AMOUNT:" + event.getAmount());
             System.out.println("NEW AMOUNT:" + amount);
             System.out.println("SOURCE:" + sourceLocation);
@@ -129,7 +129,9 @@ public class ServerAdaptationEvents {
         else {
             newAdaptationValue = cap;
         }
-        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue );
+
+        adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue);
+        //PacketDistributor.sendToPlayer(new AdaptationSyncPayload());
     }
     //override of changeAdaptValue with a different adaptation degree
     private static void decreaseAdaptValue(Player adapter, String sourceString, float cap, float customAdaptDegree)

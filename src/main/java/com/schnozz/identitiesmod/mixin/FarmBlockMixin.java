@@ -1,10 +1,9 @@
 package com.schnozz.identitiesmod.mixin;
 
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;

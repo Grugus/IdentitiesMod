@@ -1,7 +1,7 @@
 package com.schnozz.identitiesmod.cooldown;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;

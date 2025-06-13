@@ -6,7 +6,7 @@ import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ViltrumiteAttachment;
 import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
 import com.schnozz.identitiesmod.networking.payloads.ViltrumiteAttachmentSyncPayload;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;

@@ -2,7 +2,7 @@ package com.schnozz.identitiesmod.events.parry;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;

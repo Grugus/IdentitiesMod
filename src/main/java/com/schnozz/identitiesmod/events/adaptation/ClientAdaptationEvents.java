@@ -1,7 +1,7 @@
 package com.schnozz.identitiesmod.events.adaptation;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.screen.icon.AdapterProgressBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -30,7 +30,7 @@ public class ClientAdaptationEvents {
 
         if(adaptationPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())
+            if(ADAPTATION_SWITCH_MAPPING.get().consumeClick())  //EVAN THIS NEEDS COOLDOWN (long)
             {
                 switchAdaptation(adaptationPlayer);
                 switchTimer = 1;

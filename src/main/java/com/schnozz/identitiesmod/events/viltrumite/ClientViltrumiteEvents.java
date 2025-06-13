@@ -2,8 +2,9 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.items.BoundingBoxVisualizer;
+import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.*;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
@@ -18,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -38,8 +40,15 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientViltrumiteEvents {
+    //damage constants
     private static final float CHOKE_DAMAGE = 6.0F;
+    //integer
+    private static int stunDuration = 35;
+    //timers
     private static int dashDuration = 0;
+    private static int stunTimer = 0;
+    private static int dashMisses = 0;
+    //flight speed double
     private static double flightSpeed = 2.0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -53,7 +62,7 @@ public class ClientViltrumiteEvents {
             {
                 findEntity(Minecraft.getInstance().player);
             }
-            if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick())
+            if(VILTRUMITE_CHOKE_MAPPING.get().consumeClick() && !viltrumitePlayer.getData(ModDataAttachments.VILTRUMITE_STATES).getViltrumiteState(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"flight")))  //EVAN THIS NEEDS COOLDOWN
             {
                 chokeDash(viltrumitePlayer);
             }
@@ -85,13 +94,33 @@ public class ClientViltrumiteEvents {
             if(dashDuration > 0 && dashDuration < 30)
             {
                 dashDuration++;
-                chokeDamage(viltrumitePlayer);
+                if(!chokeDamage(viltrumitePlayer))
+                {
+                    dashMisses++;
+                }
+            }
+            if(dashMisses >= 20)
+            {
+                viltrumitePlayer.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
+                PacketDistributor.sendToServer(new StunPayload(viltrumitePlayer.getId(), stunDuration));
+                stunTimer = 1;
+                dashMisses = 0;
+            }
+            if(stunTimer > 0 && stunTimer <= stunDuration)
+            {
+                stunTimer++;
+            }
+            if(stunTimer > stunDuration)
+            {
+                viltrumitePlayer.removeEffect(ModEffects.STUN);
+                //PacketDistributor.sendToServer(new StunRemovePayload(viltrumitePlayer.getId()));
+                stunTimer = 0;
             }
         }
     }
 
     private static final CooldownIcon cooldownIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/viltrumitegrabcd_icon.png"));
-
+    //fix grab with ridable entities by preventing ride function
     private static boolean findEntity (Player player)
     {
         Vec3 look = player.getLookAngle();
@@ -122,10 +151,10 @@ public class ClientViltrumiteEvents {
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 200), ResourceLocation.fromNamespaceAndPath("identitiesmod", "grab_cd"), false));
         return false;
 
-        // do nothing or anything you want to do if it fails put an else statement -- this wasn't chatgpt btw
+        // do nothing or anything you want to do if it fails put an else statement -- this wasn't chatgpt btw (I can tell. Your comment above says "a" instead of "an")
     }
 
-    private static void chokeDamage(Player viltrumitePlayer)
+    private static boolean chokeDamage(Player viltrumitePlayer)
     {
         Level level = viltrumitePlayer.level();
 
@@ -144,14 +173,17 @@ public class ClientViltrumiteEvents {
             }
         }
 
-        if (target instanceof LivingEntity livingEntity) {
+        if (target instanceof LivingEntity) {
             Holder<DamageType> placeHolderDamageType = level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK);
             PacketDistributor.sendToServer(new EntityDamagePayload(target.getId(),viltrumitePlayer.getId(), CHOKE_DAMAGE,placeHolderDamageType));
             dashDuration = 0;
 
             PacketDistributor.sendToServer(new VelocityPayload(viltrumitePlayer.getId(),0,0,0));
             PacketDistributor.sendToServer(new VelocityPayload(target.getId(),0,0,0));
+
+            return true;
         }
+        return false;
     }
 
     private static void chokeDash(Player viltrumitePlayer)
@@ -161,6 +193,7 @@ public class ClientViltrumiteEvents {
         double vx = 3.0 * rx; double vy = 2.0 * ry; double vz = 3.0 * rz;
         PacketDistributor.sendToServer(new VelocityPayload(viltrumitePlayer.getId(),vx,vy,vz));
         dashDuration = 1;
+        dashMisses = 1;
     }
 
     private static void flight(Player viltrumitePlayer)
