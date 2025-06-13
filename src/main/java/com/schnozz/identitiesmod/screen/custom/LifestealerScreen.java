@@ -70,7 +70,7 @@ public class LifestealerScreen extends Screen {
         int dynamicX = originX;
         int dynamicY = originY;
             //button text (dynamic)
-        Component message = Component.literal("Strength (1 heart)"); //18 characters
+        Component message = Component.literal("Strength (2 heart)"); //18 characters
             //I think for tooltips but doesn't show up. Could also literally be for voice narration, if so then useless
         Button.CreateNarration createNarration = new Button.CreateNarration() {
             @Override

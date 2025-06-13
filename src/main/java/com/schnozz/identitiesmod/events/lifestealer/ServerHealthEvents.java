@@ -24,8 +24,6 @@ public class ServerHealthEvents {
             int h = Math.min(20, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
             player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
             player.setData(ModDataAttachments.HEALTH_NEEDED, h);
-
-
         }
 
         if(event.getEntity() instanceof Player player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer") && event.getSource().getDirectEntity() instanceof Player p && !p.equals(player))
