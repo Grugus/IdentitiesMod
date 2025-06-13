@@ -77,7 +77,7 @@ public class ClientGravityEvents {
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
 
-                pullStunTimer = 1;
+                //pullStunTimer = 1;
             }
             //gravity meteor creation and set both position and movement
             else if(GRAVITY_METEOR_MAPPING.get().consumeClick()) //EVAN THIS NEEDS COOLDOWN
