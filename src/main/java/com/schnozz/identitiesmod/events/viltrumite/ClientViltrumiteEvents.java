@@ -71,6 +71,7 @@ public class ClientViltrumiteEvents {
                     chokeDash(viltrumitePlayer);
                     viltrumitePlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), viltrumitePlayer.level().getGameTime(), 500);
                     PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(viltrumitePlayer.level().getGameTime(), 500), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "choke_dash_cd"), false));
+                    CHOKE_DASH_CDICON.setCooldown(new Cooldown(viltrumitePlayer.level().getGameTime(), 500));
                 }
             }
             if(VILTRUMITE_FLIGHT_MAPPING.get().consumeClick())
@@ -126,6 +127,7 @@ public class ClientViltrumiteEvents {
     }
 
     private static final CooldownIcon cooldownIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/viltrumitegrabcd_icon.png"));
+    private static final CooldownIcon CHOKE_DASH_CDICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/viltrumite_choke_dash_cd_icon.png"));
     //fix grab with ridable entities by preventing ride function
     private static boolean findEntity (Player player)
     {
@@ -224,6 +226,7 @@ public class ClientViltrumiteEvents {
         long gameTime = Minecraft.getInstance().level.getGameTime();
         GuiGraphics graphics = event.getGuiGraphics();
         cooldownIcon.render(graphics, gameTime);
+        CHOKE_DASH_CDICON.render(graphics, gameTime);
     }
 
 }

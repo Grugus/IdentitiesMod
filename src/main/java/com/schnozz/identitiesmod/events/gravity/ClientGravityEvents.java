@@ -95,6 +95,7 @@ public class ClientGravityEvents {
                     chaosTimer = 1; //starts chaos logic loop
                     chaos(gravityPlayer); //intial hit guaranteed
                 }
+                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 250));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
             }
@@ -140,6 +141,7 @@ public class ClientGravityEvents {
     //cooldown icons
     private static final CooldownIcon PUSH_COOLDOWN_ICON = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
     private static final CooldownIcon PULL_COOLDOWN_ICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
+    private static final CooldownIcon CHAOS_COOLDOWN_ICON = new CooldownIcon(10, 50, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitychaoscd_icon.png"));
     //ability methods
     public static void push(Player gravityPlayer)
     {
@@ -230,6 +232,7 @@ public class ClientGravityEvents {
         GuiGraphics graphics = event.getGuiGraphics();
         PUSH_COOLDOWN_ICON.render(graphics, gameTime);
         PULL_COOLDOWN_ICON.render(graphics, gameTime);
+        CHAOS_COOLDOWN_ICON.render(graphics, gameTime);
     }
 
 }
