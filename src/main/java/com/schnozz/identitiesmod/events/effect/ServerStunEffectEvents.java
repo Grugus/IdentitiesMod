@@ -19,12 +19,9 @@ public class ServerStunEffectEvents {
     @SubscribeEvent
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         Entity attacker = event.getSource().getEntity();
-        System.out.println("ATTACKER: " + attacker);
         if(attacker instanceof ServerPlayer attackerPlayer)
         {
-            System.out.println("IS PLAYER");
             if (attackerPlayer.getActiveEffects().contains(ModEffects.STUN)) {
-                System.out.println("STUNNED ATTACKER: " + attackerPlayer);
                 event.setCanceled(true);
             }
         }

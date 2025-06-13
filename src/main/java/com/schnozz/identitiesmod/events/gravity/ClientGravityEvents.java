@@ -90,14 +90,16 @@ public class ClientGravityEvents {
                 closestDistance = Integer.MAX_VALUE;
 
                 findChaosTargetAndDistance(gravityPlayer);
-                if (target instanceof LivingEntity livingEntity) {
-                    chaosTargetEntityId = livingEntity.getId();
-                    chaosTimer = 1; //starts chaos logic loop
-                    chaos(gravityPlayer); //intial hit guaranteed
+                if(target != null) {
+                    if (target instanceof LivingEntity livingEntity) {
+                        chaosTargetEntityId = livingEntity.getId();
+                        chaosTimer = 1; //starts chaos logic loop
+                        chaos(gravityPlayer); //intial hit guaranteed
+                    }
+                    CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 250));
+                    gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
+                    PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
                 }
-                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 250));
-                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
             }
 
 

@@ -102,9 +102,9 @@ public class ServerAdaptationEvents {
         {
             float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
             float amount = event.getAmount()*damagePercent*3.5F;
-            System.out.println("OLD AMOUNT:" + event.getAmount());
-            System.out.println("NEW AMOUNT:" + amount);
-            System.out.println("SOURCE:" + sourceLocation);
+            //System.out.println("OLD AMOUNT:" + event.getAmount());
+            //System.out.println("NEW AMOUNT:" + amount);
+            //System.out.println("SOURCE:" + sourceLocation);
             event.setAmount(amount);
         }
     }
