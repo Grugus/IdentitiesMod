@@ -45,10 +45,14 @@ public class ServerViltrumiteEvents {
                 //sets held entity position
                 Player viltrumitePlayer = event.getEntity();
                 Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                assert target != null;
+                //error checks STOP DELETING EVAN YOU FATTASS IT CAUSES ERRORS
+                if(target == null){return;}
+                if(!target.isAlive()){return;}
+                //sets position in front and turns off gravity
                 Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
                 target.setPos(targetPos);
                 target.setNoGravity(true);
+                //sets mob aggro to viltrumite
                 if(!(target instanceof Player) && target instanceof Mob mob)
                 {
                     mob.setTarget(event.getEntity());
