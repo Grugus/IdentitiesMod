@@ -73,6 +73,7 @@ public class ServerNecroEvents {
 
                 command_list.addUUID(newMonster.getUUID());
                 level.addFreshEntity(newMonster);
+                newMonster.setCanPickUpLoot(true);
             }
 
 

@@ -2,16 +2,12 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
-import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
 import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -46,28 +43,20 @@ public class ServerViltrumiteEvents {
         {
             if(!event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty())
             {
-                //gets target
+                //sets held entity position
                 Player viltrumitePlayer = event.getEntity();
                 Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                //stops errors when target dies
-                if(target==null){return;}
-                if(!target.isAlive()){return;}
-                //checks if target is being ridden by Viltrumite
-                if(target.getPassengers().contains(viltrumitePlayer))
+                assert target != null;
+                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
+                target.setPos(targetPos);
+                target.setNoGravity(true);
+                if(!(target instanceof Player) && target instanceof Mob mob)
                 {
-                    target.ejectPassengers();
-                }
-                //sets target position in front of viltrumite
-                else
-                {
-                    Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
-                    target.setPos(targetPos);
-                    target.setNoGravity(true);
+                    mob.setTarget(event.getEntity());
                 }
             }
         }
     }
-
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
