@@ -1,7 +1,7 @@
 package com.schnozz.identitiesmod.events.adaptation;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.screen.icon.AdapterProgressBar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

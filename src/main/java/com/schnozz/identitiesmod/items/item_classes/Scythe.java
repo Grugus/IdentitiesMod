@@ -4,7 +4,7 @@ package com.schnozz.identitiesmod.items.item_classes;
 import com.schnozz.identitiesmod.datacomponent.ChargeRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;

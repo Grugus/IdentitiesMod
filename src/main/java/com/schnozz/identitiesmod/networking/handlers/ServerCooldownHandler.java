@@ -1,6 +1,6 @@
 package com.schnozz.identitiesmod.networking.handlers;
 
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import net.minecraft.world.entity.player.Player;

@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

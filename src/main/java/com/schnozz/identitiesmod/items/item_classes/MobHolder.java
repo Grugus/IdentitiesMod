@@ -5,7 +5,7 @@ import com.schnozz.identitiesmod.datacomponent.CompoundTagListRecord;
 import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.entities.ThrownMobHolder;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;

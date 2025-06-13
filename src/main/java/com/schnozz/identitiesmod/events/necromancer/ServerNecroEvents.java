@@ -8,8 +8,7 @@ import com.schnozz.identitiesmod.datacomponent.ModDataComponentRegistry;
 import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
-import net.minecraft.core.component.DataComponents;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -24,14 +23,12 @@ import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.DEDICATED_SERVER)

@@ -2,7 +2,7 @@ package com.schnozz.identitiesmod.items.item_classes;
 
 import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
-import com.schnozz.identitiesmod.register_attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
