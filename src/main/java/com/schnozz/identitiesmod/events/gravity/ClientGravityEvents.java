@@ -4,9 +4,11 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
+import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
 import com.schnozz.identitiesmod.networking.payloads.EntityDamagePayload;
+import com.schnozz.identitiesmod.networking.payloads.StunPayload;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,6 +17,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +43,7 @@ public class ClientGravityEvents {
     private static final double Z_STRENGTH = 1.5;
     //timers
     private static int chaosTimer = 0;
+    private static int pullStunTimer = 0;
     //dynamic forces
     private static double vX,vY,vZ;
     //chaos target entity id
@@ -49,7 +53,10 @@ public class ClientGravityEvents {
     //chaos target find global variables
     private static Entity target;
     private static double closestDistance;
-
+    //entity list for pull
+    private static List<Entity> entitiesInBox;
+    //stun duration
+    private static int stunDuration = 40;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
@@ -72,6 +79,8 @@ public class ClientGravityEvents {
                 PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 200));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
+
+                pullStunTimer = 1;
             }
             //gravity meteor creation and set both position and movement
             else if(GRAVITY_METEOR_MAPPING.get().consumeClick()) //EVAN THIS NEEDS COOLDOWN
@@ -99,6 +108,27 @@ public class ClientGravityEvents {
                 if(ran == 0) {
                     chaos(gravityPlayer);
                     chaosTimer++;
+                }
+            }
+            if(pullStunTimer > 0 && pullStunTimer < 30)
+            {
+                for(Entity entity: entitiesInBox)
+                {
+                    if(entity instanceof LivingEntity livingEntity)
+                    {
+                        livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
+                        PacketDistributor.sendToServer(new StunPayload(livingEntity.getId(), stunDuration));
+                    }
+                }
+            }
+            if(pullStunTimer >= 30)
+            {
+                for(Entity entity: entitiesInBox)
+                {
+                    if(entity instanceof LivingEntity livingEntity && livingEntity.getActiveEffects().contains(ModEffects.STUN))
+                    {
+                        livingEntity.removeEffect(ModEffects.STUN);
+                    }
                 }
             }
         }
@@ -131,7 +161,7 @@ public class ClientGravityEvents {
         double xMax = gravityPlayer.getX() + 20.0; double yMax = gravityPlayer.getY() + 20.0; double zMax = gravityPlayer.getZ() + 20.0;
         AABB gravityForceBB = new AABB(xMin,yMin,zMin,xMax,yMax,zMax);
 
-        List<Entity> entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
+        entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
         for (Entity entity : entitiesInBox) {
             double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
             double forceX = -dx/2; double forceY = -dy/4; double forceZ = -dz/2;
