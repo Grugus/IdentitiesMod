@@ -43,6 +43,13 @@ public class ModDataAttachments {
                             .build()
             );
 
+    public static final Supplier<AttachmentType<LifestealerBuffsAttachment>> LIFESTEALER_BUFFS =
+            ATTACHMENT_TYPES.register("lifestealer_buffs", () ->
+                    AttachmentType.builder(LifestealerBuffsAttachment::new)
+                            .serialize(LifestealerBuffsAttachment.CODEC)
+                            .build()
+            );
+
     public static final Supplier<AttachmentType<ViltrumiteAttachment>> VILTRUMITE_STATES =
             ATTACHMENT_TYPES.register("viltrumite_states", () ->
                     AttachmentType.builder(ViltrumiteAttachment::new)

@@ -8,6 +8,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -52,6 +53,16 @@ public class PayloadRegister {
                 }
         );
 
+        registrar.playToServer(
+                LifestealerBuffSyncPayload.TYPE,
+                LifestealerBuffSyncPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    Player player = context.player();
+                    if (player != null) {
+                        player.setData(ModDataAttachments.LIFESTEALER_BUFFS.get(), payload.attachment());
+                    }
+                }
+        );
 
         registrar.playToClient(
                 ViltrumiteAttachmentSyncPayload.TYPE,
@@ -128,9 +139,9 @@ public class PayloadRegister {
                 HealthCostPayload.STREAM_CODEC,
                 (payload, context) -> {
                     Player p = context.player();
-                    int currentHealth = p.getData(ModDataAttachments.HEALTH_NEEDED);
-                    p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealth - payload.cost());
-                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(p.getData(ModDataAttachments.HEALTH_NEEDED));
+                    int currentHealthNeeded = p.getData(ModDataAttachments.HEALTH_NEEDED);
+                    p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealthNeeded - payload.cost());
+                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + p.getData(ModDataAttachments.HEALTH_NEEDED));
                 }
         );
 
