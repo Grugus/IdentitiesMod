@@ -19,7 +19,7 @@ public abstract class ServerPotionToggleHandler {
         }
         else
         {
-            player.addEffect(new MobEffectInstance(payload.effect(), MobEffectInstance.INFINITE_DURATION, payload.level(), false, false));
+            player.addEffect(new MobEffectInstance(payload.effect(), MobEffectInstance.INFINITE_DURATION, payload.level(), false, false, true));
         }
 
     }

@@ -1,10 +1,14 @@
 package com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.BuffButtons;
 
+import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -17,18 +21,17 @@ public class FireRes extends Button{
     public void onPress()
     {
         Player p = Minecraft.getInstance().player;
-        assert p != null;
+        if(p == null){return;}
 
-        boolean hasEffect = p.getActiveEffects().contains(MobEffects.FIRE_RESISTANCE);
+        float permLevel = p.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"fire_res"));
+        int cost = 6;
 
-        int cost = 4;
+        if (p.getMaxHealth() >= 20 + cost && permLevel < 0)
+        {
+            PacketDistributor.sendToServer(new HealthCostPayload(cost));
+            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"fire_res"),permLevel+1);
 
-        if(!hasEffect) {
-            if (p.getMaxHealth() >= 20 + cost)
-            {
-                PacketDistributor.sendToServer(new HealthCostPayload(cost));
-                PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.FIRE_RESISTANCE,0, Integer.MAX_VALUE));
-            }
+            PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.FIRE_RESISTANCE, (int)permLevel, MobEffectInstance.INFINITE_DURATION));
         }
     }
 }

@@ -24,6 +24,5 @@ public class StrengthToggle extends Button
 
         float permLevel = p.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"strength"));
         PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.DAMAGE_BOOST, (int)permLevel));
-
     }
 }
