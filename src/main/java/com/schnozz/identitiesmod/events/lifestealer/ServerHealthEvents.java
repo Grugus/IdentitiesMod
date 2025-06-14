@@ -17,14 +17,18 @@ public class ServerHealthEvents {
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event)
     {
-        //change the Zombie to Player
+        //for when lifestealer kills the player gain 1 heart
         if(event.getSource().getDirectEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
-            if(player.level().isClientSide){return;}
+
             if (event.getEntity() instanceof Zombie) {
                 int h = Math.min(20, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
                 player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
                 player.setData(ModDataAttachments.HEALTH_NEEDED, h);
             }
+        }
+
+        // for when lifestealer dies to a player lose 1 heart
+        if(event.getEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
 
             if (event.getSource().getDirectEntity() instanceof Player p) {
                 int h = Math.max(0, player.getData(ModDataAttachments.HEALTH_NEEDED) - 2);
@@ -33,5 +37,7 @@ public class ServerHealthEvents {
 
             }
         }
+
+
     }
 }
