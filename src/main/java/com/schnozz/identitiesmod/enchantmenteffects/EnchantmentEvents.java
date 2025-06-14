@@ -48,7 +48,10 @@ public class EnchantmentEvents {
                         .registryOrThrow(Registries.ENCHANTMENT)
                         .getHolderOrThrow(ModEnchantments.LIGHTNING_AXE);
 
-                // CHECK LIGHTNING BOLT AND THEN CANCEL DAMAGE
+                if(event.getSource().getMsgId().equals("minecraft:lightning_bolt"))
+                {
+                    event.setNewDamage(0);
+                }
 
             }
 
