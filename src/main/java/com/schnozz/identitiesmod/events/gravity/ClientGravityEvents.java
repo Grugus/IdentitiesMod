@@ -46,7 +46,7 @@ public class ClientGravityEvents {
     //chaos target entity id
     private static int chaosTargetEntityId;
     //chaos damage
-    private static float chaosDamage = 1.5F;
+    private static float chaosDamage = 2.5F;
     //chaos target find global variables
     private static Entity target;
     private static double closestDistance;
@@ -104,13 +104,13 @@ public class ClientGravityEvents {
 
 
             //chaos logic
-            if(chaosTimer > 0 && chaosTimer < 450 && chaosTargetEntityId != 0)
+            if(chaosTimer > 0 && chaosTimer < 200 && chaosTargetEntityId != 0)
             {
-                int ran = (int) (Math.random() * 50);
+                int ran = (int) (Math.random() * 40);
                 if(ran == 0) {
                     chaos(gravityPlayer);
-                    chaosTimer++;
                 }
+                chaosTimer++;
             }
             if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
             {
