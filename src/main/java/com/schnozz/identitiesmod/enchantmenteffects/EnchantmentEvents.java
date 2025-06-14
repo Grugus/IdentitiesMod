@@ -13,8 +13,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -39,6 +41,16 @@ public class EnchantmentEvents {
 
         if(event.getEntity() instanceof Player player && !player.level().isClientSide && player.level() instanceof ServerLevel level)
         {
+            if(player.getMainHandItem().getItem() instanceof AxeItem a)
+            {
+                ItemEnchantments enchantments = ((IItemStackExtension) player.getMainHandItem()).getAllEnchantments(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT));
+                Holder<Enchantment> fireShieldHolder = level.registryAccess()
+                        .registryOrThrow(Registries.ENCHANTMENT)
+                        .getHolderOrThrow(ModEnchantments.LIGHTNING_AXE);
+
+                // CHECK LIGHTNING BOLT AND THEN CANCEL DAMAGE
+
+            }
 
             if (!player.isBlocking()) return;
 
