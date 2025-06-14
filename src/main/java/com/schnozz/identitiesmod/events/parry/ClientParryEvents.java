@@ -46,7 +46,7 @@ public class ClientParryEvents {
         player.setData(ModDataAttachments.COOLDOWN, newAtachment);
         cooldownIcon.setCooldown(new Cooldown(currentTime, 120));
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 120), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 8), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
+        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 16), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
     }
 
     public static void setIconCooldown(Cooldown cod)

@@ -1,6 +1,8 @@
 package com.schnozz.identitiesmod.networking;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
+import com.schnozz.identitiesmod.events.parry.ClientParryEvents;
+import com.schnozz.identitiesmod.events.viltrumite.ClientViltrumiteEvents;
 import com.schnozz.identitiesmod.networking.handlers.*;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
@@ -74,6 +76,34 @@ public class PayloadRegister {
                         LocalPlayer player = Minecraft.getInstance().player;
                         if (player != null) {
                             player.setData(ModDataAttachments.COMBAT_LOGGED.get(), payload.attachment());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
+                CDPayload.TYPE,
+                CDPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            ClientViltrumiteEvents.setIconCooldown(payload.cooldown());
+                        }
+                    });
+                }
+        );
+
+        registrar.playToClient(
+                CDPayload.TYPE,
+                CDPayload.STREAM_CODEC,
+                (payload, context) -> {
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            ClientParryEvents.setIconCooldown(payload.cooldown());
                         }
                     });
                 }

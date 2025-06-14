@@ -7,6 +7,7 @@ import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import com.schnozz.identitiesmod.networking.payloads.CDPayload;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -150,6 +151,7 @@ public class ServerViltrumiteEvents {
 
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
+        if(event.getEntity().level().isClientSide) return;
         if(event.getEntity() instanceof ServerPlayer p && !event.getEntity().getData(ModDataAttachments.ENTITY_HELD).isEmpty() && event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE.get()).equals("Viltrumite"))
         {
             Entity target = level.getEntity(p.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
@@ -159,7 +161,7 @@ public class ServerViltrumiteEvents {
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
             p.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), level.getGameTime(), 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), false));
-            ClientViltrumiteEvents.setIconCooldown(new Cooldown(level.getGameTime(), 200));
+            PacketDistributor.sendToPlayer(p, new CDPayload(new Cooldown(level.getGameTime(), 200)));
         }
 
     }

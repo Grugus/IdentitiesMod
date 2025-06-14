@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import com.schnozz.identitiesmod.networking.payloads.CDPARRYPayload;
 import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.networking.payloads.SoundPayload;
 import com.schnozz.identitiesmod.sounds.ModSounds;
@@ -44,7 +45,7 @@ public class ServerParryEvents {
                     newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-                    ClientParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
+                    PacketDistributor.sendToPlayer(player, new CDPARRYPayload(new Cooldown(currentTime, 20)));
                     event.setCanceled(true);
                     System.out.println("Parry Success");
 
@@ -57,7 +58,7 @@ public class ServerParryEvents {
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                     newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
-                    ClientParryEvents.setIconCooldown(new Cooldown(currentTime, 20));
+                    PacketDistributor.sendToPlayer(player, new CDPARRYPayload(new Cooldown(currentTime, 20)));
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                     PacketDistributor.sendToPlayer(player, new SoundPayload(ModSounds.PARRY_SOUND.get()));
                     event.setCanceled(true);
