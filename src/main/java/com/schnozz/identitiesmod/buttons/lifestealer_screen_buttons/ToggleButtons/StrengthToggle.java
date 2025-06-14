@@ -18,6 +18,9 @@ public class StrengthToggle extends Button
     {
         Player p = Minecraft.getInstance().player;
         assert p != null;
-        PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.DAMAGE_BOOST, p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier()));
+        if(p.getActiveEffects().contains(MobEffects.DAMAGE_BOOST)){PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.DAMAGE_BOOST, p.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier()));}
+        else {
+            PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.DAMAGE_BOOST,0));
+        }
     }
 }

@@ -18,20 +18,20 @@ public class ServerHealthEvents {
     public static void onEntityDeath(LivingDeathEvent event)
     {
         //change the Zombie to Player
+        if(event.getSource().getDirectEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
+            if(player.level().isClientSide){return;}
+            if (event.getEntity() instanceof Zombie) {
+                int h = Math.min(20, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
+                player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
+                player.setData(ModDataAttachments.HEALTH_NEEDED, h);
+            }
 
-        if(event.getEntity() instanceof Player && event.getSource().getDirectEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer"))
-        {
-            int h = Math.min(20, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
-            player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
-            player.setData(ModDataAttachments.HEALTH_NEEDED, h);
-        }
+            if (event.getSource().getDirectEntity() instanceof Player p) {
+                int h = Math.max(0, player.getData(ModDataAttachments.HEALTH_NEEDED) - 2);
+                player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
+                player.setData(ModDataAttachments.HEALTH_NEEDED, h);
 
-        if(event.getEntity() instanceof Player player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer") && event.getSource().getDirectEntity() instanceof Player p)
-        {
-            int h = Math.max(0, player.getData(ModDataAttachments.HEALTH_NEEDED) - 2);
-            player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
-            player.setData(ModDataAttachments.HEALTH_NEEDED, h);
-
+            }
         }
     }
 }

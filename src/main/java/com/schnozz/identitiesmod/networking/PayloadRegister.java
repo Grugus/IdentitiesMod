@@ -130,7 +130,7 @@ public class PayloadRegister {
                     Player p = context.player();
                     int currentHealth = p.getData(ModDataAttachments.HEALTH_NEEDED);
                     p.setData(ModDataAttachments.HEALTH_NEEDED, currentHealth - payload.cost());
-                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(p.getMaxHealth() + p.getData(ModDataAttachments.HEALTH_NEEDED));
+                    p.getAttribute(Attributes.MAX_HEALTH).setBaseValue(p.getData(ModDataAttachments.HEALTH_NEEDED));
                 }
         );
 

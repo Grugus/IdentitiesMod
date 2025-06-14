@@ -13,7 +13,7 @@ public class ClientPotionLevelHandler {
         Minecraft.getInstance().execute(() -> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                player.addEffect(new MobEffectInstance(payload.effect(), Integer.MAX_VALUE, payload.level(), false, false));
+                player.addEffect(new MobEffectInstance(payload.effect(), MobEffectInstance.INFINITE_DURATION, payload.level(), false, false,true));
             }
         });
     }

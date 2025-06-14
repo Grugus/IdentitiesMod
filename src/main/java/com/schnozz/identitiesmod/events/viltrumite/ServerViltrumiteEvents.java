@@ -131,7 +131,6 @@ public class ServerViltrumiteEvents {
             if(target == null) return;
             target.setNoGravity(false);
             event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
-
         }
     }
 
@@ -144,7 +143,6 @@ public class ServerViltrumiteEvents {
             if(target == null) return;
             target.setNoGravity(false);
             event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
-
         }
     }
 
