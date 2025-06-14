@@ -96,8 +96,8 @@ public class PayloadRegister {
         );
 
         registrar.playToClient(
-                CDPayload.TYPE,
-                CDPayload.STREAM_CODEC,
+                CDPARRYPayload.TYPE,
+                CDPARRYPayload.STREAM_CODEC,
                 (payload, context) -> {
                     // Schedule work on the main client thread
                     Minecraft.getInstance().execute(() -> {
