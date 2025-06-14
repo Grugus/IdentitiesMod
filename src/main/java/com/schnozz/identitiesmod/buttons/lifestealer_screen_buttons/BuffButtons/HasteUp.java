@@ -36,8 +36,14 @@ public class HasteUp extends Button{
         if (p.getMaxHealth() >= 20 + cost && permLevel < 2) //level is less than 3
         {
             PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"haste"),permLevel+1);
 
+            permLevel++;
+            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"haste"),permLevel);
+
+            if(p.getActiveEffects().contains(MobEffects.DIG_SPEED))
+            {
+                p.removeEffect(MobEffects.DIG_SPEED);
+            }
             PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DIG_SPEED, (int)permLevel, MobEffectInstance.INFINITE_DURATION));
         }
     }

@@ -47,6 +47,7 @@ public class ModDataAttachments {
             ATTACHMENT_TYPES.register("lifestealer_buffs", () ->
                     AttachmentType.builder(LifestealerBuffsAttachment::new)
                             .serialize(LifestealerBuffsAttachment.CODEC)
+                            .copyOnDeath()
                             .build()
             );
 

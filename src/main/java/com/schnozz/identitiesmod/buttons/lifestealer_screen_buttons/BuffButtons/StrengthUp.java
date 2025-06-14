@@ -37,8 +37,14 @@ public class StrengthUp extends Button
         if (p.getMaxHealth() >= 20 + cost && permLevel < 2) //str level is less than 3
         {
             PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"strength"),permLevel+1);
 
+            permLevel++;
+            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"strength"),permLevel);
+
+            if(p.getActiveEffects().contains(MobEffects.DAMAGE_BOOST))
+            {
+                p.removeEffect(MobEffects.DAMAGE_BOOST);
+            }
             PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.DAMAGE_BOOST, (int)permLevel, MobEffectInstance.INFINITE_DURATION));
         }
 

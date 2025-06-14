@@ -49,34 +49,10 @@ public class ServerHealthEvents {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event)
     {
-        if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealear"))
+        if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer") && event.isWasDeath())
         {
             Player lifeStealer = event.getEntity();
-
-            float permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"strength"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
-            permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"speed"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
-            permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"jump"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.JUMP, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
-            permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"haste"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
-            permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"night_vision"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
-            permLevel = lifeStealer.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"fire_res"));
-            if(permLevel != -1) {
-                lifeStealer.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, (int) permLevel, false, false, true));
-            }
+            lifeStealer.setData(ModDataAttachments.LIFESTEALER_BUFFS,event.getOriginal().getData(ModDataAttachments.LIFESTEALER_BUFFS));
         }
     }
 }

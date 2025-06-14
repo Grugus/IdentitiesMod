@@ -37,8 +37,14 @@ public class JumpUp extends Button
         if (p.getMaxHealth() >= 20 + cost && permLevel < 2) //level is less than 3
         {
             PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"jump"),permLevel+1);
 
+            permLevel++;
+            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"jump"),permLevel);
+
+            if(p.getActiveEffects().contains(MobEffects.JUMP))
+            {
+                p.removeEffect(MobEffects.JUMP);
+            }
             PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.JUMP, (int)permLevel, MobEffectInstance.INFINITE_DURATION));
         }
     }

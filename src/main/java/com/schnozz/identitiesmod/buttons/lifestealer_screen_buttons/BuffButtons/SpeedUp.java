@@ -37,8 +37,14 @@ public class SpeedUp extends Button
         if (p.getMaxHealth() >= 20 + cost && permLevel < 2) //level is less than 3
         {
             PacketDistributor.sendToServer(new HealthCostPayload(cost));
-            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"speed"),permLevel+1);
 
+            permLevel++;
+            p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"speed"),permLevel);
+
+            if(p.getActiveEffects().contains(MobEffects.MOVEMENT_SPEED))
+            {
+                p.removeEffect(MobEffects.MOVEMENT_SPEED);
+            }
             PacketDistributor.sendToServer(new PotionLevelPayload(MobEffects.MOVEMENT_SPEED, (int)permLevel, MobEffectInstance.INFINITE_DURATION));
         }
     }
