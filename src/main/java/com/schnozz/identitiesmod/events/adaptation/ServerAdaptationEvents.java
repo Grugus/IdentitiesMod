@@ -27,6 +27,8 @@ public class ServerAdaptationEvents {
 
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
+        if(event.getEntity().isDeadOrDying()){return;} //make sure it fixed error
+
         Entity entity = event.getEntity();
         DamageSource source = event.getSource();
 

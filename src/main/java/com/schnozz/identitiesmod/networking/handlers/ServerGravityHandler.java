@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.networking.payloads.GravityPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ServerGravityHandler {
@@ -13,6 +14,9 @@ public class ServerGravityHandler {
 
         Entity entity = player.level().getEntity(payload.entityID());
         if(entity == null) return;
+        if(entity instanceof Player) {
+            System.out.println("PLAYER BEING PUSHED/PULLED");
+        }
         entity.push(payload.fx(),payload.fy(),payload.fz());
     }
 }
