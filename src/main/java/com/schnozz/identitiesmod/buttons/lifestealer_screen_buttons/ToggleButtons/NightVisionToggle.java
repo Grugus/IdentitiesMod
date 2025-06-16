@@ -23,6 +23,10 @@ public class NightVisionToggle extends Button {
 
         float permLevel = p.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"night_vision"));
         PacketDistributor.sendToServer(new PotionTogglePayload(MobEffects.NIGHT_VISION, (int)permLevel));
+        if(p.getActiveEffects().contains(MobEffects.NIGHT_VISION))
+        {
+            p.removeEffect(MobEffects.NIGHT_VISION);
+        }
     }
 }
 

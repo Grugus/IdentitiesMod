@@ -2,25 +2,20 @@ package com.schnozz.identitiesmod.events.lifestealer;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.ToggleButtons.StrengthToggle;
-import com.schnozz.identitiesmod.networking.payloads.PotionTogglePayload;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
-public class ServerHealthEvents {
+public class ServerLifestealerEvents {
 
 
     @SubscribeEvent
@@ -53,6 +48,15 @@ public class ServerHealthEvents {
         {
             Player lifeStealer = event.getEntity();
             lifeStealer.setData(ModDataAttachments.LIFESTEALER_BUFFS,event.getOriginal().getData(ModDataAttachments.LIFESTEALER_BUFFS));
+        }
+    }
+    @SubscribeEvent
+    public static void onItemUse(PlayerInteractEvent.RightClickItem event)
+    {
+        Entity entity = event.getEntity();
+        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer") && event.getItemStack().getItem() == Items.POTION || event.getItemStack().getItem() == Items.SPLASH_POTION || event.getItemStack().getItem() == Items.LINGERING_POTION)
+        {
+            event.setCanceled(true);
         }
     }
 }

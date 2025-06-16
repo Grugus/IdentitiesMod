@@ -1,10 +1,9 @@
 package com.schnozz.identitiesmod.datagen;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.enchantmenteffects.ApplyWitherEnchantment;
-import com.schnozz.identitiesmod.enchantmenteffects.AxeLightningEnchantment;
-import com.schnozz.identitiesmod.enchantmenteffects.FireShieldEnchantment;
-import io.netty.bootstrap.BootstrapConfig;
+import com.schnozz.identitiesmod.enchantments.ApplyWitherEnchantment;
+import com.schnozz.identitiesmod.enchantments.AxeLightningEnchantment;
+import com.schnozz.identitiesmod.enchantments.FireShieldEnchantment;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
