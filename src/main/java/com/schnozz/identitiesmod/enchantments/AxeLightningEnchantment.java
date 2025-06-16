@@ -21,7 +21,7 @@ public record AxeLightningEnchantment() implements EnchantmentEntityEffect {
             for(int i = 0; i < enchantmentLevel; i++)
             {
                 Random r = new Random();
-                if(r.nextInt(0, 10) == 0)
+                if(r.nextInt(0, 5) == 0)
                 {
                     EntityType.LIGHTNING_BOLT.spawn(level, e.getOnPos(), MobSpawnType.TRIGGERED);
                 }

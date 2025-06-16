@@ -6,6 +6,7 @@ import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.*;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -157,8 +158,8 @@ public class ClientGravityEvents {
         for (Entity entity : entitiesInBox) {
             Vec3 angle = gravityPlayer.getLookAngle();
             double rx = angle.x; double ry = angle.y; double rz = angle.z;
-            double forceX = 4.0 * rx; double forceY = 2.0 * ry; double forceZ = 4.0 * rz;
-            PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+            double vX = 3.0 * rx; double vY = 1.2 * ry; double vZ = 3.0 * rz;
+            PacketDistributor.sendToServer(new VelocityPayload(entity.getId(),vX,vY,vZ));
         }
     }
     public static void pull(Player gravityPlayer)
@@ -172,8 +173,8 @@ public class ClientGravityEvents {
         entitiesInBox = level.getEntities(gravityPlayer, gravityForceBB);
         for (Entity entity : entitiesInBox) {
             double dx = entity.getX() - gravityPlayer.getX(); double dy = entity.getY() - gravityPlayer.getY(); double dz = entity.getZ() - gravityPlayer.getZ();
-            double forceX = -dx/2; double forceY = -dy/4; double forceZ = -dz/2;
-            PacketDistributor.sendToServer(new GravityPayload(entity.getId(),forceX,forceY,forceZ));
+            double vX = -dx/3; double vY = -dy/6; double vZ = -dz/3;
+            PacketDistributor.sendToServer(new VelocityPayload(entity.getId(),vX,vY,vZ));
         }
     }
 

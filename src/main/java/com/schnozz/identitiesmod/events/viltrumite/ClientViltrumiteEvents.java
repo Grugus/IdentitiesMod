@@ -2,12 +2,12 @@ package com.schnozz.identitiesmod.events.viltrumite;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.items.BoundingBoxVisualizer;
-import com.schnozz.identitiesmod.items.ItemRegistry;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

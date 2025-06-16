@@ -1,6 +1,5 @@
 package com.schnozz.identitiesmod.networking.payloads;
 
-import com.schnozz.identitiesmod.codecs.ModCodecs;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

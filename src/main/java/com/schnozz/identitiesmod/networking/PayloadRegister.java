@@ -6,9 +6,11 @@ import com.schnozz.identitiesmod.events.viltrumite.ClientViltrumiteEvents;
 import com.schnozz.identitiesmod.networking.handlers.*;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.*;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.*;
+import com.schnozz.identitiesmod.networking.payloads.CDPARRYPayload;
+import com.schnozz.identitiesmod.networking.payloads.CDPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -53,14 +55,17 @@ public class PayloadRegister {
                 }
         );
 
-        registrar.playToServer(
+        registrar.playToClient(
                 LifestealerBuffSyncPayload.TYPE,
                 LifestealerBuffSyncPayload.STREAM_CODEC,
                 (payload, context) -> {
-                    Player player = context.player();
-                    if (player != null) {
-                        player.setData(ModDataAttachments.LIFESTEALER_BUFFS.get(), payload.attachment());
-                    }
+                    // Schedule work on the main client thread
+                    Minecraft.getInstance().execute(() -> {
+                        LocalPlayer player = Minecraft.getInstance().player;
+                        if (player != null) {
+                            player.setData(ModDataAttachments.LIFESTEALER_BUFFS.get(), payload.attachment());
+                        }
+                    });
                 }
         );
 
@@ -73,20 +78,6 @@ public class PayloadRegister {
                         LocalPlayer player = Minecraft.getInstance().player;
                         if (player != null) {
                             player.setData(ModDataAttachments.VILTRUMITE_STATES.get(), payload.attachment());
-                        }
-                    });
-                }
-        );
-
-        registrar.playToClient(
-                CombatLoggedAttachmentSyncPayload.TYPE,
-                CombatLoggedAttachmentSyncPayload.STREAM_CODEC,
-                (payload, context) -> {
-                    // Schedule work on the main client thread
-                    Minecraft.getInstance().execute(() -> {
-                        LocalPlayer player = Minecraft.getInstance().player;
-                        if (player != null) {
-                            player.setData(ModDataAttachments.COMBAT_LOGGED.get(), payload.attachment());
                         }
                     });
                 }

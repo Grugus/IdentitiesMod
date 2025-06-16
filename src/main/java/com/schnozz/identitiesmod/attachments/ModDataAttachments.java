@@ -58,11 +58,5 @@ public class ModDataAttachments {
                             .copyOnDeath()
                             .build()
             );
-    public static final Supplier<AttachmentType<CombatLoggedAttachment>> COMBAT_LOGGED =
-            ATTACHMENT_TYPES.register("combat_logged", () ->
-                    AttachmentType.builder(CombatLoggedAttachment::new)
-                            .serialize(CombatLoggedAttachment.CODEC)
-                            .build()
-            );
 
 }

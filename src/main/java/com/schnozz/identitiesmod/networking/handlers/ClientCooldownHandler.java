@@ -2,7 +2,7 @@ package com.schnozz.identitiesmod.networking.handlers;
 
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
-import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

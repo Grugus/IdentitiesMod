@@ -3,11 +3,13 @@ package com.schnozz.identitiesmod.events;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
+import com.schnozz.identitiesmod.attachments.LifestealerBuffsAttachment;
 import com.schnozz.identitiesmod.attachments.ViltrumiteAttachment;
-import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
-import com.schnozz.identitiesmod.networking.payloads.ViltrumiteAttachmentSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.LifestealerBuffSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.ViltrumiteAttachmentSyncPayload;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.networking.payloads.PowerSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.PowerSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,20 +26,26 @@ public class AttachmentSyncEvents {
         {
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
+
             AdaptationAttachment adaptation = player.getData(ModDataAttachments.ADAPTION);
             PacketDistributor.sendToPlayer(player, new AdaptationSyncPayload(adaptation));
+
             ViltrumiteAttachment viltrumiteStates = player.getData(ModDataAttachments.VILTRUMITE_STATES);
             PacketDistributor.sendToPlayer(player, new ViltrumiteAttachmentSyncPayload(viltrumiteStates));
+
+            LifestealerBuffsAttachment lifeBuffs = player.getData(ModDataAttachments.LIFESTEALER_BUFFS);
+            PacketDistributor.sendToPlayer(player, new LifestealerBuffSyncPayload(lifeBuffs));
         }
     }
 
     @SubscribeEvent
     public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-
             String power = player.getData(ModDataAttachments.POWER_TYPE);
             PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
 
+            LifestealerBuffsAttachment lifeBuffs = player.getData(ModDataAttachments.LIFESTEALER_BUFFS);
+            PacketDistributor.sendToPlayer(player, new LifestealerBuffSyncPayload(lifeBuffs));
         }
     }
 }

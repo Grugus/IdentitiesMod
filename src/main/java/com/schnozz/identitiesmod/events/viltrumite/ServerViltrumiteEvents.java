@@ -8,7 +8,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CDPayload;
-import com.schnozz.identitiesmod.networking.payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.*;
@@ -108,7 +107,6 @@ public class ServerViltrumiteEvents {
             if (event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
 
                 Player viltrumtiePlayer = (Player) event.getSource().getDirectEntity();
-                viltrumtiePlayer.getData(ModDataAttachments.COMBAT_LOGGED).setHitTime(event.getEntity().level().getGameTime());
 
                 //cd set
                 long startTime = viltrumtiePlayer.level().getGameTime();

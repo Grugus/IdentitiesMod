@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.networking.payloads;
+package com.schnozz.identitiesmod.networking.payloads.sync_payloads;
 
 
 import com.schnozz.identitiesmod.codecs.ModCodecs;

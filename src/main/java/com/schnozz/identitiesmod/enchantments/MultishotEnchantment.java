@@ -12,18 +12,12 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public record ApplyWitherEnchantment() implements EnchantmentEntityEffect {
-    public static final MapCodec<ApplyWitherEnchantment> CODEC = MapCodec.unit(ApplyWitherEnchantment::new);
+public record MultishotEnchantment() implements EnchantmentEntityEffect {
+    public static final MapCodec<MultishotEnchantment> CODEC = MapCodec.unit(MultishotEnchantment::new);
+
     @Override
-    public void apply(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 origin) {
-        if(entity instanceof LivingEntity e)
-        {
-            Random r = new Random();
-            if(r.nextInt(0, 100/(enchantmentLevel*10)) == 0)
-            {
-                e.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 2));
-            }
-        }
+    public void apply(ServerLevel serverLevel, int i, EnchantedItemInUse enchantedItemInUse, Entity entity, Vec3 vec3) {
+        //absolutely jack shit
     }
 
     @Override

@@ -11,13 +11,12 @@ import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerLifestealerEvents {
-
-
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event)
     {
@@ -44,7 +43,7 @@ public class ServerLifestealerEvents {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event)
     {
-        if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer") && event.isWasDeath())
+        if(event.isWasDeath() && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer"))
         {
             Player lifeStealer = event.getEntity();
             lifeStealer.setData(ModDataAttachments.LIFESTEALER_BUFFS,event.getOriginal().getData(ModDataAttachments.LIFESTEALER_BUFFS));

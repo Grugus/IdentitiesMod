@@ -1,0 +1,31 @@
+{
+  "anvil_cost": 5,
+  "description": {
+    "translate": "enchantment.identitiesmod.multishot"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "affected": "victim",
+        "effect": {
+          "type": "identitiesmod:multishot"
+        },
+        "enchanted": "attacker"
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 25,
+    "per_level_above_first": 7
+  },
+  "max_level": 2,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 7
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "minecraft:bow",
+  "weight": 5
+}

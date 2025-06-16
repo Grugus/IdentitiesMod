@@ -1,7 +1,8 @@
 package com.schnozz.identitiesmod.datagen;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.enchantments.ApplyWitherEnchantment;
+import com.schnozz.identitiesmod.enchantments.MultishotEnchantment;
+import com.schnozz.identitiesmod.enchantments.WitherEnchantment;
 import com.schnozz.identitiesmod.enchantments.AxeLightningEnchantment;
 import com.schnozz.identitiesmod.enchantments.FireShieldEnchantment;
 import net.minecraft.core.registries.Registries;
@@ -23,6 +24,9 @@ public class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "lightning_axe"));
     public static final ResourceKey<Enchantment> FIRE_SHIELD = ResourceKey.create(Registries.ENCHANTMENT,
             ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "fire_shield"));
+    public static final ResourceKey<Enchantment> MULTISHOT = ResourceKey.create(Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "multishot"));
+
     public static  final TagKey<Item> shieldTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("neoforge", "shields"));
 
     public static void bootstrap(BootstrapContext<Enchantment> context){
@@ -39,7 +43,7 @@ public class ModEnchantments {
                 2,
                 EquipmentSlotGroup.MAINHAND))
                 .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER,
-                        EnchantmentTarget.VICTIM, new ApplyWitherEnchantment())
+                        EnchantmentTarget.VICTIM, new WitherEnchantment())
         );
 
         register(context, LIGHTNING_AXE, Enchantment.enchantment(Enchantment.definition(
@@ -64,6 +68,18 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND))
                 .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER,
                         EnchantmentTarget.VICTIM, new FireShieldEnchantment())
+        );
+
+        register(context, MULTISHOT, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
+                        5,
+                        2,
+                        Enchantment.dynamicCost(5, 7),
+                        Enchantment.dynamicCost(25, 7),
+                        2,
+                        EquipmentSlotGroup.MAINHAND))
+                .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER,
+                        EnchantmentTarget.VICTIM, new MultishotEnchantment())
         );
     }
 

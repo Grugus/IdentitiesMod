@@ -12,19 +12,16 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public record CocktailEnchantment() implements EnchantmentEntityEffect {
-    public static final MapCodec<CocktailEnchantment> CODEC = MapCodec.unit(CocktailEnchantment::new);
+public record WitherEnchantment() implements EnchantmentEntityEffect {
+    public static final MapCodec<WitherEnchantment> CODEC = MapCodec.unit(WitherEnchantment::new);
     @Override
     public void apply(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 origin) {
         if(entity instanceof LivingEntity e)
         {
             Random r = new Random();
-            //add cooldown instead of checking for effects
-            if(r.nextInt(0, 100/(enchantmentLevel*20)) == 0)
+            if(r.nextInt(0, 100/(enchantmentLevel*10)) == 0)
             {
                 e.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 2));
-                e.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
-                e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
             }
         }
     }

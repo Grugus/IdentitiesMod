@@ -3,7 +3,7 @@ package com.schnozz.identitiesmod.events.adaptation;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
-import com.schnozz.identitiesmod.networking.payloads.AdaptationSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;

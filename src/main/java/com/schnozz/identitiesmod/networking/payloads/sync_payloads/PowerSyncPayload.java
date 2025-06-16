@@ -1,4 +1,4 @@
-package com.schnozz.identitiesmod.networking.payloads;
+package com.schnozz.identitiesmod.networking.payloads.sync_payloads;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
