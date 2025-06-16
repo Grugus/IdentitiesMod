@@ -1,6 +1,7 @@
 package com.schnozz.identitiesmod.screen.custom;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.BuffButtons.*;
 import com.schnozz.identitiesmod.buttons.lifestealer_screen_buttons.ToggleButtons.*;
 import com.schnozz.identitiesmod.IdentitiesMod;
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Supplier;
 
@@ -55,6 +57,8 @@ public class LifestealerScreen extends Screen {
 
     public void addButtons() //creates and registers all LifestealerScreen buff and toggle renderable widgets
     {
+        Player player = Minecraft.getInstance().player;
+
         //variable initialization and first defining
             //width and height of the screen
         int scaledWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
@@ -67,10 +71,14 @@ public class LifestealerScreen extends Screen {
         int originX = bWidth - scaledWidth/25;
         int originY = scaledHeight/4 + bHeight;
             //changing x and y (dynamic)
-        int dynamicX = originX;
+        int dynamicX = originX - scaledWidth/10;
         int dynamicY = originY;
             //button text (dynamic)
-        Component message = Component.literal("Strength (2 heart)"); //18 characters
+        int amount = (int)player.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"strength"));
+        if(amount == -1){amount = 2;}
+        else if(amount == 0){amount = 3;}
+        else{amount = 5;}
+        Component message = Component.literal("Strength ("+ amount +")"); //18 characters
             //I think for tooltips but doesn't show up. Could also literally be for voice narration, if so then useless
         Button.CreateNarration createNarration = new Button.CreateNarration() {
             @Override
@@ -85,41 +93,51 @@ public class LifestealerScreen extends Screen {
         this.addRenderableWidget(strButton);
 
         dynamicY+=bHeight+5;
-        message = Component.literal("Speed (1 heart)"); //15 characters
+        amount = (int)player.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"speed"));
+        amount += 2;
+        message = Component.literal("Speed (" + amount +")"); //15 characters
         bWidth = (int) (message.getString().length()*6);
-        dynamicX = bWidth + scaledWidth/11;
+        dynamicX = bWidth + scaledWidth/5;
 
         SpeedUp speedButton = new SpeedUp(dynamicX,dynamicY,bWidth,bHeight,message,Button::onPress,createNarration); //do onPress last
         this.addRenderableWidget(speedButton);
 
         dynamicY+=bHeight+5;
-        message = Component.literal("JumpBoost (1 heart)"); //19 cha
+        amount = (int)player.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"jump"));
+        if(amount == -1){amount = 1;}
+        else{amount = 2;}
+        message = Component.literal("JumpBoost (" + amount +")"); //19 cha
         bWidth = (int) (message.getString().length()*6);
-        dynamicX = bWidth + scaledWidth/30;
+        dynamicX = bWidth + scaledWidth/7;
 
         JumpUp jumpButton = new JumpUp(dynamicX,dynamicY,bWidth,bHeight,message,Button::onPress,createNarration); //do onPress last
         this.addRenderableWidget(jumpButton);
 
         dynamicY+=bHeight+5;
-        message = Component.literal("Haste (2 hearts)"); //16 cha
+        amount = (int)player.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"haste"));
+        if(amount == -1){amount = 2;}
+        else{amount = 3;}
+        message = Component.literal("Haste (" + amount +")");
         bWidth = (int) (message.getString().length()*6);
-        dynamicX = bWidth + scaledWidth/13;
+        dynamicX = bWidth + scaledWidth/5;
 
         HasteUp hasteButton = new HasteUp(dynamicX,dynamicY,bWidth,bHeight,message,Button::onPress,createNarration); //do onPress last
         this.addRenderableWidget(hasteButton);
 
         dynamicY+=bHeight+5;
-        message = Component.literal("FireResistance (2 hearts)"); //25 cha
+
+        message = Component.literal("Fire Resistance (3)");
         bWidth = (int) (message.getString().length()*6);
-        dynamicX = bWidth - scaledWidth/20;
+        dynamicX = bWidth + scaledWidth/16;
 
         FireRes fireResButton = new FireRes(dynamicX,dynamicY,bWidth,bHeight,message,Button::onPress,createNarration); //do onPress last
         this.addRenderableWidget(fireResButton);
 
         dynamicY+=bHeight+5;
-        message = Component.literal("NightVision (1 heart)"); //21 cha
+        amount = (int)player.getData(ModDataAttachments.LIFESTEALER_BUFFS).getLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"night_vision"));
+        message = Component.literal("Night Vision (1)");
         bWidth = (int) (message.getString().length()*6);
-        dynamicX = bWidth;
+        dynamicX = bWidth + scaledWidth/11;
 
         NightVision nightVisionButton = new NightVision(dynamicX,dynamicY,bWidth,bHeight,message,Button::onPress,createNarration); //do onPress last
         this.addRenderableWidget(nightVisionButton);

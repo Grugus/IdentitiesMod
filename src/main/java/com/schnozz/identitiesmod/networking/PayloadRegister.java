@@ -55,18 +55,13 @@ public class PayloadRegister {
                 }
         );
 
-        registrar.playToClient(
+        registrar.playBidirectional(
                 LifestealerBuffSyncPayload.TYPE,
                 LifestealerBuffSyncPayload.STREAM_CODEC,
-                (payload, context) -> {
-                    // Schedule work on the main client thread
-                    Minecraft.getInstance().execute(() -> {
-                        LocalPlayer player = Minecraft.getInstance().player;
-                        if (player != null) {
-                            player.setData(ModDataAttachments.LIFESTEALER_BUFFS.get(), payload.attachment());
-                        }
-                    });
-                }
+                new DirectionalPayloadHandler<>(
+                        ClientLifestealerBuffSyncPayload::handle,
+                        ServerLifestealerBuffSyncHandler::handle
+                )
         );
 
         registrar.playToClient(

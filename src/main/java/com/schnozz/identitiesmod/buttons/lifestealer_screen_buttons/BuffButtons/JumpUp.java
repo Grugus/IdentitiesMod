@@ -4,6 +4,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.HealthCostPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.LifestealerBuffSyncPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -40,6 +41,7 @@ public class JumpUp extends Button
 
             permLevel++;
             p.getData(ModDataAttachments.LIFESTEALER_BUFFS).setLifestealerBuff(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"jump"),permLevel);
+            PacketDistributor.sendToServer(new LifestealerBuffSyncPayload(p.getData(ModDataAttachments.LIFESTEALER_BUFFS)));
 
             if(p.getActiveEffects().contains(MobEffects.JUMP))
             {

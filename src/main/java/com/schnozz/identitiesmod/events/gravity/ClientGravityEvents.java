@@ -107,7 +107,7 @@ public class ClientGravityEvents {
             //chaos logic
             if(chaosTimer > 0 && chaosTimer < 200 && chaosTargetEntityId != 0)
             {
-                if(!level.getEntity(chaosTargetEntityId).isAlive()) {
+                if(level.getEntity(chaosTargetEntityId) == null || !level.getEntity(chaosTargetEntityId).isAlive()) {
                     chaosTimer = 201;
                 }
                 else {
