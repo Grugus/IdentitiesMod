@@ -107,11 +107,16 @@ public class ClientGravityEvents {
             //chaos logic
             if(chaosTimer > 0 && chaosTimer < 200 && chaosTargetEntityId != 0)
             {
-                int ran = (int) (Math.random() * 40);
-                if(ran == 0) {
-                    chaos(gravityPlayer);
+                if(!level.getEntity(chaosTargetEntityId).isAlive()) {
+                    chaosTimer = 201;
                 }
-                chaosTimer++;
+                else {
+                    int ran = (int) (Math.random() * 40);
+                    if (ran == 0) {
+                        chaos(gravityPlayer);
+                    }
+                    chaosTimer++;
+                }
             }
             if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
             {
