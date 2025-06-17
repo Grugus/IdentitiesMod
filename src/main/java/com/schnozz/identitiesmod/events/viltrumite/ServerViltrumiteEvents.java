@@ -129,24 +129,24 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onKillBread(LivingDeathEvent event)
     {
-        if(event.getEntity() != null && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
-            Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            Entity target = ((ServerLevel)(viltrumitePlayer.level())).getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
-            event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
+            viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
         }
     }
 
     @SubscribeEvent
     public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if(event.getEntity() != null && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
-            Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            Entity target = ((ServerLevel)(viltrumitePlayer.level())).getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
-            event.getEntity().setData(ModDataAttachments.ENTITY_HELD, null);
+            viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
         }
     }
 
