@@ -166,7 +166,7 @@ public class ClientViltrumiteEvents {
     {
         Level level = viltrumitePlayer.level();
 
-        List<Entity> entities = level.getEntities(viltrumitePlayer, viltrumitePlayer.getBoundingBox(), (entity) -> {
+        List<Entity> entities = level.getEntities(viltrumitePlayer, viltrumitePlayer.getBoundingBox().expandTowards(viltrumitePlayer.getX()+1,0, viltrumitePlayer.getZ()+1), (entity) -> {
             return entity instanceof LivingEntity && !entity.isSpectator() && entity != viltrumitePlayer;
         });
 

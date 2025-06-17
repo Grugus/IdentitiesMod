@@ -49,8 +49,12 @@ public class ServerViltrumiteEvents {
                 if(target == null){return;}
                 if(!target.isAlive()){return;}
                 //sets position in front and turns off gravity
-                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(2));
+                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(1));
+
                 target.setPos(targetPos);
+                target.setDeltaMovement(0,0,0);
+                target.hurtMarked = true;
+
                 target.setNoGravity(true);
                 //sets mob aggro to viltrumite
                 if(!(target instanceof Player) && target instanceof Mob mob)
