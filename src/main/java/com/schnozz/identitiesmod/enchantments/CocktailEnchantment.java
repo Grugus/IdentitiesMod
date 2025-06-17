@@ -22,9 +22,9 @@ public record CocktailEnchantment() implements EnchantmentEntityEffect {
             //add cooldown instead of checking for effects
             if(r.nextInt(0, 100/(enchantmentLevel*20)) == 0)
             {
-                e.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 2));
-                e.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
-                e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
+                e.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 1));
+                e.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 1));
+                e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
             }
         }
     }
