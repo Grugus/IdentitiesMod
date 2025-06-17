@@ -1,6 +1,6 @@
 package com.schnozz.identitiesmod.buttons.schoztucle;
 
-public enum peebee {
+public enum Autism_Diagnosis {
     //my sister wrote this
 
     // hello

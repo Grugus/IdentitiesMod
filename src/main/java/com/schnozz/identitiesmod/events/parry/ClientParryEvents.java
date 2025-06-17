@@ -42,10 +42,10 @@ public class ClientParryEvents {
     private static void parry(long currentTime, LocalPlayer player) {
         CooldownAttachment newAtachment = new CooldownAttachment();
         newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
-        newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 120);
+        newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 70);
         player.setData(ModDataAttachments.COOLDOWN, newAtachment);
-        cooldownIcon.setCooldown(new Cooldown(currentTime, 120));
-        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 120), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
+        cooldownIcon.setCooldown(new Cooldown(currentTime, 70));
+        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 70), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
         PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 16), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), false));
     }
 

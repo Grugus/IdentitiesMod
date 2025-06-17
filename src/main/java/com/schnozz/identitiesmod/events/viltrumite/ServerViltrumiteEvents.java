@@ -9,10 +9,12 @@ import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CDPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -125,9 +127,9 @@ public class ServerViltrumiteEvents {
     }
 
     @SubscribeEvent
-    public static void onKillBread(PlayerEvent.Clone event)
+    public static void onKillBread(LivingDeathEvent event)
     {
-        if(event.isWasDeath() && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(!event.getEntity().level().isClientSide && event.getEntity() != null && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
             Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
@@ -139,7 +141,7 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if(!event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(!event.getEntity().level().isClientSide && event.getEntity() != null && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
             Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
@@ -157,11 +159,12 @@ public class ServerViltrumiteEvents {
             Entity target = level.getEntity(p.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
-            target.setDeltaMovement(p.getLookAngle().scale(2));
+            target.setDeltaMovement(p.getLookAngle().x * 2, p.getLookAngle().y * 0.75, p.getLookAngle().z * 2);
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
             p.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), level.getGameTime(), 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), false));
             PacketDistributor.sendToPlayer(p, new CDPayload(new Cooldown(level.getGameTime(), 200)));
+            p.level().playSound(null, p.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
         }
 
     }

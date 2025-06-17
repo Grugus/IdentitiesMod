@@ -7,14 +7,15 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import net.minecraft.server.level.ServerLevel;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerKyleEvents {
     @SubscribeEvent
-    public static void onKyleDeath(PlayerEvent.Clone event)
+    public static void onKyleDeath(LivingDeathEvent event)
     {
-        if(event.isWasDeath() && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Kyle"))
+        if(!event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Kyle"))
         {
             if(event.getEntity().level() instanceof ServerLevel level)
             {
