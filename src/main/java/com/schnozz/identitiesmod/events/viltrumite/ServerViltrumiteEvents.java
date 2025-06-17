@@ -129,7 +129,7 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onKillBread(LivingDeathEvent event)
     {
-        if(!event.getEntity().level().isClientSide && event.getEntity() != null && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() != null && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
             Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
@@ -141,7 +141,7 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if(!event.getEntity().level().isClientSide && event.getEntity() != null && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() != null && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
         {
             Entity target = ((ServerLevel)(event.getEntity().level())).getEntity( event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
