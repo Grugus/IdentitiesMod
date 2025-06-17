@@ -47,7 +47,7 @@ public class ClientGravityEvents {
     //chaos target entity id
     private static int chaosTargetEntityId;
     //chaos damage
-    private static float chaosDamage = 2.5F;
+    private static float chaosDamage = 1F;
     //chaos target find global variables
     private static Entity target;
     private static double closestDistance;
@@ -92,7 +92,7 @@ public class ClientGravityEvents {
 
                 findChaosTargetAndDistance(gravityPlayer);
 
-                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 500));
+                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 5000));
 
                 if(target != null) {
                     if (target instanceof LivingEntity livingEntity) {
