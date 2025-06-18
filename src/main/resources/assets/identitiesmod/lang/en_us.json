@@ -5,7 +5,14 @@
   "item.identitiesmod.mobholder": "Mob Holder",
   "item.identitiesmod.bone_whistle": "Bone Whistle",
   "item.identitiesmod.bone_shears": "Bone Shears",
-  "item.identitiesmod.power_gauntlet": "Power Gauntlet",
+  "item.identitiesmod.strong_s1_gauntlet": "Strong Gauntlet (S1)",
+  "item.identitiesmod.fast_s1_gauntlet": "Fast Gauntlet (S1)",
+  "item.identitiesmod.strong_s2_gauntlet": "Strong Gauntlet (S2)",
+  "item.identitiesmod.fast_s2_gauntlet": "Fast Gauntlet (S2)",
+  "item.identitiesmod.strong_s3_gauntlet": "Strong Gauntlet (S3)",
+  "item.identitiesmod.fast_s3_gauntlet": "Fast Gauntlet (S3)",
+  "item.identitiesmod.strong_s4_gauntlet": "Strong Gauntlet (Finale)",
+  "item.identitiesmod.fast_s4_gauntlet": "Fast Gauntlet (Finale)",
   "item.identitiesmod.scythe": "Scythe",
 
 

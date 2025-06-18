@@ -1,7 +1,7 @@
 package com.schnozz.identitiesmod.events.item;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
-import com.schnozz.identitiesmod.items.item_classes.FastPowerGauntlet;
+import com.schnozz.identitiesmod.items.item_classes.PowerGauntlet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,7 +15,7 @@ public class FastPowerGauntletEvents {
         if (!(event.getSource().getDirectEntity() instanceof ServerPlayer player)) return;
 
         ItemStack weapon = player.getMainHandItem();
-        if (weapon.getItem() instanceof FastPowerGauntlet gauntlet) {
+        if (weapon.getItem() instanceof PowerGauntlet gauntlet) {
             float damage = (float)(gauntlet.getTier().getAttackDamageBonus()) + 1;
             event.setAmount(damage);
         }

@@ -14,6 +14,7 @@ public class ItemRegistry {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(IdentitiesMod.MODID);
 
+    //Necromancer
     public static final DeferredItem<Item> NECROROD = ITEMS.registerItem(
             "necrorod",
             Necrorod::new, // The factory that the properties will be passed into.
@@ -24,7 +25,18 @@ public class ItemRegistry {
             MobHolder::new, // The factory that the properties will be passed into.
             new Item.Properties().stacksTo(1) // The properties to use.
     );
+    public static final DeferredItem<Item> BONE_WHISTLE = ITEMS.registerItem(
+            "bone_whistle",
+            BoneWhistle::new, // The factory that the properties will be passed into.
+            new Item.Properties().stacksTo(1) // The properties to use.
+    );
+    public static final DeferredItem<Item> BONE_SHEARS = ITEMS.registerItem(
+            "bone_shears",
+            BoneShears::new, // The factory that the properties will be passed into.
+            new Item.Properties().stacksTo(1) // The properties to use.
+    );
 
+    //Kyle
     public static final Supplier<SwordItem> SCYTHE = ITEMS.register("scythe", () -> new Scythe(
             // The tier to use.
             ModToolTiers.SCYTHE,
@@ -42,45 +54,86 @@ public class ItemRegistry {
                             )
             )
     ));
-    public static final Supplier<SwordItem> STRONG_POWER_GAUNTLET = ITEMS.register("strong_power_gauntlet", () -> new StrongPowerGauntlet(
-            ModToolTiers.STRONG_POWER_GAUNTLET,
+
+    //power gauntlets
+    public static final Supplier<SwordItem> STRONG_S1_GAUNTLET = ITEMS.register("strong_s1_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.STRONG_SEASON_1,
             new Item.Properties().stacksTo(1).attributes(
                     SwordItem.createAttributes(
-                            ModToolTiers.STRONG_POWER_GAUNTLET,
-                            // The type-specific attack damage bonus. 3 for swords, 1.5 for shovels, 1 for pickaxes, varying for axes and hoes.
+                            ModToolTiers.STRONG_SEASON_1,
                             3f,
-                            // The type-specific attack speed modifier. The player has a default attack speed of 4, so to get to the desired
-                            // value of 1.6f, we use -2.4f. -2.4f for swords, -3f for shovels, -2.8f for pickaxes, varying for axes and hoes.
                             -3f
                     )
             )
     ));
-    public static final Supplier<SwordItem> FAST_POWER_GAUNTLET = ITEMS.register("fast_power_gauntlet", () -> new FastPowerGauntlet(
-            ModToolTiers.FAST_POWER_GAUNTLET,
+    public static final Supplier<SwordItem> FAST_S1_GAUNTLET = ITEMS.register("fast_s1_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.FAST_SEASON_1,
             new Item.Properties().stacksTo(1).attributes(
                     SwordItem.createAttributes(
-                            ModToolTiers.FAST_POWER_GAUNTLET,
-                            // The type-specific attack damage bonus. 3 for swords, 1.5 for shovels, 1 for pickaxes, varying for axes and hoes.
+                            ModToolTiers.FAST_SEASON_1,
                             0,
-                            // The type-specific attack speed modifier. The player has a default attack speed of 4, so to get to the desired
-                            // value of 1.6f, we use -2.4f. -2.4f for swords, -3f for shovels, -2.8f for pickaxes, varying for axes and hoes.
                             -1f
                     )
             )
     ));
-
-    public static final DeferredItem<Item> BONE_WHISTLE = ITEMS.registerItem(
-            "bone_whistle",
-            BoneWhistle::new, // The factory that the properties will be passed into.
-            new Item.Properties().stacksTo(1) // The properties to use.
-    );
-    public static final DeferredItem<Item> BONE_SHEARS = ITEMS.registerItem(
-            "bone_shears",
-            BoneShears::new, // The factory that the properties will be passed into.
-            new Item.Properties().stacksTo(1) // The properties to use.
-    );
-
-
+    public static final Supplier<SwordItem> STRONG_S2_GAUNTLET = ITEMS.register("strong_s2_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.STRONG_SEASON_2,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.STRONG_SEASON_2,
+                            3f,
+                            -3f
+                    )
+            )
+    ));
+    public static final Supplier<SwordItem> FAST_S2_GAUNTLET = ITEMS.register("fast_s2_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.FAST_SEASON_2,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.FAST_SEASON_2,
+                            0,
+                            -1f
+                    )
+            )
+    ));public static final Supplier<SwordItem> STRONG_S3_GAUNTLET = ITEMS.register("strong_s3_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.STRONG_SEASON_3,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.STRONG_SEASON_3,
+                            3f,
+                            -3f
+                    )
+            )
+    ));
+    public static final Supplier<SwordItem> FAST_S3_GAUNTLET = ITEMS.register("fast_s3_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.FAST_SEASON_3,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.FAST_SEASON_3,
+                            0,
+                            -1f
+                    )
+            )
+    ));public static final Supplier<SwordItem> STRONG_S4_GAUNTLET = ITEMS.register("strong_s4_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.STRONG_SEASON_4,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.STRONG_SEASON_4,
+                            3f,
+                            -3f
+                    )
+            )
+    ));
+    public static final Supplier<SwordItem> FAST_S4_GAUNTLET = ITEMS.register("fast_s4_gauntlet", () -> new PowerGauntlet(
+            ModToolTiers.FAST_SEASON_4,
+            new Item.Properties().stacksTo(1).attributes(
+                    SwordItem.createAttributes(
+                            ModToolTiers.FAST_SEASON_4,
+                            0,
+                            -1f
+                    )
+            )
+    ));
     public static void register(IEventBus bus)
     {
         ITEMS.register(bus);

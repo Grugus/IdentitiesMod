@@ -8,9 +8,9 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 
-public class StrongPowerGauntlet extends SwordItem {
+public class PowerGauntlet extends SwordItem {
 
-    public StrongPowerGauntlet(Tier tier, Properties properties) {
+    public PowerGauntlet(Tier tier, Properties properties) {
         super(tier,properties);
     }
 
@@ -20,6 +20,6 @@ public class StrongPowerGauntlet extends SwordItem {
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }
 
-
 }
+
 
