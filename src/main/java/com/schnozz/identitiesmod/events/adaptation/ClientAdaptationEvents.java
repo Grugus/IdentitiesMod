@@ -20,7 +20,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import static com.schnozz.identitiesmod.keymapping.ModMappings.ADAPTATION_SWITCH_MAPPING;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class ClientAdaptationEvents {
+public class   ClientAdaptationEvents {
     private static final AdapterProgressBar DIAMOND_SWORD_BAR = new AdapterProgressBar(10,10, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/diamond_sword_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"generic"));
     private static final AdapterProgressBar FLAME_BAR = new AdapterProgressBar(10,33, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/flame_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"infire"));
     private static final AdapterProgressBar POTION_BAR = new AdapterProgressBar(10,56, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/potion_of_harming_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"magic"));
@@ -38,8 +38,8 @@ public class ClientAdaptationEvents {
             {
                 switchAdaptation(adaptationPlayer);
                 switchTimer = 1;
-                adaptationPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), level.getGameTime(), 250);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), false));
+                adaptationPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), level.getGameTime(), 2000);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 2000), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), false));
             }
 
             if(switchTimer > 0 && switchTimer < 600)

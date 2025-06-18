@@ -17,10 +17,10 @@ import net.neoforged.neoforge.network.PacketDistributor;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
     private static final float NO_CAP = 0.00F;
-    private static final float EXPLOSION_CAP = 0.05F;
+    private static final float EXPLOSION_CAP = 0.1F;
     private static final float MOB_CAP = 0.25F;
-    private static final float DEFAULT_CAP = 0.30F;
-    private static final float UNADAPT_CAP = 2.00F;
+    private static final float DEFAULT_CAP = 0.35F;
+    private static final float UNADAPT_CAP = 3.00F;
 
     private static final float HEAT_ADAPT_DEGREE = 0.01F;
     private static final float EXPLOSION_ADAPT_DEGREE = 0.13F;
@@ -35,7 +35,8 @@ public class ServerAdaptationEvents {
         String damageSourceString = source.getMsgId();
         damageSourceString = damageSourceString.toLowerCase();
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
-        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) {
+
+        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1) {
             Player adapter = (Player) entity;
             boolean alreadyAdapted = false;
             String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIds;
@@ -81,12 +82,12 @@ public class ServerAdaptationEvents {
                 decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
             }
         }
-        else if(event.getSource().getEntity() != null)
+        else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            if(event.getSource().getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Adaptation")) //if adapter is attacking
+            if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
             {
-                Player adapter = (Player) event.getSource().getEntity();
-                damageCorrectAttack(adapter,sourceLocation,event);
+                float value = 1 - adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
+                event.setAmount(event.getAmount()*(value*4));
             }
         }
     }
@@ -97,19 +98,7 @@ public class ServerAdaptationEvents {
         float amount = event.getAmount()*damagePercent;
         event.setAmount(amount);
     }
-    //decrease or increase damage taken by adapter's target based on the adaptation value
-    private static void damageCorrectAttack(Player adapter, ResourceLocation sourceLocation, LivingIncomingDamageEvent event)
-    {
-        if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
-        {
-            float damagePercent = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-            float amount = event.getAmount()*damagePercent*3.5F;
-            //System.out.println("OLD AMOUNT:" + event.getAmount());
-            //System.out.println("NEW AMOUNT:" + amount);
-            //System.out.println("SOURCE:" + sourceLocation);
-            event.setAmount(amount);
-        }
-    }
+
     //return true if damage taken by adapter will be zero after adaptation value is applied
     private static boolean zeroDamage(Player adapter, String sourceString, LivingIncomingDamageEvent event)
     {
