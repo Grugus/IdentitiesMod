@@ -75,7 +75,7 @@ public class Scythe extends SwordItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if(!target.level().isClientSide && attacker.getData(ModDataAttachments.POWER_TYPE).equals("Kyle"))
+        if(!target.level().isClientSide && attacker.getData(ModDataAttachments.POWER_TYPE).equals("Kyle") && attacker instanceof Player player && !player.getCooldowns().isOnCooldown(this))
         {
             long farmValue = FarmValueSavedData.get(attacker.level().getServer()).getValue();
             DamageSource bonusDamageSource = new DamageSource(attacker.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK),null,attacker,null);
@@ -90,6 +90,9 @@ public class Scythe extends SwordItem {
             {
                 buh.hurt(bonusDamageSource, (float) attacker.getMainHandItem().get(ModDataComponentRegistry.CHARGE).charge());
             }
+
+
+            player.getCooldowns().addCooldown(this, 18);
 
         }
 
