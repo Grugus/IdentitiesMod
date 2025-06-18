@@ -183,7 +183,7 @@ public class ServerAdaptationEvents {
         {
             tempLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,id);
             float newAdaptationValue = adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(tempLocation);
-            float adaptDegree = adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree/4;
+            float adaptDegree = adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree/2;
             if((newAdaptationValue+adaptDegree)<=cap)
             {
                 newAdaptationValue += adaptDegree;
