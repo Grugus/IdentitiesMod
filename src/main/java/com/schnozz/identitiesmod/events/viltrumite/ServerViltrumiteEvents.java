@@ -129,9 +129,9 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onKillBread(LivingDeathEvent event)
     {
-        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null && event.getEntity().level() instanceof ServerLevel level)
         {
-            Entity target = ((ServerLevel)(viltrumitePlayer.level())).getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
             viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
@@ -141,9 +141,9 @@ public class ServerViltrumiteEvents {
     @SubscribeEvent
     public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null)
+        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null && event.getEntity().level() instanceof ServerLevel level)
         {
-            Entity target = ((ServerLevel)(viltrumitePlayer.level())).getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
+            Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
             viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
@@ -159,7 +159,7 @@ public class ServerViltrumiteEvents {
             Entity target = level.getEntity(p.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
             if(target == null) return;
             target.setNoGravity(false);
-            target.setDeltaMovement(p.getLookAngle().x * 2, p.getLookAngle().y * 0.75, p.getLookAngle().z * 2);
+            target.setDeltaMovement(p.getLookAngle().x * 3, p.getLookAngle().y * 0.75, p.getLookAngle().z * 3);
             p.setData(ModDataAttachments.ENTITY_HELD.get(), new CompoundTag());//sends an empty tag
             p.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), level.getGameTime(), 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), false));
