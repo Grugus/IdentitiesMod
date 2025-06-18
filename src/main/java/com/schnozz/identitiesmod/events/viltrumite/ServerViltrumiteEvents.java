@@ -34,6 +34,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.Objects;
+
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerViltrumiteEvents {
 
@@ -127,26 +129,28 @@ public class ServerViltrumiteEvents {
     }
 
     @SubscribeEvent
-    public static void onKillBread(LivingDeathEvent event)
+    public static void onKillBread(PlayerEvent.Clone event)
     {
-        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null && event.getEntity().level() instanceof ServerLevel level)
+        if(event.getEntity().level().isClientSide) return;
+        if(event.isWasDeath() && event.getEntity().level() instanceof ServerLevel level && event.getOriginal().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
-            Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-            if(target == null) return;
-            target.setNoGravity(false);
-            viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
+            if(event.getOriginal().hasData(ModDataAttachments.ENTITY_HELD) && event.getOriginal().getData(ModDataAttachments.ENTITY_HELD).hasUUID("UUID"))
+            {
+                Objects.requireNonNull(level.getEntity(event.getOriginal().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"))).setNoGravity(false);
+            }
         }
     }
 
     @SubscribeEvent
     public static void onBreadDisconnect(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if(event.getEntity() instanceof ServerPlayer viltrumitePlayer && !event.getEntity().level().isClientSide && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite") && event.getEntity().getData(ModDataAttachments.ENTITY_HELD) != null && event.getEntity().level() instanceof ServerLevel level)
+        if(event.getEntity().level().isClientSide) return;
+        if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
-            Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-            if(target == null) return;
-            target.setNoGravity(false);
-            viltrumitePlayer.setData(ModDataAttachments.ENTITY_HELD, null);
+            if(event.getEntity().hasData(ModDataAttachments.ENTITY_HELD) && event.getEntity().getData(ModDataAttachments.ENTITY_HELD).hasUUID("UUID"))
+            {
+                Objects.requireNonNull(level.getEntity(event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"))).setNoGravity(false);
+            }
         }
     }
 

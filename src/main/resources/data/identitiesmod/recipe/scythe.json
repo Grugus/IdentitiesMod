@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    " J",
+    " J"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:dirt"
+    },
+    "J": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "identitiesmod:scythe",
+    "count": 1
+  }
+}
