@@ -107,10 +107,10 @@ public class ClientGravityEvents {
 
 
             //chaos logic
-            if(chaosTimer > 0 && chaosTimer < 200 && chaosTargetEntityId != 0)
+            if(chaosTimer > 0 && chaosTimer < 180 && chaosTargetEntityId != 0)
             {
                 if(level.getEntity(chaosTargetEntityId) == null || !level.getEntity(chaosTargetEntityId).isAlive()) {
-                    chaosTimer = 201;
+                    chaosTimer = 181;
                 }
                 else {
                     int ran = (int) (Math.random() * 40);
@@ -120,32 +120,32 @@ public class ClientGravityEvents {
                     chaosTimer++;
                 }
             }
-            if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
-            {
-                pullStunTimer++;
-            }
-            if(pullStunTimer == 20)
-            {
-                for(Entity entity: entitiesInBox)
-                {
-                    if(entity instanceof LivingEntity livingEntity)
-                    {
-                        livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
-                        PacketDistributor.sendToServer(new StunPayload(livingEntity.getId(), stunDuration));
-                    }
-                }
-            }
-            if(pullStunTimer >= 20 + stunDuration)
-            {
-                for(Entity entity: entitiesInBox)
-                {
-                    if(entity instanceof LivingEntity livingEntity && livingEntity.getActiveEffects().contains(ModEffects.STUN))
-                    {
-                        livingEntity.removeEffect(ModEffects.STUN);
-                    }
-                }
-                pullStunTimer = 0;
-            }
+//            if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
+//            {
+//                pullStunTimer++;
+//            }
+//            if(pullStunTimer == 20)
+//            {
+//                for(Entity entity: entitiesInBox)
+//                {
+//                    if(entity instanceof LivingEntity livingEntity)
+//                    {
+//                        livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
+//                        PacketDistributor.sendToServer(new StunPayload(livingEntity.getId(), stunDuration));
+//                    }
+//                }
+//            }
+//            if(pullStunTimer >= 20 + stunDuration)
+//            {
+//                for(Entity entity: entitiesInBox)
+//                {
+//                    if(entity instanceof LivingEntity livingEntity && livingEntity.getActiveEffects().contains(ModEffects.STUN))
+//                    {
+//                        livingEntity.removeEffect(ModEffects.STUN);
+//                    }
+//                }
+//                pullStunTimer = 0;
+//            }
         }
     }
     //cooldown icons
