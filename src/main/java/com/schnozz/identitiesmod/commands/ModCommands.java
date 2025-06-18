@@ -65,5 +65,18 @@ public class ModCommands {
 
                             return Command.SINGLE_SUCCESS;
                         })));
+        dispatcher.register(Commands.literal("getAdaptationMap")
+                .requires(source -> source.hasPermission(2)) // OP level 2
+                .then(Commands.argument("target", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+
+                            if(!target.level().isClientSide && target.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
+                            {
+                                target.sendSystemMessage(Component.literal("Map: " + target.getData(ModDataAttachments.ADAPTION).getAllAdaptationValues()));
+                            }
+
+                            return Command.SINGLE_SUCCESS;
+                        })));
     }
 }
