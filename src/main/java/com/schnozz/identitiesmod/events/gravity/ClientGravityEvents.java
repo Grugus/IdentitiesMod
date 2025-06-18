@@ -65,18 +65,20 @@ public class ClientGravityEvents {
         String power = gravityPlayer.getData(ModDataAttachments.POWER_TYPE);
         if (power.equals("Gravity")) {
             //gravity push
-            if (GRAVITY_PUSH_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), 0)) {
+            if (GRAVITY_PUSH_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), 0)) {
                 push(gravityPlayer);
                 PUSH_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
-                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), level.getGameTime(), 200);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pushcd"), false));
+                PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
+                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), level.getGameTime(), 240);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 240), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), false));
             }
             //gravity pull
-            else if (GRAVITY_PULL_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), 0)) {
+            else if (GRAVITY_PULL_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), 0)) {
                 pull(gravityPlayer);
-                PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 200));
-                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), level.getGameTime(), 160);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 160), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.pullcd"), false));
+                PULL_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
+                PUSH_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
+                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), level.getGameTime(), 240);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 240), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), false));
 
                 //pullStunTimer = 1;
             }
