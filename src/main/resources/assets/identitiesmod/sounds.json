@@ -10,5 +10,11 @@
     "sounds": [
       "identitiesmod:adaptation_sound"
     ]
+  },
+  "zombies_are_coming_sound": {
+    "subtitle": "sounds.identitiesmod.necromancer.aggro_one_sound",
+    "sounds": [
+      "identitiesmod:zombies_are_coming_sound"
+    ]
   }
 }

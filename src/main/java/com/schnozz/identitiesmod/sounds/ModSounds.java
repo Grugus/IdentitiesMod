@@ -18,6 +18,7 @@ public class ModSounds {
 
     public static final Supplier<SoundEvent> PARRY_SOUND = registerSoundEvent("parry_sound");
     public static final Supplier<SoundEvent> ADAPTATION_SOUND = registerSoundEvent("adaptation_sound");
+    public static final Supplier<SoundEvent> ZOMBIES_ARE_COMING_SOUND = registerSoundEvent("zombies_are_coming_sound");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name)
     {

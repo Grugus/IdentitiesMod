@@ -3,7 +3,9 @@ package com.schnozz.identitiesmod.items.item_classes;
 import com.schnozz.identitiesmod.goals.FollowEntityAtDistanceGoal;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -24,15 +26,9 @@ public class Necrorod extends Item {
 
     private static UUIDSavedData command_list;
 
-
     public Necrorod(Properties properties) {
         super(properties);
     }
-
-
-
-
-
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
@@ -69,6 +65,9 @@ public class Necrorod extends Item {
             }
 
             if (target instanceof LivingEntity livingEntity) {
+                //sound
+                level.playSound(null, player.getOnPos(), ModSounds.ZOMBIES_ARE_COMING_SOUND.get(), SoundSource.PLAYERS);
+
                 command_list = UUIDSavedData.get(level.getServer());
                 for(UUID controlled_Entity : command_list.getUUIDList())
                 {
@@ -85,11 +84,5 @@ public class Necrorod extends Item {
         }
         super.use(level, player, hand);
         return InteractionResultHolder.success(player.getItemInHand(hand));
-
-
-
     }
-
-
-
 }

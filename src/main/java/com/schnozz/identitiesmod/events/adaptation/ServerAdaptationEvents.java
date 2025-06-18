@@ -138,7 +138,6 @@ public class ServerAdaptationEvents {
 
             if(changedValue)
             {
-                System.out.println("THIS IS RUNNING");
                 serverLevel.playSound(null, adapter.getOnPos(), ModSounds.ADAPTATION_SOUND.get(), SoundSource.PLAYERS);
                 serverLevel.sendParticles(
                         particle,  // Potion-like particle
