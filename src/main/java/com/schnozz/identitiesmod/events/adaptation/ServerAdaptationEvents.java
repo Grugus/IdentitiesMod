@@ -122,15 +122,16 @@ public class ServerAdaptationEvents {
             if(changedValue)
             {
                 System.out.println("THIS IS RUNNING");
-                adapter.level().playSound(null, adapter.getOnPos(), ModSounds.ADAPTATION_SOUND.get(), SoundSource.PLAYERS);
+                serverLevel.playSound(null, adapter.getOnPos(), ModSounds.ADAPTATION_SOUND.get(), SoundSource.PLAYERS);
+                serverLevel.sendParticles(
+                        particle,  // Potion-like particle
+                        adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), // Position
+                        60, // count
+                        1, 1, 1,
+                        0.2 // how far they go
+                );
             }
-            serverLevel.sendParticles(
-                    particle,  // Potion-like particle
-                    adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), // Position
-                    60, // count
-                    1, 1, 1,
-                    0.3 // how far they go
-            );
+
 
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
