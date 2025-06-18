@@ -19,9 +19,9 @@ public class ModToolTiers {
     public static final Tier FAST_SEASON_3 = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, Integer.MAX_VALUE, 3F, 6, 3, null);
     public static final Tier FAST_SEASON_4 = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, Integer.MAX_VALUE, 3F, 7, 3, null);
 
-    public static final Tier STRONG_SEASON_1 = new SimpleTier(BlockTags.INCORRECT_FOR_STONE_TOOL, Integer.MAX_VALUE, 1.3F, 5F, 3, null);
-    public static final Tier STRONG_SEASON_2 = new SimpleTier(BlockTags.INCORRECT_FOR_IRON_TOOL, Integer.MAX_VALUE, 1.3F, 6F, 3, null);
-    public static final Tier STRONG_SEASON_3 = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, Integer.MAX_VALUE, 1.3F, 7F, 3, null);
-    public static final Tier STRONG_SEASON_4 = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, Integer.MAX_VALUE, 1.3F, 8F, 3, null);
+    public static final Tier STRONG_SEASON_1 = new SimpleTier(BlockTags.INCORRECT_FOR_STONE_TOOL, Integer.MAX_VALUE, 0F, 6F, 3, null);
+    public static final Tier STRONG_SEASON_2 = new SimpleTier(BlockTags.INCORRECT_FOR_IRON_TOOL, Integer.MAX_VALUE, 0F, 7F, 3, null);
+    public static final Tier STRONG_SEASON_3 = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, Integer.MAX_VALUE, 0F, 8F, 3, null);
+    public static final Tier STRONG_SEASON_4 = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, Integer.MAX_VALUE, 0F, 9F, 3, null);
 
 }
