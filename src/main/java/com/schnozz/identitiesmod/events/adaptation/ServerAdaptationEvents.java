@@ -85,7 +85,7 @@ public class ServerAdaptationEvents {
                     damageCorrect(adapter,sourceLocation,event);
                     groupSourcesAdapt(adapter, heatIds, DEFAULT_CAP, adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree);
                     alreadyAdapted = true;
-                    particle = new DustColorTransitionOptions( //change
+                    particle = new DustColorTransitionOptions(
                             new Vector3f(1.0f, 0.1f, 0.0f),
                             new Vector3f(0.0f, 0.1f, 1.0f),
                             1.0f);

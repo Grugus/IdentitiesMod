@@ -37,6 +37,7 @@ public class ServerParryEvents {
         {
             if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
 
+
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
                     if(event.getSource().getDirectEntity() instanceof Mob) {
 
