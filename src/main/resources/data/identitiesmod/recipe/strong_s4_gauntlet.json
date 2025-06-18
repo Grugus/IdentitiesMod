@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_axe"
+    },
+    {
+      "item": "identitiesmod:strong_s3_gauntlet"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "identitiesmod:strong_s4_gauntlet"
+  }
+}

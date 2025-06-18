@@ -8,9 +8,9 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 
-public class PowerGauntlet extends SwordItem {
+public class FastPowerGauntlet extends SwordItem {
 
-    public PowerGauntlet(Tier tier, Properties properties) {
+    public FastPowerGauntlet(Tier tier, Properties properties) {
         super(tier,properties);
     }
 

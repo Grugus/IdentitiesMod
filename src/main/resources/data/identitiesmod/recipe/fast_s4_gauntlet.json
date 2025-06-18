@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_sword"
+    },
+    {
+      "item": "identitiesmod:fast_s3_gauntlet"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "identitiesmod:fast_s4_gauntlet"
+  }
+}
