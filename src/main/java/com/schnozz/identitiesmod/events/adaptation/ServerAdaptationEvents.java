@@ -4,12 +4,14 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +34,7 @@ public class ServerAdaptationEvents {
     private static final float HEAT_ADAPT_DEGREE = 0.01F;
     private static final float EXPLOSION_ADAPT_DEGREE = 0.13F;
 
-
+    private static boolean changedValue;
 
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
@@ -49,6 +51,7 @@ public class ServerAdaptationEvents {
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
 
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1 && event.getEntity().level() instanceof ServerLevel serverLevel) {
+            changedValue = false;
 
             DustColorTransitionOptions particle = new DustColorTransitionOptions(
                     new Vector3f(0.4f, 0.1f, 0.9f),  // From: purple (RGB 0–1)
@@ -115,6 +118,12 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
             }
+
+            if(changedValue)
+            {
+                System.out.println("THIS IS RUNNING");
+                adapter.level().playSound(null, adapter.getOnPos(), ModSounds.ADAPTATION_SOUND.get(), SoundSource.PLAYERS);
+            }
             serverLevel.sendParticles(
                     particle,  // Potion-like particle
                     adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), // Position
@@ -158,6 +167,7 @@ public class ServerAdaptationEvents {
         {
             newAdaptationValue -= adaptDegree;
             increaseAdaptationValue(adapter,sourceString, UNADAPT_CAP);
+            changedValue = true;
         }
         else {
             newAdaptationValue = cap;
@@ -176,6 +186,8 @@ public class ServerAdaptationEvents {
         if((newAdaptationValue-customAdaptDegree)>=cap)
         {
             newAdaptationValue -= customAdaptDegree;
+            increaseAdaptationValue(adapter,sourceString, UNADAPT_CAP);
+            changedValue = true;
         }
         else {
             newAdaptationValue = cap;

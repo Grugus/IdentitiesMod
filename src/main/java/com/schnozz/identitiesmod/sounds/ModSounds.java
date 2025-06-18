@@ -16,19 +16,14 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, IdentitiesMod.MODID);
 
-
-
     public static final Supplier<SoundEvent> PARRY_SOUND = registerSoundEvent("parry_sound");
-
+    public static final Supplier<SoundEvent> ADAPTATION_SOUND = registerSoundEvent("adaptation_sound");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name)
     {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
-
-
-
 
     public static void register(IEventBus eventBus)
     {

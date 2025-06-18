@@ -4,5 +4,11 @@
     "sounds": [
       "identitiesmod:parry_sound"
     ]
+  },
+  "adaptation_sound": {
+    "subtitle": "sounds.identitiesmod.adaptation_sound",
+    "sounds": [
+      "identitiesmod:adaptation_sound"
+    ]
   }
 }
