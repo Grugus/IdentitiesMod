@@ -4,9 +4,11 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
+import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +17,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.joml.Vector3f;
+
+import java.util.Random;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerAdaptationEvents {
@@ -27,8 +32,13 @@ public class ServerAdaptationEvents {
     private static final float HEAT_ADAPT_DEGREE = 0.01F;
     private static final float EXPLOSION_ADAPT_DEGREE = 0.13F;
 
+
+
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
+
+
+
         if(event.getEntity().isDeadOrDying()){return;} //make sure it fixed error
 
         Entity entity = event.getEntity();
@@ -38,7 +48,13 @@ public class ServerAdaptationEvents {
         damageSourceString = damageSourceString.toLowerCase();
         ResourceLocation sourceLocation = ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,damageSourceString);
 
-        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1) {
+        if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1 && event.getEntity().level() instanceof ServerLevel serverLevel) {
+
+            DustColorTransitionOptions particle = new DustColorTransitionOptions(
+                    new Vector3f(0.4f, 0.1f, 0.9f),  // From: purple (RGB 0–1)
+                    new Vector3f(0.3f, 0.8f, 0.9f),  // To: teal-ish
+                    1.0f);
+
             Player adapter = (Player) entity;
             boolean alreadyAdapted = false;
             String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIds;
@@ -52,6 +68,10 @@ public class ServerAdaptationEvents {
                     damageCorrect(adapter,sourceLocation,event);
                     groupSourcesAdapt(adapter, heatIds, NO_CAP, HEAT_ADAPT_DEGREE);
                     alreadyAdapted = true;
+                    particle = new DustColorTransitionOptions(
+                            new Vector3f(1.0f, 0.0f, 0.0f),
+                            new Vector3f(1.0f, 1.0f, 0.0f),
+                            1.0f);
                 }
             }
             if(damageSourceString.equals("lava"))
@@ -59,6 +79,10 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, NO_CAP, HEAT_ADAPT_DEGREE);
                 alreadyAdapted = true;
+                particle = new DustColorTransitionOptions(
+                        new Vector3f(1.0f, 0.0f, 0.0f),
+                        new Vector3f(1.0f, 1.0f, 0.0f),
+                        1.0f);
             }
             if(damageSourceString.equals("drown"))
             {
@@ -71,19 +95,34 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, EXPLOSION_CAP, EXPLOSION_ADAPT_DEGREE);
                 alreadyAdapted = true;
+                particle = new DustColorTransitionOptions(
+                        new Vector3f(0.0f, 0.0f, 0.0f),
+                        new Vector3f(1.0f, 1.0f, 1.0f),
+                        1.0f);
             }
             if(damageSourceString.equals("mob"))
             {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, MOB_CAP);
                 alreadyAdapted = true;
+                particle = new DustColorTransitionOptions(
+                        new Vector3f(0.0f, 1.0f, 0.0f),
+                        new Vector3f(0.0f, 0.6f, 0.6f),
+                        1.0f);
             }
             if(!alreadyAdapted) //default adaptation to singular source with default cap
             {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
             }
-            adapter.level().addParticle(ParticleTypes.HAPPY_VILLAGER, adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), 0, 2, 0);
+            serverLevel.sendParticles(
+                    particle,  // Potion-like particle
+                    adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), // Position
+                    60, // count
+                    1, 1, 1,
+                    0.3 // how far they go
+            );
+
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
