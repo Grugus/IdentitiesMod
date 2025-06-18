@@ -4,6 +4,8 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.AdaptationAttachment;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -81,6 +83,7 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
             }
+            adapter.level().addParticle(ParticleTypes.HAPPY_VILLAGER, adapter.getX(), adapter.getY() + 1.2, adapter.getZ(), 0, 2, 0);
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
