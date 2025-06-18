@@ -13,17 +13,19 @@ public class AdapterProgressBar {
     private int y;
     private int size;
     private ResourceLocation source;
-    public AdapterProgressBar(int x, int y, int size, ResourceLocation texture, ResourceLocation source) {
+    private float cap;
+    public AdapterProgressBar(int x, int y, int size, ResourceLocation texture, ResourceLocation source, float cap) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.texture = texture;
         this.source = source;
+        this.cap = cap;
     }
 
     public void render(GuiGraphics guiGraphics) {
         Player adapter = Minecraft.getInstance().player;
-        float percentFull = 1.00F-adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(source);
+        float percentFull = cap-adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(source);
         guiGraphics.blit(texture, x, y, 0, (size*percentFull) - 18, size, size, size, size*2);
     }
 }
