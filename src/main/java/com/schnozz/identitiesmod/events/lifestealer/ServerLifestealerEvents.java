@@ -24,7 +24,7 @@ public class ServerLifestealerEvents {
 
         //for when lifestealer kills the player gain 1 heart
         if(event.getEntity() instanceof Zombie && event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")){
-                int h = Math.min(20, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
+                int h = Math.min(10, player.getData(ModDataAttachments.HEALTH_NEEDED) + 2);
                 player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
                 player.setData(ModDataAttachments.HEALTH_NEEDED, h);
         }

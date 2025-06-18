@@ -135,7 +135,6 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, DEFAULT_CAP);
             }
-
             if(changedValue)
             {
                 serverLevel.playSound(null, adapter.getOnPos(), ModSounds.ADAPTATION_SOUND.get(), SoundSource.PLAYERS);
