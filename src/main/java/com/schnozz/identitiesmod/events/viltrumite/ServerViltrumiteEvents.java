@@ -47,7 +47,9 @@ public class ServerViltrumiteEvents {
                 //sets held entity position
                 Player viltrumitePlayer = event.getEntity();
                 Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
-                //error checks STOP DELETING EVAN YOU FATTASS IT CAUSES ERRORS
+
+                System.out.println(target.getName()); //FOR DEBUG
+
                 if(target == null){return;}
                 if(!target.isAlive()){return;}
                 //sets position in front and turns off gravity
