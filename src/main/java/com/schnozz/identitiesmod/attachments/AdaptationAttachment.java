@@ -18,12 +18,12 @@ public class AdaptationAttachment {
     //public ArrayList<String> damageSourceArrayList = new ArrayList<String>();
     public float adaptationDegree = 0.10F;
     public String[] heatSourceMessageIds = {"onfire","infire","hotfloor"};
-    public String[] dotSourceMessageIds = {"magic", "wither"};
+    public String[] dotSourceMessageIds = {"magic", "wither", "indirectmagic"};
     public String[] genericMessageIds = {"generic","player"};
-    public String[] explosionMessageId = {"explosion"};
+    public String[] explosionSourceMessageIds = {"explosion","explosion.player"};
     public String[] arrowMessageId = {"arrow"};
     public String[] fullAdaptIds = {"drown","freeze","cactus"};
-    public String[][] importantSourceMessageIdGroups = {heatSourceMessageIds,dotSourceMessageIds,genericMessageIds,explosionMessageId,arrowMessageId};
+    public String[][] importantSourceMessageIdGroups = {heatSourceMessageIds,dotSourceMessageIds,genericMessageIds,explosionSourceMessageIds,arrowMessageId};
 
     public float getAdaptationValue(ResourceLocation id)
     {

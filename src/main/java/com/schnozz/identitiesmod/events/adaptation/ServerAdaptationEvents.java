@@ -39,8 +39,6 @@ public class ServerAdaptationEvents {
     @SubscribeEvent
     public static void onEntityDamage(LivingIncomingDamageEvent event) {
 
-
-
         if(event.getEntity().isDeadOrDying()){return;} //make sure it fixed error
 
         Entity entity = event.getEntity();
@@ -60,7 +58,10 @@ public class ServerAdaptationEvents {
 
             Player adapter = (Player) entity;
             boolean alreadyAdapted = false;
+
             String[] heatIds = adapter.getData(ModDataAttachments.ADAPTION).heatSourceMessageIds;
+            String[] dotIds = adapter.getData(ModDataAttachments.ADAPTION).dotSourceMessageIds;
+            String[] exploIds = adapter.getData(ModDataAttachments.ADAPTION).explosionSourceMessageIds;
 
             if(zeroDamage(adapter,damageSourceString,event)){event.setCanceled(true);}
 
@@ -74,6 +75,32 @@ public class ServerAdaptationEvents {
                     particle = new DustColorTransitionOptions(
                             new Vector3f(1.0f, 0.0f, 0.0f),
                             new Vector3f(1.0f, 1.0f, 0.0f),
+                            1.0f);
+                }
+            }
+            for(String id: dotIds)
+            {
+                if(damageSourceString.equals(id))
+                {
+                    damageCorrect(adapter,sourceLocation,event);
+                    groupSourcesAdapt(adapter, heatIds, DEFAULT_CAP, adapter.getData(ModDataAttachments.ADAPTION).adaptationDegree);
+                    alreadyAdapted = true;
+                    particle = new DustColorTransitionOptions( //change
+                            new Vector3f(1.0f, 0.0f, 0.0f),
+                            new Vector3f(1.0f, 1.0f, 0.0f),
+                            1.0f);
+                }
+            }
+            for(String id: exploIds)
+            {
+                if(damageSourceString.equals(id))
+                {
+                    damageCorrect(adapter,sourceLocation,event);
+                    groupSourcesAdapt(adapter, heatIds, EXPLOSION_CAP, EXPLOSION_ADAPT_DEGREE);
+                    alreadyAdapted = true;
+                    particle = new DustColorTransitionOptions(
+                            new Vector3f(0.0f, 0.0f, 0.0f),
+                            new Vector3f(1.0f, 1.0f, 1.0f),
                             1.0f);
                 }
             }
@@ -92,16 +119,6 @@ public class ServerAdaptationEvents {
                 damageCorrect(adapter,sourceLocation,event);
                 decreaseAdaptValue(adapter,damageSourceString, NO_CAP);
                 alreadyAdapted = true;
-            }
-            if(damageSourceString.equals("explosion"))
-            {
-                damageCorrect(adapter,sourceLocation,event);
-                decreaseAdaptValue(adapter,damageSourceString, EXPLOSION_CAP, EXPLOSION_ADAPT_DEGREE);
-                alreadyAdapted = true;
-                particle = new DustColorTransitionOptions(
-                        new Vector3f(0.0f, 0.0f, 0.0f),
-                        new Vector3f(1.0f, 1.0f, 1.0f),
-                        1.0f);
             }
             if(damageSourceString.equals("mob"))
             {

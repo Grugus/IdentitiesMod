@@ -21,9 +21,12 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.ADAPTATION_SWITCH
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class   ClientAdaptationEvents {
-    private static final AdapterProgressBar DIAMOND_SWORD_BAR = new AdapterProgressBar(10,10, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/diamond_sword_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"generic"),0.65F);
-    private static final AdapterProgressBar FLAME_BAR = new AdapterProgressBar(10,33, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/flame_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"infire"),1);
+    private static final AdapterProgressBar DIAMOND_SWORD_BAR = new AdapterProgressBar(10,10, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/diamond_sword_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"player"),0.65F);
+    private static final AdapterProgressBar FLAME_BAR = new AdapterProgressBar(10,33, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/flame_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"infire"),1F);
     private static final AdapterProgressBar POTION_BAR = new AdapterProgressBar(10,56, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/potion_of_harming_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"magic"),0.65F);
+    private static final AdapterProgressBar EXPLOSION_BAR = new AdapterProgressBar(10,79, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/explosion_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"explosion.player"),0.9F);
+    private static final AdapterProgressBar ARROW_BAR = new AdapterProgressBar(10,102, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/arrow_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"arrow"),0.65F);
+
     private static int switchTimer = 0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -62,6 +65,8 @@ public class   ClientAdaptationEvents {
         DIAMOND_SWORD_BAR.render(event.getGuiGraphics());
         FLAME_BAR.render(event.getGuiGraphics());
         POTION_BAR.render(event.getGuiGraphics());
+        EXPLOSION_BAR.render(event.getGuiGraphics());
+        ARROW_BAR.render(event.getGuiGraphics());
     }
 
     public static void switchAdaptation(Player adaptationPlayer)
