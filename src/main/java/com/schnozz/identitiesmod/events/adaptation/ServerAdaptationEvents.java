@@ -50,7 +50,7 @@ public class ServerAdaptationEvents {
 
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1 && event.getEntity().level() instanceof ServerLevel serverLevel) {
             changedValue = false;
-
+            System.out.println("OFFENSIVE MAPPING: " + entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")));
             DustColorTransitionOptions particle = new DustColorTransitionOptions(
                     new Vector3f(0.4f, 0.1f, 0.9f),  // From: purple (RGB 0–1)
                     new Vector3f(0.3f, 0.8f, 0.9f),  // To: teal-ish
@@ -149,12 +149,16 @@ public class ServerAdaptationEvents {
 
 
         }
+        else if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
+        {
+            event.setAmount(event.getAmount()*2);
+        }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
             if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
             {
                 float value = 1 - adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-                event.setAmount(event.getAmount()*(value*4));
+                event.setAmount(event.getAmount()*(value*4.5F));
             }
         }
     }
@@ -191,8 +195,7 @@ public class ServerAdaptationEvents {
 
         adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue);
 
-        AdaptationAttachment adaptation = adapter.getData(ModDataAttachments.ADAPTION);
-        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adaptation));
+        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adapter.getData(ModDataAttachments.ADAPTION)));
     }
     //override of changeAdaptValue with a different adaptation degree
     private static void decreaseAdaptValue(Player adapter, String sourceString, float cap, float customAdaptDegree)
@@ -210,8 +213,7 @@ public class ServerAdaptationEvents {
         }
         adapter.getData(ModDataAttachments.ADAPTION).setAdaptationValue(sourceLocation,newAdaptationValue);
 
-        AdaptationAttachment adaptation = adapter.getData(ModDataAttachments.ADAPTION);
-        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adaptation));
+        PacketDistributor.sendToPlayer((ServerPlayer)adapter, new AdaptationSyncPayload(adapter.getData(ModDataAttachments.ADAPTION)));
     }
     //when adaptation value is decreased for one source, it is increased for another
     private static void increaseAdaptationValue(Player adapter, String sourceString, float cap)

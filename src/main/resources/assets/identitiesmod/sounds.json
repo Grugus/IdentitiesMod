@@ -34,5 +34,11 @@
     "sounds": [
       "identitiesmod:light_punch_sound"
     ]
+  },
+  "mahoraga_theme_sound": {
+    "subtitle": "sounds.identitiesmod.adaptation.mahoraga_theme_sound",
+    "sounds": [
+      "identitiesmod:mahoraga_theme_sound"
+    ]
   }
 }

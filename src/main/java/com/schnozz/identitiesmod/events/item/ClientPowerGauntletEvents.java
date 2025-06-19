@@ -22,8 +22,6 @@ public class ClientPowerGauntletEvents {
     public static void onPlaySound(PlaySoundEvent event) {
         Player player = Minecraft.getInstance().player;
         if(player == null){return;}
-        System.out.println("EVENT NAME: " + event.getName());
-        System.out.println("CHECK NAME: " + SoundEvents.PLAYER_ATTACK_SWEEP.getLocation());
 
         if (    ("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_STRONG.getLocation().toString())
                 || ("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.getLocation().toString())

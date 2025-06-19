@@ -44,18 +44,13 @@ public class PayloadRegister {
                 }
         );
 
-        registrar.playToClient(
+        registrar.playBidirectional(
                 AdaptationSyncPayload.TYPE,
                 AdaptationSyncPayload.STREAM_CODEC,
-                (payload, context) -> {
-                    // Schedule work on the main client thread
-                    Minecraft.getInstance().execute(() -> {
-                        LocalPlayer player = Minecraft.getInstance().player;
-                        if (player != null) {
-                            player.setData(ModDataAttachments.ADAPTION.get(), payload.attachment());
-                        }
-                    });
-                }
+                new DirectionalPayloadHandler<>(
+                        ClientAdaptationSyncHandler::handle,
+                        ServerAdaptationSyncHandler::handle
+                )
         );
 
         registrar.playBidirectional(

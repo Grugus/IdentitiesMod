@@ -12,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -43,7 +44,6 @@ public class ModCommands {
                                         target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, 0, false, true,true));
                                         PacketDistributor.sendToPlayer(target,new PotionLevelPayload(MobEffects.DAMAGE_RESISTANCE,0,MobEffectInstance.INFINITE_DURATION));
                                     }
-
                                     return Command.SINGLE_SUCCESS;
                                 }))));
 
