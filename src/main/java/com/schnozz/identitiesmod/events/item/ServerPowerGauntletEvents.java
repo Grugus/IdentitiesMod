@@ -2,10 +2,7 @@ package com.schnozz.identitiesmod.events.item;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.items.item_classes.FastPowerGauntlet;
-import com.schnozz.identitiesmod.items.item_classes.StrongPowerGauntlet;
-import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -44,6 +41,5 @@ public class ServerPowerGauntletEvents {
             }
         }
     }
-    //disables use of power gauntelets by non-viltrumites
 
 }

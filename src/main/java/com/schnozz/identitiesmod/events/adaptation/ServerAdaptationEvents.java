@@ -28,8 +28,8 @@ public class ServerAdaptationEvents {
     private static final float NO_CAP = 0.00F;
     private static final float EXPLOSION_CAP = 0.1F;
     private static final float MOB_CAP = 0.25F;
-    private static final float DEFAULT_CAP = 0.35F;
-    private static final float UNADAPT_CAP = 3.00F;
+    private static final float DEFAULT_CAP = 0.4F;
+    private static final float UNADAPT_CAP = 2.0F;
 
     private static final float HEAT_ADAPT_DEGREE = 0.01F;
     private static final float EXPLOSION_ADAPT_DEGREE = 0.13F;

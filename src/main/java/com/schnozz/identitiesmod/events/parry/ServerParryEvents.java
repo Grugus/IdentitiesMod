@@ -5,6 +5,7 @@ import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import com.schnozz.identitiesmod.mob_effects.ModEffects;
 import com.schnozz.identitiesmod.networking.payloads.CDPARRYPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.networking.payloads.SoundPayload;
@@ -36,16 +37,14 @@ public class ServerParryEvents {
         if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
         {
             if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
-
-
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
-                    if(event.getSource().getDirectEntity() instanceof Mob) {
-
-                    }
-                    else {
+                    if(event.getSource().getDirectEntity() instanceof Player) {
                         parryStreak++;
                     }
+
                     source.hurt(event.getSource(), event.getAmount() * .5f);
+                    source.addEffect(new MobEffectInstance(ModEffects.STUN,20));
+
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -58,7 +57,10 @@ public class ServerParryEvents {
 
                     parryBuff(player);
                 }else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
-                    parryStreak++;
+                    if(event.getSource().getDirectEntity() instanceof Player) {
+                        parryStreak++;
+                    }
+
                     source.hurt(event.getSource(), event.getAmount() * .5f);
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
@@ -69,7 +71,6 @@ public class ServerParryEvents {
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                     event.setCanceled(true);
                     System.out.println("Parry Arrow Success");
-
                     parryBuff(player);
                 }
             }

@@ -7,7 +7,6 @@ import com.schnozz.identitiesmod.networking.payloads.SoundPayload;
 import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
