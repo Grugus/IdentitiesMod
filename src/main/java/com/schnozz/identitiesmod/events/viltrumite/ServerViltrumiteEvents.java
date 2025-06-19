@@ -8,6 +8,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CDPayload;
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -134,6 +136,8 @@ public class ServerViltrumiteEvents {
         if(event.getEntity().level().isClientSide) return;
         if(event.isWasDeath() && event.getEntity().level() instanceof ServerLevel level && event.getOriginal().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
+            event.getEntity().addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, 0, false, true,true));
+            PacketDistributor.sendToPlayer((ServerPlayer)event.getEntity(),new PotionLevelPayload(MobEffects.DAMAGE_RESISTANCE,0,MobEffectInstance.INFINITE_DURATION));
             if(event.getOriginal().hasData(ModDataAttachments.ENTITY_HELD) && event.getOriginal().getData(ModDataAttachments.ENTITY_HELD).hasUUID("UUID"))
             {
                 Objects.requireNonNull(level.getEntity(event.getOriginal().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"))).setNoGravity(false);
@@ -147,6 +151,7 @@ public class ServerViltrumiteEvents {
         if(event.getEntity().level().isClientSide) return;
         if(event.getEntity().level() instanceof ServerLevel level && event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
+
             if(event.getEntity().hasData(ModDataAttachments.ENTITY_HELD) && event.getEntity().getData(ModDataAttachments.ENTITY_HELD).hasUUID("UUID"))
             {
                 Objects.requireNonNull(level.getEntity(event.getEntity().getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"))).setNoGravity(false);
@@ -172,6 +177,7 @@ public class ServerViltrumiteEvents {
         }
 
     }
+
     @SubscribeEvent
     public static void onFall(LivingFallEvent event) {
         Entity entity = event.getEntity();
@@ -186,10 +192,19 @@ public class ServerViltrumiteEvents {
         DamageSource source = event.getSource();
         DamageType type = source.type();
         String typeString = type.msgId();
+
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
             if(typeString.equals("minecraft:arrow"))
             {
+                event.setAmount(event.getOriginalAmount()*4F);
+            }
+            if(typeString.equals("minecraft:magic") || typeString.equals("minecraft:indirectmagic"))
+            {
                 event.setAmount(event.getOriginalAmount()*2.5F);
+            }
+            if(typeString.equals("minecraft:explosion") || typeString.equals("minecraft:player.explosion"))
+            {
+                event.setAmount(event.getOriginalAmount()*1.5F);
             }
         }
     }

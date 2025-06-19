@@ -5,12 +5,15 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.PowerSyncPayload;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -34,6 +37,12 @@ public class ModCommands {
                                     target.setData(ModDataAttachments.POWER_TYPE, power);
                                     PacketDistributor.sendToPlayer(target, new PowerSyncPayload(power));
                                     System.out.println("Command was successfully executed");
+
+                                    if(power.equals("Viltrumite"))
+                                    {
+                                        target.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, MobEffectInstance.INFINITE_DURATION, 0, false, true,true));
+                                        PacketDistributor.sendToPlayer(target,new PotionLevelPayload(MobEffects.DAMAGE_RESISTANCE,0,MobEffectInstance.INFINITE_DURATION));
+                                    }
 
                                     return Command.SINGLE_SUCCESS;
                                 }))));

@@ -166,10 +166,10 @@ public class ClientViltrumiteEvents {
     {
         Level level = viltrumitePlayer.level();
 
-        List<Entity> entities = level.getEntities(viltrumitePlayer, viltrumitePlayer.getBoundingBox().inflate(0.5), (entity) -> {
+        List<Entity> entities = level.getEntities(viltrumitePlayer, viltrumitePlayer.getBoundingBox().inflate(1), (entity) -> {
             return entity instanceof LivingEntity && !entity.isSpectator() && entity != viltrumitePlayer;
         });
-        BoundingBoxVisualizer.showAABB(level, viltrumitePlayer.getBoundingBox().inflate(0.5));
+        BoundingBoxVisualizer.showAABB(level, viltrumitePlayer.getBoundingBox().inflate(1));
 
         Entity target = null;
         double closestDistance = Double.MAX_VALUE;

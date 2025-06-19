@@ -29,10 +29,8 @@ public class ClientPowerGauntletEvents {
                 || ("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_NODAMAGE.getLocation().toString())
                 || ("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_SWEEP.getLocation().toString())    )
         {
-            System.out.println("BASIC ATTACK");
             if (player.getMainHandItem().getItem() instanceof StrongPowerGauntlet) {
                 event.setSound(null);
-                System.out.println("BASIC ATTACK WITH STRONG GAUNTELET");
                 PacketDistributor.sendToServer(new SoundPayload(ModSounds.PUNCH_THUNK_SOUND.get(),3F));
             }
             if (player.getMainHandItem().getItem() instanceof FastPowerGauntlet) {
@@ -41,10 +39,8 @@ public class ClientPowerGauntletEvents {
             }
         }
         else if(("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_CRIT.getLocation().toString())) {
-            System.out.println("CRIT");
             if (player.getMainHandItem().getItem() instanceof StrongPowerGauntlet) {
                 event.setSound(null);
-                System.out.println("CRIT WITH STRONG GAUNTLET");
                 PacketDistributor.sendToServer(new SoundPayload(ModSounds.OMNI_MAN_PUNCH_SOUND.get(),3F));
             }
             if (player.getMainHandItem().getItem() instanceof FastPowerGauntlet) {

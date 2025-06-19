@@ -25,7 +25,6 @@ public record AxeLightningEnchantment() implements EnchantmentEntityEffect {
                 {
                     EntityType.LIGHTNING_BOLT.spawn(level, e.getOnPos(), MobSpawnType.TRIGGERED);
                 }
-
             }
         }
     }
