@@ -7,6 +7,7 @@ import com.schnozz.identitiesmod.networking.payloads.SoundPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.AdaptationSyncPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.screen.icon.AdapterProgressBar;
+import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
 import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,6 +32,8 @@ public class   ClientAdaptationEvents {
     private static final AdapterProgressBar EXPLOSION_BAR = new AdapterProgressBar(10,79, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/explosion_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"explosion.player"),0.9F);
     private static final AdapterProgressBar ARROW_BAR = new AdapterProgressBar(10,102, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/arrow_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"arrow"),0.65F);
 
+    private static final CooldownIcon switchIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/parrycd_icon.png"));
+
     private static int switchTimer = 0;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
@@ -45,8 +48,10 @@ public class   ClientAdaptationEvents {
             {
                 switchAdaptation(adaptationPlayer);
                 switchTimer = 1;
+
                 adaptationPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), level.getGameTime(), 3000);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 3000), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "adaptation.switchcd"), false));
+                switchIcon.setCooldown(new Cooldown(Minecraft.getInstance().level.getGameTime(), 3000));
             }
 
             if(switchTimer > 0 && switchTimer < 600)
@@ -66,7 +71,7 @@ public class   ClientAdaptationEvents {
         {
             return;
         }
-
+        switchIcon.render(event.getGuiGraphics(),Minecraft.getInstance().level.getGameTime());
         //DIAMOND_SWORD_BAR.render(event.getGuiGraphics());
         //FLAME_BAR.render(event.getGuiGraphics());
         //POTION_BAR.render(event.getGuiGraphics());
