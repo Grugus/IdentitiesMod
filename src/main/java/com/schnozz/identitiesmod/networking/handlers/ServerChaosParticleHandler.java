@@ -21,8 +21,8 @@ public class ServerChaosParticleHandler {
 
             assert entity != null;
 
-            Vec3 center = entity.position().add(0, 2.0, 0); // Above the head
-            double radius = 1.0;
+            Vec3 center = entity.position().add(0, 2.25, 0); // Above the head
+            double radius = 0.15;
             int rings = 10;
             int segments = 20;
 
@@ -39,16 +39,27 @@ public class ServerChaosParticleHandler {
 
                     Vec3 pos = center.add(x, y, z);
 
-
-                    ((ServerLevel)level).sendParticles(
+                    //send initial sphere
+                    level.sendParticles(
                             payload.particle(),
                             pos.x, pos.y, pos.z,
                             1,
                             0,0,0,
                             0
                     );
+
+
+
                 }
             }
+
+            level.sendParticles(
+                    payload.particle(),
+                    center.x, center.y - 0.2, center.z,
+                    2,
+                    -0.3,0.4,-0.3,
+                    0.05
+            );
         }
 
     }

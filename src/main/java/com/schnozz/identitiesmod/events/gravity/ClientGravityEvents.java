@@ -97,7 +97,6 @@ public class ClientGravityEvents {
 
                 findChaosTargetAndDistance(gravityPlayer);
 
-                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 5000));
 
                 if(target != null) {
                     if (target instanceof LivingEntity livingEntity) {
@@ -105,9 +104,10 @@ public class ClientGravityEvents {
                         chaosTimer = 1; //starts chaos logic loop
                         chaos(gravityPlayer); //intial hit guaranteed
                     }
-                    gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
-                    PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
                 }
+                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 650));
+                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 650);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 650), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
             }
 
 
@@ -116,8 +116,8 @@ public class ClientGravityEvents {
             {
                 ///////// Particle Stuff
                 DustColorTransitionOptions particle = new DustColorTransitionOptions(
-                        new Vector3f(0.4f, 0.1f, 0.9f),  // From: purple (RGB 0–1)
-                        new Vector3f(0.3f, 0.8f, 0.9f),  // To: teal-ish
+                        new Vector3f(0.5f, 0.0f, 0.5f),
+                        new Vector3f(1.0f, 0.41f, 0.71f),
                         1.0f);
 
                 CompoundTag tag = new CompoundTag();

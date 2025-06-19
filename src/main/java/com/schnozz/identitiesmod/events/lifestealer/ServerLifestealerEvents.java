@@ -33,7 +33,7 @@ public class ServerLifestealerEvents {
         if(event.getEntity() instanceof ServerPlayer player && player.getData(ModDataAttachments.POWER_TYPE).equals("Lifestealer")) {
 
             if (event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Player p) {
-                int h = Math.max(0, player.getData(ModDataAttachments.HEALTH_NEEDED) - 2);
+                int h = Math.max(-4, player.getData(ModDataAttachments.HEALTH_NEEDED) - 2);
                 player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20 + h);
                 player.setData(ModDataAttachments.HEALTH_NEEDED, h);
 
