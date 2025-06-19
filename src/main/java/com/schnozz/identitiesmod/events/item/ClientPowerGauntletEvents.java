@@ -29,21 +29,21 @@ public class ClientPowerGauntletEvents {
         {
             if (player.getMainHandItem().getItem() instanceof StrongPowerGauntlet) {
                 event.setSound(null);
-                PacketDistributor.sendToServer(new SoundPayload(ModSounds.PUNCH_THUNK_SOUND.get(),3F));
+                PacketDistributor.sendToServer(new SoundPayload(ModSounds.PUNCH_THUNK_SOUND.get(),20F));
             }
             if (player.getMainHandItem().getItem() instanceof FastPowerGauntlet) {
                 event.setSound(null);
-                PacketDistributor.sendToServer(new SoundPayload(ModSounds.LIGHT_PUNCH_SOUND.get(),3F));
+                PacketDistributor.sendToServer(new SoundPayload(ModSounds.LIGHT_PUNCH_SOUND.get(),5F));
             }
         }
         else if(("minecraft:"+ event.getName()).equals(SoundEvents.PLAYER_ATTACK_CRIT.getLocation().toString())) {
             if (player.getMainHandItem().getItem() instanceof StrongPowerGauntlet) {
                 event.setSound(null);
-                PacketDistributor.sendToServer(new SoundPayload(ModSounds.OMNI_MAN_PUNCH_SOUND.get(),3F));
+                PacketDistributor.sendToServer(new SoundPayload(ModSounds.OMNI_MAN_PUNCH_SOUND.get(),20F));
             }
             if (player.getMainHandItem().getItem() instanceof FastPowerGauntlet) {
                 event.setSound(null);
-                PacketDistributor.sendToServer(new SoundPayload(ModSounds.LIGHT_PUNCH_SOUND.get(),3F));
+                PacketDistributor.sendToServer(new SoundPayload(ModSounds.LIGHT_PUNCH_SOUND.get(),5F));
             }
         }
     }

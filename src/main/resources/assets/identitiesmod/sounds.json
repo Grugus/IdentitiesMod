@@ -40,5 +40,11 @@
     "sounds": [
       "identitiesmod:mahoraga_theme_sound"
     ]
+  },
+  "grab_sound": {
+    "subtitle": "sounds.identitiesmod.viltrumite.grab_sound",
+    "sounds": [
+      "identitiesmod:grab_sound"
+    ]
   }
 }

@@ -23,6 +23,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> PUNCH_THUNK_SOUND = registerSoundEvent("punch_thunk_sound");
     public static final Supplier<SoundEvent> LIGHT_PUNCH_SOUND = registerSoundEvent("light_punch_sound");
     public static final Supplier<SoundEvent> MAHORAGA_THEME_SOUND = registerSoundEvent("mahoraga_theme_sound");
+    public static final Supplier<SoundEvent> GRAB_SOUND = registerSoundEvent("grab_sound");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name)
     {

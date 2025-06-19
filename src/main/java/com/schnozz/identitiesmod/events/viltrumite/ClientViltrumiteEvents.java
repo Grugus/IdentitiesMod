@@ -9,6 +9,7 @@ import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
 import com.schnozz.identitiesmod.screen.icon.CooldownIcon;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -147,6 +148,7 @@ public class ClientViltrumiteEvents {
             if (closest != null) {
 
                 PacketDistributor.sendToServer(new EntityBoxPayload(closest.saveWithoutId(new CompoundTag()))); // packet only gets sent if a entity was found
+                PacketDistributor.sendToServer(new SoundPayload(ModSounds.GRAB_SOUND.get(),5F));
                 return true;
             }
         }
