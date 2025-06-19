@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -102,6 +103,12 @@ public class ServerViltrumiteEvents {
         if(event.getEntity().level().isClientSide) return;
         if(event.getEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite"))
         {
+            if(event.getSource().getDirectEntity()!=null){
+                if(event.getSource().getDirectEntity() instanceof Mob mob && !mob.isAggressive())
+                {
+                    return;
+                }
+            }
             Player viltrumtiePlayer = (Player) event.getEntity();
 
             //cd set
@@ -115,7 +122,10 @@ public class ServerViltrumiteEvents {
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity().isAlive()  ) {
             if (event.getSource().getDirectEntity().getData(ModDataAttachments.POWER_TYPE).equals("Viltrumite")) {
-
+                if(event.getEntity() instanceof Mob mob && !mob.isAggressive())
+                {
+                    return;
+                }
                 Player viltrumtiePlayer = (Player) event.getSource().getDirectEntity();
 
                 //cd set
@@ -184,6 +194,8 @@ public class ServerViltrumiteEvents {
             event.setCanceled(true);
         }
     }
+
+
 
     @SubscribeEvent
     public static void onDamage(LivingIncomingDamageEvent event) {
