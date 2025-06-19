@@ -138,6 +138,20 @@ public class PayloadRegister {
                 ServerVelocityHandler::handle
         );
 
+        registrar.playToServer(
+                ParryParticlePayload.TYPE,
+                ParryParticlePayload.STREAM_CODEC,
+                ServerParryParticleHandler::handle
+        );
+
+        registrar.playToServer(
+                ChaosParticlePayload.TYPE,
+                ChaosParticlePayload.STREAM_CODEC,
+                ServerChaosParticleHandler::handle
+        );
+
+
+
 
         registrar.playToServer(
                 EntityBoxPayload.TYPE,

@@ -12,7 +12,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -28,6 +30,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,7 +97,6 @@ public class ClientGravityEvents {
 
                 findChaosTargetAndDistance(gravityPlayer);
 
-                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 5000));
 
                 if(target != null) {
                     if (target instanceof LivingEntity livingEntity) {
@@ -102,16 +104,31 @@ public class ClientGravityEvents {
                         chaosTimer = 1; //starts chaos logic loop
                         chaos(gravityPlayer); //intial hit guaranteed
                     }
-                    gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 250);
-                    PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 250), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
                 }
+                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 650));
+                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 650);
+                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 650), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
             }
 
 
             //chaos logic
             if(chaosTimer > 0 && chaosTimer < 180 && chaosTargetEntityId != 0)
             {
-                //PARTCILE
+                ///////// Particle Stuff
+                DustColorTransitionOptions particle = new DustColorTransitionOptions(
+                        new Vector3f(0.5f, 0.0f, 0.5f),
+                        new Vector3f(1.0f, 0.41f, 0.71f),
+                        1.0f);
+
+                CompoundTag tag = new CompoundTag();
+
+
+                assert target != null;
+
+                PacketDistributor.sendToServer(new ChaosParticlePayload(particle, target.saveWithoutId(new CompoundTag())));
+
+                ///////// Particle Stuff
+
                 if(level.getEntity(chaosTargetEntityId) == null || !level.getEntity(chaosTargetEntityId).isAlive()) {
                     chaosTimer = 181;
                 }
