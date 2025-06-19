@@ -66,7 +66,7 @@ public class ServerParryEvents {
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
                     PacketDistributor.sendToPlayer(player, new CDPARRYPayload(new Cooldown(currentTime, 20)));
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
-                    PacketDistributor.sendToPlayer(player, new SoundPayload(ModSounds.PARRY_SOUND.get()));
+                    PacketDistributor.sendToPlayer(player, new SoundPayload(ModSounds.PARRY_SOUND.get(),3F));
                     event.setCanceled(true);
                     System.out.println("Parry Arrow Success");
 

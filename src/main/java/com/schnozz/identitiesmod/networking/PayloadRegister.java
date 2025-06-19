@@ -9,8 +9,11 @@ import com.schnozz.identitiesmod.networking.payloads.*;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.*;
 import com.schnozz.identitiesmod.networking.payloads.CDPARRYPayload;
 import com.schnozz.identitiesmod.networking.payloads.CDPayload;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -106,17 +109,15 @@ public class PayloadRegister {
                 }
         );
 
-        registrar.playToClient(
+        registrar.playToServer(
                 SoundPayload.TYPE,
                 SoundPayload.STREAM_CODEC,
                 (payload, context) -> {
                     // Schedule work on the main client thread
-                    Minecraft.getInstance().execute(() -> {
-                        LocalPlayer player = Minecraft.getInstance().player;
-                        if (player != null) {
-                            player.playSound(payload.sound());
-                        }
-                    });
+                    Player player = context.player();
+                    if (player != null) {
+                        player.level().playSound(null, player.getOnPos(), payload.sound(), SoundSource.PLAYERS, payload.volume(),1F);
+                    }
                 }
         );
 

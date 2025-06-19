@@ -16,5 +16,23 @@
     "sounds": [
       "identitiesmod:zombies_are_coming_sound"
     ]
+  },
+  "omni_man_punch_sound": {
+    "subtitle": "sounds.identitiesmod.viltrumite.strong_punch_one_sound",
+    "sounds": [
+      "identitiesmod:omni_man_punch_sound"
+    ]
+  },
+  "punch_thunk_sound": {
+    "subtitle": "sounds.identitiesmod.viltrumite.strong_punch_two_sound",
+    "sounds": [
+      "identitiesmod:punch_thunk_sound"
+    ]
+  },
+  "light_punch_sound": {
+    "subtitle": "sounds.identitiesmod.viltrumite.light_punch_sound",
+    "sounds": [
+      "identitiesmod:light_punch_sound"
+    ]
   }
 }
