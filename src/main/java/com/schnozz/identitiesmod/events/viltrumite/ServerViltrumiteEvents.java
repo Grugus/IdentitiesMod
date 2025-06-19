@@ -173,7 +173,6 @@ public class ServerViltrumiteEvents {
             p.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), level.getGameTime(), 200);
             PacketDistributor.sendToPlayer(p, new CooldownSyncPayload(new Cooldown(level.getGameTime(), 200), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "grab_cd"), false));
             PacketDistributor.sendToPlayer(p, new CDPayload(new Cooldown(level.getGameTime(), 200)));
-            p.level().playSound(null, p.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
         }
 
     }
