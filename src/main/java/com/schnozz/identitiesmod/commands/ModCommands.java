@@ -9,6 +9,7 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.PowerSyncPayload;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -114,7 +115,9 @@ public class ModCommands {
                     {
                         target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), home.getX(), home.getY(),  home.getZ(), target.getXRot(), target.getYRot());
                     }
-
+                    else {
+                        target.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
+                    }
                     return Command.SINGLE_SUCCESS;
                 })
         );
@@ -128,7 +131,9 @@ public class ModCommands {
                     {
                         target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), spawn.getX(), spawn.getY(),  spawn.getZ(), target.getXRot(), target.getYRot());
                     }
-
+                    else {
+                        target.sendSystemMessage(Component.literal("COMBAT LOGGED").withStyle(ChatFormatting.RED));
+                    }
                     return Command.SINGLE_SUCCESS;
                 })
         );
