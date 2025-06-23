@@ -51,7 +51,7 @@ public class ClientViltrumiteEvents {
     private static int stunTimer = 0;
     private static int dashMisses = 0;
     //flight speed double
-    private static double flightSpeed = 1.5;
+    private static double flightSpeed = 0.75;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer viltrumitePlayer = Minecraft.getInstance().player;

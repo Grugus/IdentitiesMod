@@ -15,17 +15,17 @@
     ]
   },
   "max_cost": {
-    "base": 25,
+    "base": 300,
     "per_level_above_first": 7
   },
   "max_level": 1,
   "min_cost": {
-    "base": 5,
+    "base": 200,
     "per_level_above_first": 7
   },
   "slots": [
     "mainhand"
   ],
   "supported_items": "minecraft:shield",
-  "weight": 2
+  "weight": 1
 }

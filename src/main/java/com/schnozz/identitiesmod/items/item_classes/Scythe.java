@@ -78,7 +78,7 @@ public class Scythe extends SwordItem {
         if(!target.level().isClientSide && attacker.getData(ModDataAttachments.POWER_TYPE).equals("Kyle") && attacker instanceof Player player && !player.getCooldowns().isOnCooldown(this))
         {
             long farmValue = FarmValueSavedData.get(attacker.level().getServer()).getValue();
-            DamageSource bonusDamageSource = new DamageSource(attacker.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK),null,attacker,null);
+            DamageSource bonusDamageSource = new DamageSource(attacker.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.PLAYER_ATTACK),attacker,attacker,null);
             float bonusDamage = (float) (farmValue /2000);
 
             attacker.getMainHandItem().set(ModDataComponentRegistry.CHARGE, new ChargeRecord((int) bonusDamage));

@@ -50,7 +50,7 @@ public class ServerAdaptationEvents {
 
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation") && entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 1 && event.getEntity().level() instanceof ServerLevel serverLevel) {
             changedValue = false;
-            System.out.println("OFFENSIVE MAPPING: " + entity.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")));
+
             DustColorTransitionOptions particle = new DustColorTransitionOptions(
                     new Vector3f(0.4f, 0.1f, 0.9f),  // From: purple (RGB 0–1)
                     new Vector3f(0.3f, 0.8f, 0.9f),  // To: teal-ish

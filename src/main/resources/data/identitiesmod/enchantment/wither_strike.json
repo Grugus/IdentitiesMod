@@ -1,5 +1,5 @@
 {
-  "anvil_cost": 2,
+  "anvil_cost": 100,
   "description": {
     "translate": "enchantment.identitiesmod.wither_strike"
   },
@@ -15,18 +15,16 @@
     ]
   },
   "max_cost": {
-    "base": 25,
+    "base": 300,
     "per_level_above_first": 7
   },
   "max_level": 2,
   "min_cost": {
-    "base": 5,
+    "base": 200,
     "per_level_above_first": 7
   },
   "primary_items": "#minecraft:enchantable/sword",
-  "slots": [
-    "mainhand"
-  ],
+  "slots": ["mainhand"],
   "supported_items": "#minecraft:enchantable/weapon",
-  "weight": 5
+  "weight": 1
 }
