@@ -10,6 +10,7 @@ import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.CDPayload;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.networking.payloads.sync_payloads.GrabSyncPayload;
 import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -53,14 +54,17 @@ public class ServerViltrumiteEvents {
                 Player viltrumitePlayer = event.getEntity();
                 Entity target = level.getEntity(viltrumitePlayer.getData(ModDataAttachments.ENTITY_HELD).getUUID("UUID"));
 
-                System.out.println(target.getName()); //FOR DEBUG
 
                 if(target == null){return;}
                 if(!target.isAlive()){return;}
                 //sets position in front and turns off gravity
-                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(1));
-
-                target.setPos(targetPos);
+                Vec3 targetPos = viltrumitePlayer.getEyePosition().add(viltrumitePlayer.getLookAngle().scale(1.75));
+                Vec3 grabPos = new Vec3(targetPos.x, targetPos.y - 1, targetPos.z);
+                target.setPos(grabPos);
+                if(target instanceof ServerPlayer player)
+                {
+                    PacketDistributor.sendToPlayer(player, new GrabSyncPayload(grabPos));
+                }
                 target.setDeltaMovement(0,0,0);
                 target.hurtMarked = true;
 
@@ -113,11 +117,11 @@ public class ServerViltrumiteEvents {
 
             //cd set
             long startTime = viltrumtiePlayer.level().getGameTime();
-            Cooldown cd = new Cooldown(startTime, 1200);
+            Cooldown cd = new Cooldown(startTime, 600);
             CooldownAttachment cdAttach = viltrumtiePlayer.getData(ModDataAttachments.COOLDOWN);
             ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd");
 
-            cdAttach.setCooldown(key, startTime, 1200);
+            cdAttach.setCooldown(key, startTime, 600);
             PacketDistributor.sendToPlayer((ServerPlayer) viltrumtiePlayer, new CooldownSyncPayload(cd,key, false  ));
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity().isAlive()  ) {
@@ -130,11 +134,11 @@ public class ServerViltrumiteEvents {
 
                 //cd set
                 long startTime = viltrumtiePlayer.level().getGameTime();
-                Cooldown cd = new Cooldown(startTime, 1200);
+                Cooldown cd = new Cooldown(startTime, 600);
                 CooldownAttachment cdAttach = viltrumtiePlayer.getData(ModDataAttachments.COOLDOWN);
                 ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "fly_cd");
 
-                cdAttach.setCooldown(key, startTime, 1200);
+                cdAttach.setCooldown(key, startTime, 600);
                 PacketDistributor.sendToPlayer((ServerPlayer) viltrumtiePlayer, new CooldownSyncPayload(cd,key, false  ));
             }
         }

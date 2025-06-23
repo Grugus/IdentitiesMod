@@ -36,13 +36,18 @@ public class ServerParryEvents {
         long currentTime = event.getEntity().level().getGameTime();
         if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
         {
+
+            if(!player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
+                parryStreak = 0;
+            }
+
             if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
                     if(event.getSource().getDirectEntity() instanceof Player) {
                         parryStreak++;
                     }
 
-                    source.hurt(event.getSource(), event.getAmount() * .5f);
+                    source.hurt(event.getSource(), event.getAmount() * .8f);
                     source.addEffect(new MobEffectInstance(ModEffects.STUN,20));
 
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
@@ -61,7 +66,7 @@ public class ServerParryEvents {
                         parryStreak++;
                     }
 
-                    source.hurt(event.getSource(), event.getAmount() * .5f);
+                    source.hurt(event.getSource(), event.getAmount() * .8f);
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -73,11 +78,15 @@ public class ServerParryEvents {
                     System.out.println("Parry Arrow Success");
                     parryBuff(player);
                 }
+                else
+                {
+                    event.setCanceled(true);
+                }
             }
-            else
-            {
-                parryStreak = 0;
-            }
+
+
+
+
         }
     }
 

@@ -3,8 +3,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "identitiesmod:item/power_gauntlet",
-		"particle": "identitiesmod:item/power_gauntlet"
+		"0": "identitiesmod:item/fast_gauntlet",
+		"particle": "identitiesmod:item/fast_gauntlet"
 	},
 	"elements": [
 		{

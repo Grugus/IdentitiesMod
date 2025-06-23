@@ -48,4 +48,15 @@ public class AttachmentSyncEvents {
             PacketDistributor.sendToPlayer(player, new LifestealerBuffSyncPayload(lifeBuffs));
         }
     }
+
+    @SubscribeEvent
+    public static void onChanged(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            String power = player.getData(ModDataAttachments.POWER_TYPE);
+            PacketDistributor.sendToPlayer(player, new PowerSyncPayload(power));
+
+            LifestealerBuffsAttachment lifeBuffs = player.getData(ModDataAttachments.LIFESTEALER_BUFFS);
+            PacketDistributor.sendToPlayer(player, new LifestealerBuffSyncPayload(lifeBuffs));
+        }
+    }
 }

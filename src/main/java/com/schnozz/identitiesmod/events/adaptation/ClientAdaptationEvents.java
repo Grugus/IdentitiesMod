@@ -32,7 +32,7 @@ public class   ClientAdaptationEvents {
     private static final AdapterProgressBar EXPLOSION_BAR = new AdapterProgressBar(10,79, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/explosion_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"explosion.player"),0.9F);
     private static final AdapterProgressBar ARROW_BAR = new AdapterProgressBar(10,102, 18, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/arrow_icon.png"),ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"arrow"),0.65F);
 
-    private static final CooldownIcon switchIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/parrycd_icon.png"));
+    private static final CooldownIcon switchIcon = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/adaptationcd_icon.png"));
 
     private static int switchTimer = 0;
     @SubscribeEvent

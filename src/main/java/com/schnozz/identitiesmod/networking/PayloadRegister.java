@@ -204,5 +204,11 @@ public class PayloadRegister {
                 EntityPositionPayload.STREAM_CODEC,
                 ServerEntityPositionHandler::handle
         );
+
+        registrar.playToClient(
+                GrabSyncPayload.TYPE,
+                GrabSyncPayload.STREAM_CODEC,
+                ClientGrabSyncPayloadHandler::handle
+        );
     }
 }

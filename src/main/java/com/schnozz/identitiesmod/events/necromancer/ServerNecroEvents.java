@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
@@ -99,10 +100,22 @@ public class ServerNecroEvents {
             event.setCanceled(true);
         }
 
+        if((event.getEntity() instanceof Monster monster && command_list.getUUIDList().contains(monster.getUUID())) && (event.getSource().getDirectEntity() instanceof AbstractArrow a && a.getOwner() instanceof Player p && p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer")))
+        {
+            event.setCanceled(true);
+        }
+
+        if((event.getEntity() instanceof Monster monster && command_list.getUUIDList().contains(monster.getUUID())) && (event.getSource().getDirectEntity() instanceof AbstractArrow a && a.getOwner() instanceof Monster m && command_list.getUUIDList().contains(m.getUUID())))
+        {
+            event.setCanceled(true);
+        }
+
         if(event.getSource().getDirectEntity() instanceof LivingEntity entity && (event.getEntity() instanceof Monster monster && command_list.getUUIDList().contains(monster.getUUID())) && !((event.getSource().getDirectEntity() instanceof Player p && p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer")) || (event.getSource().getDirectEntity() instanceof Monster m && command_list.getUUIDList().contains(m.getUUID()))))
         {
             monster.setTarget(entity);
         }
+
+
     }
 
 

@@ -16,9 +16,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -72,7 +74,24 @@ public class MobHolder extends Item  implements IItemExtension {
 
     }
 
+    @Override
+    public void onDestroyed(ItemEntity itemEntity, DamageSource damageSource) {
+        if(itemEntity.level().isClientSide) return;
+        command_list = UUIDSavedData.get(itemEntity.level().getServer());
+        int x = itemEntity.getItem().get(ModDataComponentRegistry.HELD_LIST).entries().size();
+        x = x*1;
+        for(int i = 0; i < x; i++)
+        {
 
+            if(itemEntity.getItem().get(ModDataComponentRegistry.HELD_LIST).entries().get(i).hasUUID("UUID"))
+            {
+                command_list.removeUUID(itemEntity.getItem().get(ModDataComponentRegistry.HELD_LIST).entries().get(i).getUUID("UUID"));
+            }
+
+        }
+
+        super.onDestroyed(itemEntity, damageSource);
+    }
 
 
     @Override
@@ -127,7 +146,7 @@ public class MobHolder extends Item  implements IItemExtension {
         {
             List<CompoundTag> heldEntities = new ArrayList<>(player.getMainHandItem().getOrDefault(ModDataComponentRegistry.HELD_LIST.get(), new CompoundTagListRecord(new ArrayList<>())).entries());
             command_list = UUIDSavedData.get(player.level().getServer());
-            CompoundTag tag = heldEntities.removeFirst();
+            CompoundTag tag = heldEntities.removeLast();
             System.out.println(heldEntities.size());
             player.getMainHandItem().set(ModDataComponentRegistry.HELD_LIST, new CompoundTagListRecord(List.copyOf(heldEntities)));
             ResourceLocation entityId = ResourceLocation.tryParse(tag.getString("id"));

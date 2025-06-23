@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
 import com.schnozz.identitiesmod.networking.payloads.PotionLevelPayload;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.PowerSyncPayload;
 import net.minecraft.commands.CommandSourceStack;
@@ -19,6 +20,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.ArrayList;
 
 @EventBusSubscriber(modid = "identitiesmod", bus = EventBusSubscriber.Bus.GAME)
 public class ModCommands {
@@ -46,6 +49,18 @@ public class ModCommands {
                                     }
                                     return Command.SINGLE_SUCCESS;
                                 }))));
+
+        dispatcher.register(Commands.literal("deleteNecromancer")
+                .requires(source -> source.hasPermission(2)) // OP level 2
+                .then(Commands.argument("target", EntityArgument.player())
+                                .executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+
+                                    UUIDSavedData savedData = UUIDSavedData.get(target.server);
+                                    savedData.clearUUID();
+
+                                    return Command.SINGLE_SUCCESS;
+                                })));
 
 
         dispatcher.register(Commands.literal("getpower")

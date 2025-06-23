@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class UUIDSavedData extends SavedData {
     private static final String UUID_LIST_TAG = "UUIDList";  // NBT tag for storing UUIDs
-    private final List<UUID> uuidList = new ArrayList<>();
+    private List<UUID> uuidList = new ArrayList<>();
 
     // Load data from NBT (called when loading saved data)
     public static UUIDSavedData load(CompoundTag tag, HolderLookup.Provider lookupProvider) {
@@ -55,6 +55,11 @@ public class UUIDSavedData extends SavedData {
         }
     }
 
+    public void clearUUID() {
+        uuidList = new ArrayList<>();
+        this.setDirty();
+    }
+
     // Remove a UUID from the list
     public void removeUUID(UUID uuid) {
         if (uuidList.remove(uuid)) {
@@ -69,7 +74,7 @@ public class UUIDSavedData extends SavedData {
 
     // Access saved data from the Overworld (using MinecraftServer)
     public static UUIDSavedData get(MinecraftServer server) {
-        return server.getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(UUIDSavedData::new, UUIDSavedData::load), "example");
+        return server.getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(UUIDSavedData::new, UUIDSavedData::load), "necromancer_list");
     }
 
 
