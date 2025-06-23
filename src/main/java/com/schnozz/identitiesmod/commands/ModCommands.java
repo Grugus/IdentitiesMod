@@ -62,9 +62,11 @@ public class ModCommands {
                     if(target.getTags().contains("AFK"))
                     {
                         target.removeTag("AFK");
+                        target.sendSystemMessage(Component.literal("You are no longer AFK"));
                     }
                     else {
                         target.addTag("AFK");
+                        target.sendSystemMessage(Component.literal("You are now AFK"));
                     }
 
                     return Command.SINGLE_SUCCESS;
@@ -111,6 +113,20 @@ public class ModCommands {
                     if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
                     {
                         target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), home.getX(), home.getY(),  home.getZ(), target.getXRot(), target.getYRot());
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
+
+        dispatcher.register(Commands.literal("spawn")
+                .requires(source -> source.hasPermission(0)) // allow all players, or raise for ops
+                .executes(context -> {
+                    ServerPlayer target = context.getSource().getPlayerOrException();
+                    BlockPos spawn = target.level().getSharedSpawnPos();
+                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
+                    {
+                        target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), spawn.getX(), spawn.getY(),  spawn.getZ(), target.getXRot(), target.getYRot());
                     }
 
                     return Command.SINGLE_SUCCESS;

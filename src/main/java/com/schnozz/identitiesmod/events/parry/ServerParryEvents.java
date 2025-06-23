@@ -26,22 +26,42 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerParryEvents {
     private static int parryStreak = 0;
+    private static int parryTicker = 0;
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent event)
+    {
+        if(!event.getEntity().level().isClientSide)
+        {
+            Player player = event.getEntity();
+            if(player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "parry_cd"), player.level().getGameTime()) )
+            {
+                parryTicker++;
+                if(parryTicker >= 29)
+                {
+                    parryStreak = 0;
+                }
+
+            }
+            else {
+                parryTicker = 0;
+            }
+        }
+
+    }
+
     @SubscribeEvent
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
         long currentTime = event.getEntity().level().getGameTime();
         if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
         {
-
-            if(!player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
-                parryStreak = 0;
-            }
-
             if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
                     if(event.getSource().getDirectEntity() instanceof Player) {
