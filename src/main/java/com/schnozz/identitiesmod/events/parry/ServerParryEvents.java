@@ -21,26 +21,47 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.DEDICATED_SERVER)
+@EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerParryEvents {
     private static int parryStreak = 0;
+    private static int parryTicker = 0;
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent event)
+    {
+        if(!event.getEntity().level().isClientSide)
+        {
+            Player player = event.getEntity();
+            if(player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "parry_cd"), player.level().getGameTime()) )
+            {
+                parryTicker++;
+                if(parryTicker >= 29)
+                {
+                    parryStreak = 0;
+                }
+
+            }
+            else {
+                parryTicker = 0;
+            }
+        }
+
+    }
+
     @SubscribeEvent
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
         long currentTime = event.getEntity().level().getGameTime();
         if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
         {
-
-            if(!player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
-                parryStreak = 0;
-            }
-
             if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
                     if(event.getSource().getDirectEntity() instanceof Player) {
@@ -61,7 +82,7 @@ public class ServerParryEvents {
                     System.out.println("Parry Success");
 
                     parryBuff(player);
-                }else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
+                }else if (event.getSource().getDirectEntity() instanceof AbstractHurtingProjectile arrow && arrow.getOwner() instanceof LivingEntity source) {
                     if(event.getSource().getDirectEntity() instanceof Player) {
                         parryStreak++;
                     }
@@ -80,6 +101,12 @@ public class ServerParryEvents {
                 }
                 else
                 {
+                    player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
+                    CooldownAttachment newAtachment = new CooldownAttachment();
+                    newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                    newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 45);
+                    player.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                    PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 45), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                     event.setCanceled(true);
                 }
             }

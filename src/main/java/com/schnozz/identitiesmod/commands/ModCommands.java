@@ -3,6 +3,7 @@ package com.schnozz.identitiesmod.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.leveldata.FarmValueSavedData;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.leveldata.UUIDSavedData;
@@ -11,11 +12,14 @@ import com.schnozz.identitiesmod.networking.payloads.sync_payloads.PowerSyncPayl
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -50,6 +54,25 @@ public class ModCommands {
                                     return Command.SINGLE_SUCCESS;
                                 }))));
 
+        dispatcher.register(Commands.literal("afk")
+                .requires(source -> source.hasPermission(0)) // allow all players, or raise for ops
+                .executes(context -> {
+                    ServerPlayer target = context.getSource().getPlayerOrException();
+
+                    if(target.getTags().contains("AFK"))
+                    {
+                        target.removeTag("AFK");
+                        target.sendSystemMessage(Component.literal("You are no longer AFK"));
+                    }
+                    else {
+                        target.addTag("AFK");
+                        target.sendSystemMessage(Component.literal("You are now AFK"));
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
+
         dispatcher.register(Commands.literal("deleteNecromancer")
                 .requires(source -> source.hasPermission(2)) // OP level 2
                 .then(Commands.argument("target", EntityArgument.player())
@@ -61,6 +84,54 @@ public class ModCommands {
 
                                     return Command.SINGLE_SUCCESS;
                                 })));
+
+        dispatcher.register(Commands.literal("sethome")
+                .requires(source -> source.hasPermission(0)) // allow all players, or raise for ops
+                .executes(context -> {
+                    ServerPlayer target = context.getSource().getPlayerOrException();
+                    if(target.level().dimension() == Level.OVERWORLD)
+                    {
+                        target.setData(ModDataAttachments.HOME_POS, target.getOnPos());
+                    }
+                    else
+                    {
+                        target.sendSystemMessage(Component.literal("Please set home in the overworld"));
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
+
+        dispatcher.register(Commands.literal("home")
+                .requires(source -> source.hasPermission(0)) // allow all players, or raise for ops
+                .executes(context -> {
+                    ServerPlayer target = context.getSource().getPlayerOrException();
+                    if(target.getData(ModDataAttachments.HOME_POS) == BlockPos.ZERO) return Command.SINGLE_SUCCESS;
+
+                    BlockPos home = target.getData(ModDataAttachments.HOME_POS);
+
+                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
+                    {
+                        target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), home.getX(), home.getY(),  home.getZ(), target.getXRot(), target.getYRot());
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
+
+        dispatcher.register(Commands.literal("spawn")
+                .requires(source -> source.hasPermission(0)) // allow all players, or raise for ops
+                .executes(context -> {
+                    ServerPlayer target = context.getSource().getPlayerOrException();
+                    BlockPos spawn = target.level().getSharedSpawnPos();
+                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
+                    {
+                        target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), spawn.getX(), spawn.getY(),  spawn.getZ(), target.getXRot(), target.getYRot());
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
 
 
         dispatcher.register(Commands.literal("getpower")
@@ -76,7 +147,7 @@ public class ModCommands {
                                 })));
 
         dispatcher.register(Commands.literal("getKyleWorth")
-                .requires(source -> source.hasPermission(2)) // OP level 2
+                .requires(source -> source.hasPermission(0)) // OP level 2
                 .then(Commands.argument("target", EntityArgument.player())
                         .executes(context -> {
                             ServerPlayer target = EntityArgument.getPlayer(context, "target");

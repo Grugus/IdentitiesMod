@@ -3,7 +3,10 @@ package com.schnozz.identitiesmod.attachments;
 import com.mojang.serialization.Codec;
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -50,6 +53,10 @@ public class ModDataAttachments {
                             .copyOnDeath()
                             .build()
             );
+
+    public static final Supplier<AttachmentType<BlockPos>> HOME_POS = ATTACHMENT_TYPES.register(
+            "home_pos", () -> AttachmentType.builder(() -> BlockPos.ZERO).serialize(BlockPos.CODEC).copyOnDeath().build()
+    );
 
     public static final Supplier<AttachmentType<ViltrumiteAttachment>> VILTRUMITE_STATES =
             ATTACHMENT_TYPES.register("viltrumite_states", () ->
