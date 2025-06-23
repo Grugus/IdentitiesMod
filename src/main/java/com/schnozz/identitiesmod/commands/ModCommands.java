@@ -110,7 +110,7 @@ public class ModCommands {
 
                     BlockPos home = target.getData(ModDataAttachments.HOME_POS);
 
-                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
+                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "teleport_combat_tracked_cd"), target.level().getGameTime()))
                     {
                         target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), home.getX(), home.getY(),  home.getZ(), target.getXRot(), target.getYRot());
                     }
@@ -124,7 +124,7 @@ public class ModCommands {
                 .executes(context -> {
                     ServerPlayer target = context.getSource().getPlayerOrException();
                     BlockPos spawn = target.level().getSharedSpawnPos();
-                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "combat_tracked_cd"), target.level().getGameTime()))
+                    if(!target.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "teleport_combat_tracked_cd"), target.level().getGameTime()))
                     {
                         target.teleportTo(target.getServer().getLevel(Level.OVERWORLD), spawn.getX(), spawn.getY(),  spawn.getZ(), target.getXRot(), target.getYRot());
                     }

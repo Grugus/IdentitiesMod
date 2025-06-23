@@ -35,7 +35,7 @@ public class ServerParryEvents {
     private static int parryTicker = 0;
 
     @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent event)
+    public static void onPlayerTick(PlayerTickEvent.Post event)
     {
         if(!event.getEntity().level().isClientSide)
         {
