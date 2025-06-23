@@ -40,20 +40,21 @@ public class ServerParryEvents {
         if(!event.getEntity().level().isClientSide)
         {
             Player player = event.getEntity();
-            if(player.getData(ModDataAttachments.POWER_TYPE).equals("Parry") && player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "parry_cd"), player.level().getGameTime()) )
+            if(player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
             {
-                parryTicker++;
-                if(parryTicker >= 29)
+                if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "parry_cd"), player.level().getGameTime()))
                 {
-                    parryStreak = 0;
+                    parryTicker++;
+                    if(parryTicker >= 29)
+                    {
+                        parryStreak = 0;
+                    }
                 }
-
-            }
-            else {
-                parryTicker = 0;
+                else {
+                    parryTicker = 0;
+                }
             }
         }
-
     }
 
     @SubscribeEvent
