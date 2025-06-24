@@ -109,7 +109,28 @@ public class ServerParryEvents {
                     event.setCanceled(true);
                     System.out.println("Parry Arrow Success");
                     parryBuff(player);
-                } else {
+                }
+                else if (event.getSource().getDirectEntity() instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity source) {
+                    if (event.getSource().getDirectEntity() instanceof Player) {
+                        parryStreak++;
+                    }
+
+                    source.hurt(event.getSource(), event.getAmount() * .8f);
+
+                    parryDebuff(source);
+                    parryDebuffStreak++;
+
+                    player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
+                    CooldownAttachment newAtachment = new CooldownAttachment();
+                    newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                    newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 20);
+                    player.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                    PacketDistributor.sendToPlayer(player, new CDPARRYPayload(new Cooldown(currentTime, 20)));
+                    PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 20), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
+                    event.setCanceled(true);
+                    System.out.println("Parry Arrow Success");
+                    parryBuff(player);
+                }else {
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -134,7 +155,7 @@ public class ServerParryEvents {
         }
         if(parryDebuffStreak == 4)
         {
-            target.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 1, false, true));
+            target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1, false, true));
         }
         if(parryDebuffStreak == 5)
         {
@@ -146,7 +167,7 @@ public class ServerParryEvents {
         }
         if(parryDebuffStreak == 7)
         {
-            target.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 2, false, true));
+            target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 1, false, true));
             parryDebuffStreak = 1;
         }
     }

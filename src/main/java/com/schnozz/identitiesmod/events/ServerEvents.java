@@ -6,11 +6,13 @@ import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.networking.payloads.sync_payloads.CooldownSyncPayload;
+import com.schnozz.identitiesmod.sounds.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.DisplaySlot;
@@ -37,45 +39,51 @@ public class ServerEvents {
     public static void onEntityDamage(LivingIncomingDamageEvent event)
     {
         if(event.getEntity().level().isClientSide) return;
-        if(event.getEntity() instanceof Player hurtPlayer)
+        if(event.getEntity() instanceof ServerPlayer hurtPlayer)
         {
             //cd set
-            long startTime = hurtPlayer.level().getGameTime();
+            long currentTime = hurtPlayer.level().getGameTime();
+            CooldownAttachment newAtachment = new CooldownAttachment();
 
-            Cooldown cd = new Cooldown(startTime, 1200);
-            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd");
-            CooldownAttachment cdAttach = hurtPlayer.getData(ModDataAttachments.COOLDOWN);
 
             if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof Player)
             {
-                cd = new Cooldown(startTime, 2400);
-                cdAttach.setCooldown(key, startTime, 2400);
+                newAtachment.getAllCooldowns().putAll(hurtPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), currentTime, 2400);
+                hurtPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                PacketDistributor.sendToPlayer(hurtPlayer, new CooldownSyncPayload(new Cooldown(currentTime, 2400), ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), false));
+
             }
             else{
-                cdAttach.setCooldown(key, startTime, 1200);
+
+                newAtachment.getAllCooldowns().putAll(hurtPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), currentTime, 400);
+                hurtPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                PacketDistributor.sendToPlayer(hurtPlayer, new CooldownSyncPayload(new Cooldown(currentTime, 400), ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), false));
             }
 
-            PacketDistributor.sendToPlayer((ServerPlayer) hurtPlayer, new CooldownSyncPayload(cd,key, false  ));
         }
         if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity().isAlive()  ) {
-            if (event.getSource().getDirectEntity() instanceof Player angryPlayer) {
+            if (event.getSource().getDirectEntity() instanceof ServerPlayer angryPlayer) {
                 //cd set
-                long startTime = angryPlayer.level().getGameTime();
+                long currentTime = angryPlayer.level().getGameTime();
+                CooldownAttachment newAtachment = new CooldownAttachment();
 
-                Cooldown cd = new Cooldown(startTime, 600);
-                ResourceLocation key = ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd");
-                CooldownAttachment cdAttach = angryPlayer.getData(ModDataAttachments.COOLDOWN);
 
                 if(event.getEntity() instanceof Player)
                 {
-                    cd = new Cooldown(startTime, 2400);
-                    cdAttach.setCooldown(key, startTime, 2400);
+                    newAtachment.getAllCooldowns().putAll(angryPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                    newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), currentTime, 2400);
+                    angryPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                    PacketDistributor.sendToPlayer(angryPlayer, new CooldownSyncPayload(new Cooldown(currentTime, 2400), ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), false));
                 }
                 else{
-                    cdAttach.setCooldown(key, startTime, 600);
+                    newAtachment.getAllCooldowns().putAll(angryPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+                    newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), currentTime, 400);
+                    angryPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                    PacketDistributor.sendToPlayer(angryPlayer, new CooldownSyncPayload(new Cooldown(currentTime, 400), ResourceLocation.fromNamespaceAndPath("identitiesmod", "teleport_combat_tracked_cd"), false));
                 }
 
-                PacketDistributor.sendToPlayer((ServerPlayer) angryPlayer, new CooldownSyncPayload(cd,key, false  ));
             }
         }
     }
