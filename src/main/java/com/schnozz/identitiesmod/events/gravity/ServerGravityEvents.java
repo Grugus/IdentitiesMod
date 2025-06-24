@@ -3,12 +3,17 @@ package com.schnozz.identitiesmod.events.gravity;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
 import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.IdentitiesMod;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
@@ -34,6 +39,32 @@ public class ServerGravityEvents {
         Entity entity = event.getEntity();
         if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Gravity") && event.getItemStack().getItem() == Items.ENDER_PEARL) {
             event.setCanceled(true);
+        }
+    }
+    @SubscribeEvent
+    public static void onLivingDamage(LivingIncomingDamageEvent event)
+    {
+        if(event.getSource().getDirectEntity() instanceof Player gravityPlayer && gravityPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
+        {
+            long currentTime = Minecraft.getInstance().level.getGameTime();
+            if(gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "pull_strength_cd"), currentTime))
+            {
+                if(event.getSource().type().msgId().equals("player"))
+                {
+                    event.setAmount(event.getAmount()*2);
+                }
+            }
+        }
+        if(event.getSource().getDirectEntity() != null && event.getSource().getEntity() instanceof Player gravityPlayer && gravityPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
+        {
+            long currentTime = Minecraft.getInstance().level.getGameTime();
+            if(gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "push_strength_cd"), currentTime))
+            {
+                if(event.getSource().type().msgId().equals("arrow"))
+                {
+                    event.setAmount(event.getAmount()*3);
+                }
+            }
         }
     }
 }

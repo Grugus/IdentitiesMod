@@ -76,14 +76,6 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
-
-    public static final Lazy<KeyMapping> GRAVITY_CHAOS_MAPPING = Lazy.of(() -> new KeyMapping(
-            "key.identitiesmod.gravity.chaos",
-            KeyConflictContext.UNIVERSAL,
-            InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_X,
-            "key.categories.misc"
-    ));
     //Parry
     public static final Lazy<KeyMapping> PARRY_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.parry",
@@ -107,17 +99,16 @@ public class ModMappings {
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         //Viltrumite mappings
         event.register(VILTRUMITE_GRAB_MAPPING.get());
-        event.register(VILTRUMITE_CHOKE_MAPPING.get()); //in progress
+        event.register(VILTRUMITE_CHOKE_MAPPING.get());
         event.register(VILTRUMITE_FLIGHT_MAPPING.get());
 
         //Gravity mappings
         event.register(GRAVITY_PUSH_MAPPING.get());
         event.register(GRAVITY_PULL_MAPPING.get());
-        event.register(GRAVITY_METEOR_MAPPING.get()); //post v1
-        event.register(GRAVITY_CHAOS_MAPPING.get());
+        event.register(GRAVITY_METEOR_MAPPING.get());
 
         //Adaptation mapping
-        event.register(ADAPTATION_SWITCH_MAPPING.get()); //changed to a reflection without adaptation
+        event.register(ADAPTATION_SWITCH_MAPPING.get());
 
         //Parry mapping
         event.register(PARRY_MAPPING.get());

@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +33,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerParryEvents {
     private static int parryStreak = 0;
+    private static int parryDebuffStreak = 0;
     private static int parryTicker = 0;
 
     @SubscribeEvent
@@ -61,16 +63,20 @@ public class ServerParryEvents {
     public static void onPlayerHurt(LivingIncomingDamageEvent event)
     {
         long currentTime = event.getEntity().level().getGameTime();
+
         if(event.getEntity() instanceof ServerPlayer player && player.hasData(ModDataAttachments.POWER_TYPE) && player.getData(ModDataAttachments.POWER_TYPE).equals("Parry"))
         {
-            if(player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
+            if (player.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_duration"), currentTime)) {
                 if ((event.getSource().getDirectEntity() instanceof LivingEntity source)) {
-                    if(event.getSource().getDirectEntity() instanceof Player) {
+                    if (event.getSource().getDirectEntity() instanceof Player) {
                         parryStreak++;
                     }
 
                     source.hurt(event.getSource(), event.getAmount() * .8f);
-                    source.addEffect(new MobEffectInstance(ModEffects.STUN,20));
+                    source.addEffect(new MobEffectInstance(ModEffects.STUN, 20));
+
+                    parryDebuff(source);
+                    parryDebuffStreak++;
 
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
@@ -83,12 +89,16 @@ public class ServerParryEvents {
                     System.out.println("Parry Success");
 
                     parryBuff(player);
-                }else if (event.getSource().getDirectEntity() instanceof AbstractHurtingProjectile arrow && arrow.getOwner() instanceof LivingEntity source) {
-                    if(event.getSource().getDirectEntity() instanceof Player) {
+                } else if (event.getSource().getDirectEntity() instanceof AbstractHurtingProjectile arrow && arrow.getOwner() instanceof LivingEntity source) {
+                    if (event.getSource().getDirectEntity() instanceof Player) {
                         parryStreak++;
                     }
 
                     source.hurt(event.getSource(), event.getAmount() * .8f);
+
+                    parryDebuff(source);
+                    parryDebuffStreak++;
+
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -99,9 +109,7 @@ public class ServerParryEvents {
                     event.setCanceled(true);
                     System.out.println("Parry Arrow Success");
                     parryBuff(player);
-                }
-                else
-                {
+                } else {
                     player.level().playSound(null, player.getOnPos(), ModSounds.PARRY_SOUND.get(), SoundSource.PLAYERS);
                     CooldownAttachment newAtachment = new CooldownAttachment();
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
@@ -111,10 +119,35 @@ public class ServerParryEvents {
                     event.setCanceled(true);
                 }
             }
+        }
+    }
 
-
-
-
+    public static void parryDebuff(LivingEntity target)
+    {
+        if(parryDebuffStreak == 2)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 1, false, true));
+        }
+        if(parryDebuffStreak == 3)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1, false, true));
+        }
+        if(parryDebuffStreak == 4)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 1, false, true));
+        }
+        if(parryDebuffStreak == 5)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2, false, true));
+        }
+        if(parryDebuffStreak == 6)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 1, false, true));
+        }
+        if(parryDebuffStreak == 7)
+        {
+            target.addEffect(new MobEffectInstance(MobEffects.POISON, 150, 2, false, true));
+            parryDebuffStreak = 1;
         }
     }
 
@@ -122,32 +155,32 @@ public class ServerParryEvents {
     {
         if(parryStreak == 3)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.MOVEMENT_SPEED, 600, 1, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 1, false, true));
         }
         if(parryStreak == 4)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.DAMAGE_BOOST, 600, 1, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1, false, true));
         }
         if(parryStreak == 5)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.MOVEMENT_SPEED, 600, 2, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2, false, true));
         }
         if(parryStreak == 6)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.REGENERATION, 400, 1, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1, false, true));
         }
         if(parryStreak == 7)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.DAMAGE_BOOST, 600, 2, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 2, false, true));
         }
         if(parryStreak == 8)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.REGENERATION, 400, 1, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1, false, true));
         }
         if(parryStreak == 10)
         {
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.GLOWING, 300, 3, false, true));
-            parryPlayer.addEffect(new MobEffectInstance((Holder<MobEffect>) MobEffects.ABSORPTION, 300, 3, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 300, 3, false, true));
+            parryPlayer.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 300, 3, false, true));
             parryStreak = 2;
         }
     }

@@ -2,6 +2,7 @@ package com.schnozz.identitiesmod.events.gravity;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.attachments.ModDataAttachments;
+import com.schnozz.identitiesmod.cooldown.CooldownAttachment;
 import com.schnozz.identitiesmod.damage_sources.ModDamageTypes;
 import com.schnozz.identitiesmod.cooldown.Cooldown;
 import com.schnozz.identitiesmod.mob_effects.ModEffects;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +46,6 @@ public class ClientGravityEvents {
     private static final double Z_STRENGTH = 1.5;
     //timers
     private static int chaosTimer = 0;
-    private static int pullStunTimer = 0;
     //dynamic forces
     private static double vX,vY,vZ;
     //chaos target entity id
@@ -56,8 +57,6 @@ public class ClientGravityEvents {
     private static double closestDistance;
     //entity list for pull
     private static List<Entity> entitiesInBox;
-    //stun duration
-    private static int stunDuration = 40;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer gravityPlayer = Minecraft.getInstance().player;
@@ -82,96 +81,19 @@ public class ClientGravityEvents {
                 PUSH_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 240));
                 gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), level.getGameTime(), 240);
                 PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 240), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.ctrlcd"), false));
-
-                //pullStunTimer = 1;
             }
             //gravity meteor creation and set both position and movement
             else if(GRAVITY_METEOR_MAPPING.get().consumeClick()) //EVAN THIS NEEDS COOLDOWN
             {
                 //MeteorEntity newMeteor = new MeteorEntity(,level);
             }
-            else if(GRAVITY_CHAOS_MAPPING.get().consumeClick() && !gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), 0))  //EVAN THIS NEEDS COOLDOWN
-            {
-                target = null;
-                closestDistance = Integer.MAX_VALUE;
 
-                findChaosTargetAndDistance(gravityPlayer);
-
-
-                if(target != null) {
-                    if (target instanceof LivingEntity livingEntity) {
-                        chaosTargetEntityId = livingEntity.getId();
-                        chaosTimer = 1; //starts chaos logic loop
-                        chaos(gravityPlayer); //intial hit guaranteed
-                    }
-                }
-                CHAOS_COOLDOWN_ICON.setCooldown(new Cooldown(level.getGameTime(), 650));
-                gravityPlayer.getData(ModDataAttachments.COOLDOWN).setCooldown(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), level.getGameTime(), 650);
-                PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(level.getGameTime(), 650), ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "gravity.chaoscd"), false));
-            }
-
-
-            //chaos logic
-            if(chaosTimer > 0 && chaosTimer < 180 && chaosTargetEntityId != 0)
-            {
-                ///////// Particle Stuff
-                DustColorTransitionOptions particle = new DustColorTransitionOptions(
-                        new Vector3f(0.5f, 0.0f, 0.5f),
-                        new Vector3f(1.0f, 0.41f, 0.71f),
-                        1.0f);
-
-                CompoundTag tag = new CompoundTag();
-
-
-                assert target != null;
-
-                PacketDistributor.sendToServer(new ChaosParticlePayload(particle, target.saveWithoutId(new CompoundTag())));
-
-                ///////// Particle Stuff
-
-                if(level.getEntity(chaosTargetEntityId) == null || !level.getEntity(chaosTargetEntityId).isAlive()) {
-                    chaosTimer = 181;
-                }
-                else {
-                    int ran = (int) (Math.random() * 40);
-                    if (ran == 0) {
-                        chaos(gravityPlayer);
-                    }
-                    chaosTimer++;
-                }
-            }
-//            if(pullStunTimer > 0 && pullStunTimer < 20 + stunDuration)
-//            {
-//                pullStunTimer++;
-//            }
-//            if(pullStunTimer == 20)
-//            {
-//                for(Entity entity: entitiesInBox)
-//                {
-//                    if(entity instanceof LivingEntity livingEntity)
-//                    {
-//                        livingEntity.addEffect(new MobEffectInstance(ModEffects.STUN, stunDuration, 0,false,true,true));
-//                        PacketDistributor.sendToServer(new StunPayload(livingEntity.getId(), stunDuration));
-//                    }
-//                }
-//            }
-//            if(pullStunTimer >= 20 + stunDuration)
-//            {
-//                for(Entity entity: entitiesInBox)
-//                {
-//                    if(entity instanceof LivingEntity livingEntity && livingEntity.getActiveEffects().contains(ModEffects.STUN))
-//                    {
-//                        livingEntity.removeEffect(ModEffects.STUN);
-//                    }
-//                }
-//                pullStunTimer = 0;
-//            }
         }
     }
     //cooldown icons
     private static final CooldownIcon PUSH_COOLDOWN_ICON = new CooldownIcon(10, 10, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypushcd_icon.png"));
     private static final CooldownIcon PULL_COOLDOWN_ICON = new CooldownIcon(10, 30, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitypullcd_icon.png"));
-    private static final CooldownIcon CHAOS_COOLDOWN_ICON = new CooldownIcon(10, 50, 16, ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID, "textures/gui/gravitychaoscd_icon.png"));
+
     //ability methods
     public static void push(Player gravityPlayer)
     {
@@ -188,6 +110,14 @@ public class ClientGravityEvents {
             double vX = 3.0 * rx; double vY = 1.2 * ry; double vZ = 3.0 * rz;
             PacketDistributor.sendToServer(new VelocityPayload(entity.getId(),vX,vY,vZ));
         }
+
+        long currentTime = Minecraft.getInstance().level.getGameTime();
+
+        CooldownAttachment newAtachment = new CooldownAttachment();
+        newAtachment.getAllCooldowns().putAll(gravityPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+        newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "push_strength_cd"), currentTime, 110);
+        gravityPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 110), ResourceLocation.fromNamespaceAndPath("identitiesmod", "push_strength_cd"), false));
     }
     public static void pull(Player gravityPlayer)
     {
@@ -203,47 +133,14 @@ public class ClientGravityEvents {
             double vX = -dx/3; double vY = -dy/6; double vZ = -dz/3;
             PacketDistributor.sendToServer(new VelocityPayload(entity.getId(),vX,vY,vZ));
         }
-    }
 
-    public static void findChaosTargetAndDistance(Player gravityPlayer)
-    {
-        Vec3 eyePosition = gravityPlayer.getEyePosition(1.0F); // Player's eye location
-        Vec3 lookVector = gravityPlayer.getLookAngle();        // Direction player is looking
-        Vec3 endPosition = eyePosition.add(lookVector.scale(25)); // End of the ray
+        long currentTime = Minecraft.getInstance().level.getGameTime();
 
-        // Create AABB for entity search along the line (expanded path)
-        AABB searchArea = new AABB(eyePosition, endPosition).inflate(1.0); // Slightly wider search area
-
-        // Filter and find first entity hit
-        List<Entity> entities = gravityPlayer.level().getEntities(gravityPlayer, searchArea, (entity) -> {
-            // Optional filters: skip the player and only target living entities
-            return entity instanceof LivingEntity && !entity.isSpectator() && entity != gravityPlayer;
-        });
-
-        for (Entity entity : entities) {
-            AABB entityBox = entity.getBoundingBox().inflate(0.3);
-            Optional<Vec3> hit = entityBox.clip(eyePosition, endPosition);
-
-            if (hit.isPresent()) {
-                double distance = eyePosition.distanceTo(hit.get());
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    target = entity;
-                }
-            }
-        }
-    }
-    public static void chaos(Player gravityPlayer)
-    {
-        double x = (int)(Math.random()*X_STRENGTH)+0.4;
-        double z = (int)(Math.random()*Z_STRENGTH)+0.4;
-        if((int)(Math.random()*1.8) == 0) {x*=-1;}
-        if((int)(Math.random()*1.8) == 0) {z*=-1;}
-
-        Holder<DamageType> gravDamageType = gravityPlayer.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.GRAVITY_POWER_DAMAGE);
-
-        PacketDistributor.sendToServer(new GravityPayload(chaosTargetEntityId,x,0.0,z));
-        PacketDistributor.sendToServer(new EntityDamagePayload(chaosTargetEntityId,gravityPlayer.getId(),chaosDamage,gravDamageType));
+        CooldownAttachment newAtachment = new CooldownAttachment();
+        newAtachment.getAllCooldowns().putAll(gravityPlayer.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
+        newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "pull_strength_cd"), currentTime, 110);
+        gravityPlayer.setData(ModDataAttachments.COOLDOWN, newAtachment);
+        PacketDistributor.sendToServer(new CooldownSyncPayload(new Cooldown(currentTime, 110), ResourceLocation.fromNamespaceAndPath("identitiesmod", "pull_strength_cd"), false));
     }
 
     public static void meteor()
@@ -262,7 +159,6 @@ public class ClientGravityEvents {
         GuiGraphics graphics = event.getGuiGraphics();
         PUSH_COOLDOWN_ICON.render(graphics, gameTime);
         PULL_COOLDOWN_ICON.render(graphics, gameTime);
-        CHAOS_COOLDOWN_ICON.render(graphics, gameTime);
     }
 
 }
