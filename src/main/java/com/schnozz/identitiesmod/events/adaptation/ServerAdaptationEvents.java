@@ -158,7 +158,7 @@ public class ServerAdaptationEvents {
             if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
             {
                 float value = 1 - adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-                event.setAmount(event.getAmount()*(value*2.2F));
+                event.setAmount(event.getAmount()*(value*1.7F));
             }
         }
     }
