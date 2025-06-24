@@ -194,7 +194,7 @@ public class ServerNecroEvents {
             {
                 if(p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))
                 {
-                    monster.goalSelector.addGoal(3, new FollowEntityAtDistanceGoal(monster, p,1D, 5f));
+                    monster.goalSelector.addGoal(3, new FollowEntityAtDistanceGoal(monster, p,2D, 5f));
                 }
             }
             //add the follow player goal and any others depending on type

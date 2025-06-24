@@ -43,7 +43,7 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientViltrumiteEvents {
     //damage constants
-    private static final float CHOKE_DAMAGE = 6.0F;
+    private static final float CHOKE_DAMAGE = 3.0F;
     //integer
     private static int stunDuration = 35;
     //timers
@@ -51,7 +51,7 @@ public class ClientViltrumiteEvents {
     private static int stunTimer = 0;
     private static int dashMisses = 0;
     //flight speed double
-    private static double flightSpeed = 0.50;
+    private static double flightSpeed = 0.35;
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         LocalPlayer viltrumitePlayer = Minecraft.getInstance().player;
