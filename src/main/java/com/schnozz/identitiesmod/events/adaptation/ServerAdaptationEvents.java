@@ -151,7 +151,7 @@ public class ServerAdaptationEvents {
         }
         else if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            event.setAmount(event.getAmount()*1.2);
+            event.setAmount(event.getAmount()*1.2F);
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
