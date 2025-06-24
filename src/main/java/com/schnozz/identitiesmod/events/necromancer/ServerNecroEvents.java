@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -190,6 +191,10 @@ public class ServerNecroEvents {
             );
             monster.targetSelector.removeAllGoals(goal -> true);
             monster.setTarget(null);
+            monster.getAttribute(Attributes.MAX_HEALTH).setBaseValue(monster.getAttributeBaseValue(Attributes.MAX_HEALTH) * 2);
+            monster.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(monster.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * 1.5);
+            monster.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(monster.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.25);
+            monster.heal(500);
             for(Player p : server.getLevel(ServerLevel.OVERWORLD).players())
             {
                 if(p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))
