@@ -46,7 +46,7 @@ public class ServerGravityEvents {
     {
         if(event.getSource().getDirectEntity() instanceof Player gravityPlayer && gravityPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
         {
-            long currentTime = Minecraft.getInstance().level.getGameTime();
+            long currentTime = gravityPlayer.level().getGameTime();
             if(gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "pull_strength_cd"), currentTime))
             {
                 if(event.getSource().type().msgId().equals("player"))
@@ -57,7 +57,7 @@ public class ServerGravityEvents {
         }
         if(event.getSource().getDirectEntity() != null && event.getSource().getEntity() instanceof Player gravityPlayer && gravityPlayer.getData(ModDataAttachments.POWER_TYPE).equals("Gravity"))
         {
-            long currentTime = Minecraft.getInstance().level.getGameTime();
+            long currentTime = gravityPlayer.level().getGameTime();
             if(gravityPlayer.getData(ModDataAttachments.COOLDOWN).isOnCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "push_strength_cd"), currentTime))
             {
                 if(event.getSource().type().msgId().equals("arrow"))

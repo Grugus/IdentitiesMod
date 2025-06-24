@@ -41,17 +41,6 @@ import static com.schnozz.identitiesmod.keymapping.ModMappings.*;
 
 @EventBusSubscriber(modid = IdentitiesMod.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientGravityEvents {
-    //x and z finals for chaos
-    private static final double X_STRENGTH = 1.5;
-    private static final double Z_STRENGTH = 1.5;
-    //timers
-    private static int chaosTimer = 0;
-    //dynamic forces
-    private static double vX,vY,vZ;
-    //chaos target entity id
-    private static int chaosTargetEntityId;
-    //chaos damage
-    private static float chaosDamage = 1F;
     //chaos target find global variables
     private static Entity target;
     private static double closestDistance;
