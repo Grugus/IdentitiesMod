@@ -51,7 +51,7 @@ public class ServerGravityEvents {
             {
                 if(event.getSource().type().msgId().equals("player"))
                 {
-                    event.setAmount(event.getAmount()*2);
+                    event.setAmount(event.getAmount()*1.3F);
                 }
             }
         }
@@ -62,7 +62,7 @@ public class ServerGravityEvents {
             {
                 if(event.getSource().type().msgId().equals("arrow"))
                 {
-                    event.setAmount(event.getAmount()*3);
+                    event.setAmount(event.getAmount()*2F);
                 }
             }
         }
