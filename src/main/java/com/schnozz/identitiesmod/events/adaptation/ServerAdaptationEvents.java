@@ -151,14 +151,14 @@ public class ServerAdaptationEvents {
         }
         else if(entity.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
-            event.setAmount(event.getAmount()*1.2F);
+            event.setAmount(event.getAmount()+1.5F);
         }
         else if(event.getSource().getDirectEntity() != null && event.getSource().getDirectEntity() instanceof ServerPlayer adapter && adapter.getData(ModDataAttachments.POWER_TYPE).equals("Adaptation"))
         {
             if(adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(ResourceLocation.fromNamespaceAndPath(IdentitiesMod.MODID,"offensive")) == 0)
             {
                 float value = 1 - adapter.getData(ModDataAttachments.ADAPTION).getAdaptationValue(sourceLocation);
-                event.setAmount(event.getAmount()*(value*1.7F));
+                event.setAmount(event.getAmount()+(value*4F));
             }
         }
     }
