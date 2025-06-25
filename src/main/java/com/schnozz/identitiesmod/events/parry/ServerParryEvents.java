@@ -155,7 +155,7 @@ public class ServerParryEvents {
         }
         if(parryDebuffStreak == 4)
         {
-            target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1, false, true));
+            target.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 80, 1, false, true));
         }
         if(parryDebuffStreak == 5)
         {
