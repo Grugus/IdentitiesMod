@@ -37,6 +37,14 @@ public class ModMappings {
             "key.categories.misc"
     ));
 
+    public static final Lazy<KeyMapping> TRAPPER_MAPPING = Lazy.of(() -> new KeyMapping(
+            "key.identitiesmod.trapper.invisible",
+            KeyConflictContext.UNIVERSAL,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "key.categories.misc"
+    ));
+
     //Lifestealer Screen
     public static final Lazy<KeyMapping> LIFESTEALER_MAPPING = Lazy.of(() -> new KeyMapping(
             "key.identitiesmod.lifestealer.screen",

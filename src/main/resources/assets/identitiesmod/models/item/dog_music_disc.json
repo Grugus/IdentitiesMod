@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "identitiesmod:item/dog_music_disc"
+  }
+}

@@ -72,7 +72,7 @@ public class ServerParryEvents {
                         parryStreak++;
                     }
 
-                    source.hurt(event.getSource(), event.getAmount() * .8f);
+                    source.hurt(event.getSource(), event.getAmount() * 1.35f);
                     source.addEffect(new MobEffectInstance(ModEffects.STUN, 20));
 
                     parryDebuff(source);
@@ -94,7 +94,7 @@ public class ServerParryEvents {
                         parryStreak++;
                     }
 
-                    source.hurt(event.getSource(), event.getAmount() * .8f);
+                    source.hurt(event.getSource(), event.getAmount() * 1.35f);
 
                     parryDebuff(source);
                     parryDebuffStreak++;
@@ -115,7 +115,7 @@ public class ServerParryEvents {
                         parryStreak++;
                     }
 
-                    source.hurt(event.getSource(), event.getAmount() * .8f);
+                    source.hurt(event.getSource(), event.getAmount() * 1.35f);
 
                     parryDebuff(source);
                     parryDebuffStreak++;
@@ -136,6 +136,7 @@ public class ServerParryEvents {
                     newAtachment.getAllCooldowns().putAll(player.getData(ModDataAttachments.COOLDOWN).getAllCooldowns());
                     newAtachment.setCooldown(ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), currentTime, 45);
                     player.setData(ModDataAttachments.COOLDOWN, newAtachment);
+                    PacketDistributor.sendToPlayer(player, new CDPARRYPayload(new Cooldown(currentTime, 45)));
                     PacketDistributor.sendToPlayer(player, new CooldownSyncPayload(new Cooldown(currentTime, 45), ResourceLocation.fromNamespaceAndPath("identitiesmod", "parry_cd"), false));
                     event.setCanceled(true);
                 }

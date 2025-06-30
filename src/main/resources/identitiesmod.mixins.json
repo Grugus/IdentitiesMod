@@ -5,6 +5,7 @@
   "package": "com.schnozz.identitiesmod.mixin",
   "mixins": [
     "FarmBlockMixin",
+    "PlayerRendererMixin",
     "SeedUseMixin"
   ],
   "client": [],

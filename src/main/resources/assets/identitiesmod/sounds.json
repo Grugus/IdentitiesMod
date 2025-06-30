@@ -46,5 +46,21 @@
     "sounds": [
       "identitiesmod:grab_sound"
     ]
+  },
+  "dog_disc_sound": {
+    "sounds": [
+      {
+        "name": "identitiesmod:dog_disc_sound",
+        "stream": true
+      }
+    ]
+  },
+  "def_cat_sound": {
+    "sounds": [
+      {
+        "name": "identitiesmod:def_cat_sound",
+        "stream": true
+      }
+    ]
   }
 }

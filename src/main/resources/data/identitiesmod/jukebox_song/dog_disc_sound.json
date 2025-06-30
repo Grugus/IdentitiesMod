@@ -1,0 +1,8 @@
+{
+  "comparator_output": 11,
+  "description": {
+    "translate": "item.identitiesmod.dog_music_disc.desc"
+  },
+  "length_in_seconds": 145.3,
+  "sound_event": "identitiesmod:dog_disc_sound"
+}

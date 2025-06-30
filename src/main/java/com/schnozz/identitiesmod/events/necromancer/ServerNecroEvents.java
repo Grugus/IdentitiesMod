@@ -73,6 +73,9 @@ public class ServerNecroEvents {
                 command_list.addUUID(newMonster.getUUID());
                 level.addFreshEntity(newMonster);
                 newMonster.setCanPickUpLoot(true);
+                newMonster.getAttribute(Attributes.MAX_HEALTH).setBaseValue(newMonster.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.7);
+                newMonster.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(newMonster.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * 1.2);
+                newMonster.heal(500);
             }
 
 
@@ -191,10 +194,6 @@ public class ServerNecroEvents {
             );
             monster.targetSelector.removeAllGoals(goal -> true);
             monster.setTarget(null);
-            monster.getAttribute(Attributes.MAX_HEALTH).setBaseValue(monster.getAttributeBaseValue(Attributes.MAX_HEALTH) * 2);
-            monster.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(monster.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * 1.5);
-            monster.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(monster.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.25);
-            monster.heal(500);
             for(Player p : server.getLevel(ServerLevel.OVERWORLD).players())
             {
                 if(p.getData(ModDataAttachments.POWER_TYPE).equals("Necromancer"))

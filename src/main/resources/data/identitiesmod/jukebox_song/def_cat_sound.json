@@ -1,0 +1,8 @@
+{
+  "comparator_output": 11,
+  "description": {
+    "translate": "item.identitiesmod.def_cat.desc"
+  },
+  "length_in_seconds": 52,
+  "sound_event": "identitiesmod:def_cat_sound"
+}

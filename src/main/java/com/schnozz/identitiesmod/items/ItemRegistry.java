@@ -2,7 +2,13 @@ package com.schnozz.identitiesmod.items;
 
 import com.schnozz.identitiesmod.IdentitiesMod;
 import com.schnozz.identitiesmod.items.item_classes.*;
+import com.schnozz.identitiesmod.sounds.ModSounds;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.JukeboxSong;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SwordItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -25,6 +31,23 @@ public class ItemRegistry {
             MobHolder::new, // The factory that the properties will be passed into.
             new Item.Properties().stacksTo(1) // The properties to use.
     );
+
+
+    public static final DeferredItem<Item> DOG_MUSIC_DISC = ITEMS.register("dog_music_disc", () ->
+            new Item(
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .rarity(Rarity.RARE)
+                            .jukeboxPlayable(ModSounds.DOG_DISC_KEY)
+            ));
+
+    public static final DeferredItem<Item> DEF_CAT = ITEMS.register("def_cat", () ->
+            new Item(
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .rarity(Rarity.RARE)
+                            .jukeboxPlayable(ModSounds.DEF_CAT_KEY)
+            ));
     public static final DeferredItem<Item> BONE_WHISTLE = ITEMS.registerItem(
             "bone_whistle",
             BoneWhistle::new, // The factory that the properties will be passed into.

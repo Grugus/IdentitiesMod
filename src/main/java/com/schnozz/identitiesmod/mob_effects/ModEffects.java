@@ -14,6 +14,8 @@ public class ModEffects {
     public static final Holder<MobEffect> STUN = EFFECTS.register("stun", () -> new StunEffect(MobEffectCategory.HARMFUL, 0x9db92c));
     public static final Holder<MobEffect> LIFE_STEALED = EFFECTS.register("life_stealed", () -> new StunEffect(MobEffectCategory.HARMFUL, 0xFF0000));
 
+    public static final Holder<MobEffect> SUPER_INVISIBILITY = EFFECTS.register("super_invisibility", () -> new SuperInvisEffect(MobEffectCategory.HARMFUL, 0xFF69B4));
+
     public static void register(IEventBus modEventBus) {
         EFFECTS.register(modEventBus);
     }
